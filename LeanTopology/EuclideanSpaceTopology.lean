@@ -187,7 +187,7 @@ theorem isOpen_inter_0_8 {n : ℕ} {U₁ U₂ : Set (E n)}
       exact (openBall_mono_0_4 this).trans hr₂
 
 /-- Proposition 0.8, third property: an arbitrary union of open sets is open. -/
-theorem isOpen_iUnion_0_8 {n : ℕ} {ι : Type*} {U : ι → Set (E n)}
+theorem isOpen_iUnion_0_8 {n : ℕ} {ι : Type*} {U : ι -> Set (E n)}
     (hU : ∀ i, isOpenEuclidean_0_6 (U i)) :
     isOpenEuclidean_0_6 (⋃ i, U i) := by
   intro x hx
@@ -204,16 +204,25 @@ sets are open.
 -/
 
 /-- Theorem 0.9: continuity is equivalent to openness of all preimages. -/
-theorem continuous_iff_preimage_open_0_9 {n m : ℕ} (f : E n → E m) :
-    Continuous f ↔
+theorem continuous_iff_preimage_open_0_9 {n m : ℕ} (f : E n -> E m) :
+    Continuous f <->
       ∀ V : Set (E m), isOpenEuclidean_0_6 V → isOpenEuclidean_0_6 (f ⁻¹' V) := by
   constructor
-  · intro hf V hV a ha
-    obtain ⟨ε, hεpos, hε⟩ := hV (f a) ha
-    obtain ⟨δ, hδpos, hδ⟩ := (continuousAt_iff_ball_0_5 f a).mp hf.continuousAt ε hεpos
-    refine ⟨δ, hδpos, ?_⟩
-    intro x hx
-    exact hε (hδ ⟨x, hx, rfl⟩)
+  · intro hf V hV
+    by_cases hpre_empty : f ⁻¹' V = ∅
+    · rw [hpre_empty]
+      exact isOpen_empty_univ_0_8.left
+    · intro a ha
+      have hfa : f a ∈ V := ha
+      obtain ⟨ε, hεpos, hεV⟩ := hV (f a) hfa
+      obtain ⟨δ, hδpos, hδ_maps⟩ :=
+        (continuousAt_iff_ball_0_5 f a).mp hf.continuousAt ε hεpos
+      have hball_preimage : openBall_0_4 a δ ⊆ f ⁻¹' V := by
+        intro x hx
+        have hfx_ball : f x ∈ openBall_0_4 (f a) ε :=
+          hδ_maps ⟨x, hx, rfl⟩
+        exact hεV hfx_ball
+      exact ⟨δ, hδpos, hball_preimage⟩
   · intro hpre
     rw [continuous_iff_continuousAt]
     intro a
@@ -223,10 +232,13 @@ theorem continuous_iff_preimage_open_0_9 {n m : ℕ} (f : E n → E m) :
     have hV : isOpenEuclidean_0_6 V := isOpen_ball_0_7 (f a) ε
     have ha : a ∈ f ⁻¹' V := by
       simp [V, openBall_0_4, hεpos]
-    obtain ⟨δ, hδpos, hδ⟩ := hpre V hV a ha
+    obtain ⟨δ, hδpos, hδ_preimage⟩ := hpre V hV a ha
+    have hball_preimage : openBall_0_4 a δ ⊆ f ⁻¹' V := hδ_preimage
+    have himage_ball : f '' openBall_0_4 a δ ⊆ openBall_0_4 (f a) ε := by
+      rintro _ ⟨x, hx, rfl⟩
+      exact hball_preimage hx
     refine ⟨δ, hδpos, ?_⟩
-    rintro _ ⟨x, hx, rfl⟩
-    exact hδ hx
+    exact himage_ball
 
 end EuclideanSpaceTopology
 end LeanTopology
