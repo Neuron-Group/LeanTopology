@@ -1,0 +1,26 @@
+name = "LeanTopology"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["LeanTopology"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+weak.linter.style.lambdaSyntax = false
+weak.linter.style.emptyLine = false
+
+[[require]]
+name = "Paperproof"
+git = "https://github.com/Paper-Proof/paperproof.git"
+subDir = "lean"
+rev = "main"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.30.0-rc2"
+
+[[lean_lib]]
+name = "LeanTopology"
