@@ -162,7 +162,7 @@ theorem isOpen_empty_univ_0_8 {n : ℕ} :
   constructor
   · intro x xin
     exfalso
-    exact (iff_false_intro fun a ↦ xin).mp xin
+    exact (iff_false_intro λ a ↦ xin).mp xin
   · intro x xin
     use 1; use zero_lt_one;
     simp
