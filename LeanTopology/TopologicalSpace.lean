@@ -25,69 +25,87 @@ the three open-set axioms.
 -/
 
 /-- Definition 1.1: the open-set axioms for a family of subsets of `X`. -/
-structure IsTopology_1_1 (X : Type u) (O : Set (Set X)) : Prop where
-  O1_empty : (∅ : Set X) ∈ O
-  O1_univ : (univ : Set X) ∈ O
-  O2_inter : ∀ ⦃U V : Set X⦄, U ∈ O -> V ∈ O -> U ∩ V ∈ O
-  O3_iUnion : ∀ {ι : Type v} (U : ι → Set X), (∀ i, U i ∈ O) -> (⋃ i, U i) ∈ O
+structure IsTopology_1_1 (X : Type u) (𝒪 : Set (Set X)) : Prop where
+  O1_empty : (∅ : Set X) ∈ 𝒪
+  O1_univ : (univ : Set X) ∈ 𝒪
+  O2_inter : ∀ ⦃U V : Set X⦄, U ∈ 𝒪 -> V ∈ 𝒪 -> U ∩ V ∈ 𝒪
+  O3_iUnion : ∀ {ι : Type v} (U : ι → Set X), (∀ i, U i ∈ 𝒪) -> (⋃ i, U i) ∈ 𝒪
 
-def IsTopology_1_1.O2_inter' (X : Type u) (O : Set (Set X)) (top : IsTopology_1_1 X O)
-  : ∀ {n : ℕ} (U : Fin n → Set X), (∀ i, U i ∈ O) -> (⋂ i, U i) ∈ O := by
-    intro n U hyp
-    induction n with
-    | zero =>
-      exact iInter_of_empty U ▸ top.O1_univ
-    | succ n hn =>
-      set U' : Fin n -> Set X := λ i ↦ U (Fin.castSucc i)
-        with U'df
-      have hU' : ∀ i : Fin n, U' i ∈ O := λ i ↦ hyp (Fin.castSucc i)
-      specialize hn U' hU'
-      have heq : (⋂ i : Fin (n+1), U i) = (⋂ i : Fin n, U' i) ∩ U (Fin.last n) := by
-        ext x
-        simp only [mem_iInter, mem_inter_iff]
-        constructor
-        · intro hx
-          constructor
-          · intro i
-            exact hx (Fin.castSucc i)
-          · exact hx (Fin.last n)
-        · rintro ⟨hx', hxlast⟩ i
-          cases i using Fin.lastCases with
-          | last    => exact hxlast
-          | cast j  => exact hx' j
-      rw [heq]
-      exact top.O2_inter hn (hyp (Fin.last n))
-
-
-section -- test
-variable {X : Type*} (O : Set (Set X)) (top : IsTopology_1_1 X O)
-
-#check top.O2_inter
-
-end
+theorem IsTopology_1_1.O2_inter' {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTopology_1_1 X 𝒪)
+    (S : Finset (Set X)) :
+    (∀ U ∈ S, U ∈ 𝒪) → ⋂₀ (↑S : Set (Set X)) ∈ 𝒪 := by
+  intro hS
+  induction S using Finset.induction_on with
+  | empty =>
+      simpa using h𝒪.O1_univ
+  | @insert U S hU ih =>
+      have hUO : U ∈ 𝒪 := hS U (by simp)
+      have hSO : ∀ V ∈ S, V ∈ 𝒪 := by
+        intro V hV
+        exact hS V (by simp [hV])
+      have hi : ⋂₀ ((↑S : Set (Set X))) ∈ 𝒪 := ih hSO
+      simpa [Finset.coe_insert, hU] using h𝒪.O2_inter hUO hi
 
 /-!
 Definition 1.2 introduces closed sets as complements of open sets.
 -/
 
 /-- Definition 1.2: a subset is closed when its complement is open. -/
-def IsClosed_1_2 {X : Type u} (O : Set (Set X)) (F : Set X) : Prop :=
-  Fᶜ ∈ O
+def IsClosed_1_2 {X : Type u} (𝒪 : Set (Set X)) (F : Set X) : Prop :=
+  Fᶜ ∈ 𝒪
+
+/-- Proposition 1.3: the closed-set axioms for a family of subsets of `X`. -/
+structure IsClosedFamily_1_3 (X : Type u) (ℱ : Set (Set X)) : Prop where
+  C1_empty : (∅ : Set X) ∈ ℱ
+  C1_univ : (univ : Set X) ∈ ℱ
+  C2_union : ∀ ⦃F G : Set X⦄, F ∈ ℱ → G ∈ ℱ → F ∪ G ∈ ℱ
+  C3_iInter : ∀ {ι : Type v} (F : ι → Set X), (∀ i, F i ∈ ℱ) → (⋂ i, F i) ∈ ℱ
+
+theorem IsClosedFamily_1_3.C2_union' {X : Type u} {ℱ : Set (Set X)}
+  (hℱ : IsClosedFamily_1_3 X ℱ)
+  (S : Finset (Set X)) :
+    (∀ F ∈ S, F ∈ ℱ) → ⋃₀ (↑S : Set (Set X)) ∈ ℱ := by
+      intro hS
+      induction S using Finset.induction_on with
+      | empty =>
+        simpa using hℱ.C1_empty
+      | @insert F S hF ih =>
+        have hFF : F ∈ ℱ := hS F (by simp)
+        have hSF : ∀ F' ∈ S, F' ∈ ℱ := by
+          intro F' hF'
+          exact hS F' (by simp [hF'])
+        have hi : ⋃₀ ((↑S : Set (Set X))) ∈ ℱ := by
+          exact ih hSF
+        simpa [Finset.coe_insert, hF] using hℱ.C2_union hFF hi
 
 /-!
-Proposition 1.3 records the standard closure properties of closed sets derived
-from the open-set axioms.
+Proposition 1.3 becomes a certification between the article's open-set axioms
+and the dual closed-set axioms for the family of complements.
 -/
 
-/-- Proposition 1.3: the closed sets satisfy the three closed-set axioms. -/
-theorem closedSet_properties_1_3 {X : Type u} {O : Set (Set X)} (hO : IsTopology_1_1 X O) :
-    IsClosed_1_2 O (∅ : Set X) ∧
-      IsClosed_1_2 O (univ : Set X) ∧
-      (∀ ⦃F₁ F₂ : Set X⦄, IsClosed_1_2 O F₁ → IsClosed_1_2 O F₂ →
-        IsClosed_1_2 O (F₁ ∪ F₂)) ∧
-      (∀ {ι : Type v} (F : ι → Set X), (∀ i, IsClosed_1_2 O (F i)) →
-        IsClosed_1_2 O (⋂ i, F i)) := by
-  sorry
+/-- Proposition 1.3: the open-set and closed-set formulations certify each other. -/
+theorem closedSet_properties_1_3 {X : Type u} {𝒪 : Set (Set X)} :
+    IsTopology_1_1 X 𝒪 <->
+      IsClosedFamily_1_3 X {F : Set X | IsClosed_1_2 𝒪 F} := by
+  constructor
+  · intro h
+    exact ⟨
+      by
+        simp [IsClosed_1_2]
+        exact h.O1_univ,
+      by
+        simp [IsClosed_1_2]
+        exact h.O1_empty,
+      by
+        simp [IsClosed_1_2]
+        intro F G
+        exact @h.O2_inter Fᶜ Gᶜ,
+      by
+        simp [IsClosed_1_2]
+        intro ι F hFc
+        have := @h.O3_iUnion (λ (i : ι) ↦ (F i)ᶜ)
+      ,
+    ⟩
 
 /-!
 Remark 1.4 explains how to interpret the intersection of zero sets inside a
@@ -105,11 +123,9 @@ closed sets and asking for the dual closed-set axioms.
 -/
 
 /-- Remark 1.5: the closed-set axioms induce a topology by taking complements. -/
-theorem topology_from_closed_sets_1_5 {X : Type u} {F : Set (Set X)}
-    (hF_empty : (∅ : Set X) ∈ F) (hF_univ : (univ : Set X) ∈ F)
-    (hF_union : ∀ ⦃A B : Set X⦄, A ∈ F → B ∈ F → A ∪ B ∈ F)
-    (hF_iInter : ∀ {ι : Type v} (A : ι → Set X), (∀ i, A i ∈ F) → (⋂ i, A i) ∈ F) :
-    IsTopology_1_1 X {U : Set X | Uᶜ ∈ F} := by
+theorem topology_from_closed_sets_1_5 {X : Type u} {ℱ : Set (Set X)}
+    (hℱ : IsClosedFamily_1_3 X ℱ) :
+    IsTopology_1_1 X {U : Set X | Uᶜ ∈ ℱ} := by
   sorry
 
 /-!
@@ -145,7 +161,7 @@ corresponding family of closed sets.
 
 /-- Example 1.8: the closed sets for the finite-complement construction. -/
 def finiteClosedFamily_1_8 (X : Type u) : Set (Set X) :=
-  {F : Set X | F = univ ∨ F.Finite}
+  {ℱ : Set X | ℱ = univ ∨ ℱ.Finite}
 
 /-- Example 1.8: the corresponding finite-complement topology. -/
 def finiteComplementTopology_1_8 (X : Type u) : Set (Set X) :=
@@ -176,13 +192,13 @@ Definition 1.10 compares two topologies on the same underlying set by
 inclusion of their open families.
 -/
 
-/-- Definition 1.10: `O₁` is coarser than `O₂` when `O₁ ⊆ O₂`. -/
-def IsCoarser_1_10 {X : Type u} (O₁ O₂ : Set (Set X)) : Prop :=
-  O₁ ⊆ O₂
+/-- Definition 1.10: `𝒪₁` is coarser than `𝒪₂` when `𝒪₁ ⊆ 𝒪₂`. -/
+def IsCoarser_1_10 {X : Type u} (𝒪₁ 𝒪₂ : Set (Set X)) : Prop :=
+  𝒪₁ ⊆ 𝒪₂
 
-/-- Definition 1.10: `O₂` is finer than `O₁` when `O₁ ⊆ O₂`. -/
-def IsFiner_1_10 {X : Type u} (O₁ O₂ : Set (Set X)) : Prop :=
-  O₁ ⊆ O₂
+/-- Definition 1.10: `𝒪₂` is finer than `𝒪₁` when `𝒪₁ ⊆ 𝒪₂`. -/
+def IsFiner_1_10 {X : Type u} (𝒪₁ 𝒪₂ : Set (Set X)) : Prop :=
+  𝒪₁ ⊆ 𝒪₂
 
 /-!
 Example 1.11 compares the standard examples: the discrete topology is the
@@ -190,10 +206,10 @@ finest, and the indiscrete topology is the coarsest.
 -/
 
 /-- Example 1.11: every topology lies between the indiscrete and discrete topologies. -/
-theorem indiscrete_le_any_le_discrete_1_11 {X : Type u} {O : Set (Set X)}
-    (hO : IsTopology_1_1 X O) :
-    IsCoarser_1_10 (indiscreteTopology_1_7 X) O ∧
-      IsCoarser_1_10 O (discreteTopology_1_6 X) := by
+theorem indiscrete_le_any_le_discrete_1_11 {X : Type u} {𝒪 : Set (Set X)}
+    (hO : IsTopology_1_1 X 𝒪) :
+    IsCoarser_1_10 (indiscreteTopology_1_7 X) 𝒪 ∧
+      IsCoarser_1_10 𝒪 (discreteTopology_1_6 X) := by
   sorry
 
 /-!
@@ -288,8 +304,8 @@ equal to one induced by some distance.
 -/
 
 /-- Definition 1.18: a topology is metrizable if it is induced by some distance. -/
-def IsMetrizable_1_18 {X : Type u} (O : Set (Set X)) : Prop :=
-  ∃ D : DistanceSpace_1_12 X, inducedTopology_1_17 D = O
+def IsMetrizable_1_18 {X : Type u} (𝒪 : Set (Set X)) : Prop :=
+  ∃ D : DistanceSpace_1_12 X, inducedTopology_1_17 D = 𝒪
 
 /-!
 Remark 1.19 emphasizes the difference between a distance space and a metrizable
@@ -346,11 +362,11 @@ with mathlib's bundled notions when one chooses to pass to them.
 -/
 
 /-- Certification: an article topology family yields a mathlib `TopologicalSpace`. -/
-abbrev toMathlibTopologicalSpace_cert {X : Type u} (O : Set (Set X))
-    (hO : IsTopology_1_1 X O) : TopologicalSpace X := by
+abbrev toMathlibTopologicalSpace_cert {X : Type u} (𝒪 : Set (Set X))
+    (hO : IsTopology_1_1 X 𝒪) : TopologicalSpace X := by
   classical
   refine
-    { IsOpen := fun U => U ∈ O
+    { IsOpen := fun U => U ∈ 𝒪
       isOpen_univ := hO.O1_univ
       isOpen_inter := by
         intro U V hU hV
@@ -359,7 +375,7 @@ abbrev toMathlibTopologicalSpace_cert {X : Type u} (O : Set (Set X))
         intro S hS
         classical
         let U : S → Set X := fun s => s.1
-        have hU : ∀ s, U s ∈ O := by
+        have hU : ∀ s, U s ∈ 𝒪 := by
           intro s
           exact hS s.1 s.2
         simpa [U, sUnion_eq_iUnion] using hO.O3_iUnion U hU }
