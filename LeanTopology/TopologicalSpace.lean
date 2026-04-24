@@ -3,11 +3,6 @@ import Mathlib.Topology.MetricSpace.Basic
 
 /-!
 # 拓扑学入门1: 拓扑空间
-
-This file follows the article "拓扑学入门1——拓扑空间".
-It records the listed definitions, examples, remarks, and propositions as Lean
-skeleta, keeping the primary definitions close to the article and postponing
-mathlib compatibility statements to the final section.
 -/
 
 noncomputable section
@@ -15,7 +10,7 @@ noncomputable section
 open Set LeanTopology.EuclideanSpaceTopology
 
 namespace LeanTopology
-namespace TopologicalSpaceArticle
+namespace TopologicalSpace
 
 universe u v
 
@@ -396,11 +391,11 @@ Definition 1.12 abstracts the three Euclidean distance axioms into the notion
 of a distance on an arbitrary set.
 -/
 
-/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 1.12: a distance function in the sense of the article. -/
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 1.12: a distance function. -/
 class DistanceSpace_1_12 (X : Type u) where
-  dist : X → X → ℝ
+  dist : X -> X -> ℝ
   nonneg : ∀ x y, 0 ≤ dist x y
-  D1 : ∀ x y, dist x y = 0 ↔ x = y
+  D1 : ∀ x y, dist x y = 0 <-> x = y
   D2 : ∀ x y, dist x y = dist y x
   D3 : ∀ x y z, dist x z ≤ dist x y + dist y z
 
@@ -411,38 +406,32 @@ distance space.
 
 /-- ℛℯ𝓂𝒶𝓇𝓀 1.13: the restriction of a distance to a subset is again a distance. -/
 abbrev restrictDistance_1_13 {X : Type u} [D : DistanceSpace_1_12 X] (A : Set X) :
-    DistanceSpace_1_12 A := by
-  refine
-    { dist := fun x y => DistanceSpace_1_12.dist x.1 y.1
-      nonneg := ?_
-      D1 := ?_
-      D2 := ?_
-      D3 := ?_ }
-  · intro x y
-    exact D.nonneg x.1 y.1
-  · intro x y
-    constructor
-    · intro h
-      apply Subtype.ext
-      exact (D.D1 x.1 y.1).1 h
-    · intro h
-      exact (D.D1 x.1 y.1).2 (Subtype.ext_iff.mp h)
-  · intro x y
-    exact D.D2 x.1 y.1
-  · intro x y z
-    exact D.D3 x.1 y.1 z.1
+    DistanceSpace_1_12 A := {
+      dist    := λ x y    ↦ DistanceSpace_1_12.dist x.1 y.1
+      nonneg  := λ x y    ↦ D.nonneg x y
+      D1      := λ x y    ↦ ⟨
+        λ h ↦         Subtype.ext ((D.D1 x y).mp h),
+        λ h ↦ (D.D1 x y).mpr (Subtype.ext_iff.mp h),
+      ⟩
+      D2      := λ x y    ↦ D.D2 x y,
+      D3      := λ x y z  ↦ D.D3 x y z,
+    }
 
 /-!
 Definition 1.14 introduces open and closed balls in a distance space.
 -/
+open DistanceSpace_1_12 in
+section
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 1.14: the open ball for a distance space. -/
 def openBall_1_14 {X : Type u} [DistanceSpace_1_12 X] (x : X) (r : ℝ) : Set X :=
-  {y : X | DistanceSpace_1_12.dist x y < r}
+  {y : X | dist x y < r}
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 1.14: the closed ball for a distance space. -/
 def closedBall_1_14 {X : Type u} [DistanceSpace_1_12 X] (x : X) (r : ℝ) : Set X :=
-  {y : X | DistanceSpace_1_12.dist x y ≤ r}
+  {y : X | dist x y ≤ r}
+
+end
 
 /-!
 Definition 1.15 defines open subsets of a distance space via distance balls.
@@ -456,26 +445,100 @@ def isOpenDistance_1_15 {X : Type u} [DistanceSpace_1_12 X] (U : Set X) : Prop :
 Proposition 1.16 states that open balls are open and closed balls are closed in
 the distance-induced sense.
 -/
+open DistanceSpace_1_12 in
+section
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 1.16: open balls are open and closed balls are closed. -/
-theorem openBall_open_closedBall_closed_1_16 {X : Type u} [DistanceSpace_1_12 X]
-    (x : X) (r : ℝ) :
-    isOpenDistance_1_15 (openBall_1_14 x r) ∧
-      IsClosed_1_2 {U : Set X | isOpenDistance_1_15 U} (closedBall_1_14 x r) := by
-  sorry
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 1.16: open balls are open. -/
+theorem openBall_open_1_16 {X : Type u} [DistanceSpace_1_12 X]
+  (x : X) (r : ℝ) : isOpenDistance_1_15 (openBall_1_14 x r) := by
+    intro y hy
+    set r' := r - dist x y with r'df
+    have r'pos : 0 < r' := sub_pos.mpr hy
+    use r'; use r'pos;
+    simp only [openBall_1_14, setOf_subset_setOf]
+    intro z hz
+    have c1 := DistanceSpace_1_12.D3 x y z
+    have c2 := add_lt_add_right hz (DistanceSpace_1_12.dist x y)
+    linarith
+
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 1.16: Closed balls are closed. -/
+theorem closedBall_closed_1_16 {X : Type u} [DistanceSpace_1_12 X] (x : X) (r : ℝ) :
+  IsClosed_1_2 {U : Set X | isOpenDistance_1_15 U} (closedBall_1_14 x r) := by
+    intro y hy
+    simp only [closedBall_1_14, mem_compl_iff,
+      mem_setOf_eq, not_le] at hy
+    set r' := dist x y - r with r'df
+    have r'pos : 0 < r' := sub_pos.mpr hy
+    use r'; use r'pos; intro z;
+    simp only [openBall_1_14, mem_setOf_eq,
+      closedBall_1_14, mem_compl_iff, not_le]
+    intro h
+    have c1 : r = dist x y - r' := by simp only [r'df, sub_sub_cancel]
+    have c2 : dist x y - r' < dist x y - dist y z
+      := sub_lt_sub_left h (dist x y)
+    have c2 : dist x y - dist y z ≤ dist x z := by
+      nth_rw 2 [DistanceSpace_1_12.D2]
+      linarith [DistanceSpace_1_12.D3 x z y]
+    linarith
+
+end
 
 /-!
 Proposition 1.17 says that the family of distance-open sets is a topology.
 -/
+open DistanceSpace_1_12 in
+section
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 1.17: the topology induced by a distance space. -/
 def inducedTopology_1_17 {X : Type u} [DistanceSpace_1_12 X] : Set (Set X) :=
   {U : Set X | isOpenDistance_1_15 U}
 
+def 𝒪𝒹 {X : Type u} [DistanceSpace_1_12 X] : Set (Set X) := inducedTopology_1_17
+
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 1.17: the distance-induced open sets satisfy the topology axioms. -/
 theorem inducedTopology_isTopology_1_17 {X : Type u} [DistanceSpace_1_12 X] :
-    IsTopology_1_1 X inducedTopology_1_17 := by
-  sorry
+    IsTopology_1_1 X 𝒪𝒹 := {
+      O1_empty  := λ x hx ↦ not_disjoint_iff.mp λ a ↦ hx
+      O1_univ   := λ x hx ↦ ⟨
+        1,
+        zero_lt_one,
+        subset_univ _,
+      ⟩,
+      O2_inter  := λ U V hU hV x hx ↦ by
+        specialize hU x hx.left
+        specialize hV x hx.right
+        rcases hU with ⟨r₁, r₁pos, hr₁⟩
+        rcases hV with ⟨r₂, r₂pos, hr₂⟩
+        set r'  := min r₁ r₂ with r'df
+        have r'pos : 0 < r' := by grind
+        use r'; use r'pos
+        intro y hy
+        constructor
+        · simp only [openBall_1_14, mem_setOf_eq] at hy
+          have : r' ≤ r₁ := Std.min_le_left
+          have : dist x y < r₁ := by linarith
+          simp only [openBall_1_14] at hr₁
+          grind
+        · simp only [openBall_1_14, mem_setOf_eq] at hy
+          have : r' ≤ r₂ := Std.min_le_right
+          have : dist x y < r₂ := by linarith
+          simp only [openBall_1_14] at hr₂
+          grind
+      O3_sUnion := λ 𝒮 h𝒮 x hx ↦ by
+        obtain ⟨S, hS, xinS⟩ := mem_sUnion.mp hx
+        specialize h𝒮 S hS
+        simp only [
+          𝒪𝒹, inducedTopology_1_17,
+          isOpenDistance_1_15,
+          gt_iff_lt, mem_setOf_eq
+        ] at h𝒮
+        specialize h𝒮 x xinS
+        rcases h𝒮 with ⟨r, rpos, sub⟩
+        use r; use rpos;
+        exact subset_sUnion_of_subset 𝒮 S sub hS
+    }
+
+end
 
 /-!
 Definition 1.18 introduces metrizability: a topology is metrizable when it is
@@ -487,8 +550,7 @@ def IsMetrizable_1_18 {X : Type u} (𝒪 : Set (Set X)) : Prop :=
   ∃ D : DistanceSpace_1_12 X, @inducedTopology_1_17 X D = 𝒪
 
 /-!
-Remark 1.19 emphasizes the difference between a distance space and a metrizable
-space: the latter remembers only the topology, not a chosen distance.
+Remark 1.19 : A metrizable space remembers only the topology, not a chosen distance.
 -/
 
 /-- ℛℯ𝓂𝒶𝓇𝓀 1.19: a chosen distance produces a metrizable topology. -/
@@ -501,9 +563,8 @@ Example 1.20 metrizes the discrete topology by the usual `0/1` distance.
 -/
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.20: the discrete distance on an arbitrary set. -/
-noncomputable def discreteDistance_1_20 {X : Type u} : X → X → ℝ := by
-  classical
-  exact fun x y ↦ if x = y then 0 else 1
+noncomputable def discreteDistance_1_20 {X : Type u} : X → X → ℝ
+  := open Classical in λ x y ↦ if x = y then 0 else 1
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.20: the discrete distance satisfies the distance axioms. -/
 abbrev discreteDistanceSpace_1_20 (X : Type u) : DistanceSpace_1_12 X := by
@@ -528,19 +589,34 @@ abbrev discreteDistanceSpace_1_20 (X : Type u) : DistanceSpace_1_12 X := by
     · have h' : ¬ y = x := by simpa [eq_comm] using h
       simp [discreteDistance_1_20, h, h']
   · intro x y z
-    sorry
+    simp [discreteDistance_1_20]
+    by_cases c1 : x = y
+    <;> by_cases c2 : y = z
+    <;> by_cases c3 : x = z
+    <;> simp [c1, c2, c3, eq_comm]
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.20: the discrete topology is metrizable. -/
 theorem discreteTopology_isMetrizable_1_20 (X : Type u) :
     IsMetrizable_1_18 (discreteTopology_1_6 X) := by
-  sorry
+    use discreteDistanceSpace_1_20 X
+    ext S
+    constructor
+    · intro _
+      simp [discreteTopology_1_6]
+    · intro hS x hx
+      use 1; use zero_lt_one;
+      intro y hy
+      simp [openBall_1_14, DistanceSpace_1_12.dist,
+        discreteDistance_1_20] at hy
+      have : x = y := by grind
+      exact this ▸ hx
 
 /-!
-The final statements certify that the article's set-family viewpoint agrees
-with mathlib's bundled notions when one chooses to pass to them.
+The final statements certify that the viewpoint we currently construct agrees
+  with mathlib's bundled notions when one chooses to pass to them.
 -/
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃: an article topology family yields a mathlib `TopologicalSpace`. -/
+/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : an article topology family yields a mathlib `TopologicalSpace`. -/
 abbrev toMathlibTopologicalSpace_cert {X : Type u} (𝒪 : Set (Set X))
     (hO : IsTopology_1_1 X 𝒪) : TopologicalSpace X := by
   classical
@@ -559,7 +635,7 @@ abbrev toMathlibTopologicalSpace_cert {X : Type u} (𝒪 : Set (Set X))
           exact hS s.1 s.2
         simpa [U, sUnion_eq_iUnion] using hO.O3_iUnion U hU }
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃: the open family of a mathlib topology satisfies the article axioms. -/
+/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the open family of a mathlib topology satisfies the article axioms. -/
 theorem fromMathlibTopologicalSpace_cert {X : Type u} (T : TopologicalSpace X) :
     IsTopology_1_1 X {U : Set X | @IsOpen X T U} := by
   classical
@@ -573,16 +649,16 @@ theorem fromMathlibTopologicalSpace_cert {X : Type u} (T : TopologicalSpace X) :
         intro S hS
         exact isOpen_sUnion hS }
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃: the article's Euclidean topology agrees with the mathlib topology. -/
+/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the article's Euclidean topology agrees with the mathlib topology. -/
 theorem euclideanTopology_iff_mathlibOpen_cert (n : ℕ) (U : Set (EuclideanSpaceTopology.E n)) :
     U ∈ euclideanTopology_1_9 n ↔ IsOpen U := by
   change EuclideanSpaceTopology.isOpenEuclidean_0_6 U ↔ IsOpen U
   exact EuclideanSpaceTopology.isOpenEuclidean_iff_isOpen_0_6 U
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃: the distance-induced topology yields a mathlib topological space. -/
+/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the distance-induced topology yields a mathlib topological space. -/
 abbrev inducedMathlibTopologicalSpace_cert {X : Type u} [DistanceSpace_1_12 X] :
     TopologicalSpace X :=
   toMathlibTopologicalSpace_cert inducedTopology_1_17 inducedTopology_isTopology_1_17
 
-end TopologicalSpaceArticle
+end TopologicalSpace
 end LeanTopology

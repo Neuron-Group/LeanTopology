@@ -5,9 +5,10 @@ import Mathlib.Topology.MetricSpace.Basic
 /-!
 # 拓扑学入门0: 欧几里得空间的拓扑
 
-This file follows the article "拓扑学入门0——欧几里得空间的拓扑".
-It records the listed definitions, propositions, and theorem as Lean
-skeletons over `EuclideanSpace ℝ (Fin n)`.
+As a basic discipline that permeates different aspects of modern mathematics,
+  topology plays an important role in notions such as "continuous", "tend to", or "approach".
+This article focuses on the topological structure in Euclidean space,
+  serving as a lead-in to more abstract topological notions.
 -/
 
 noncomputable section
@@ -26,12 +27,12 @@ Mathlib already provides these as `⟪x, y⟫_ℝ` and `‖x‖` on
 `EuclideanSpace ℝ (Fin n)`.
 -/
 
-/-- Proposition 0.1: the Cauchy--Schwarz inequality in Euclidean space. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.1: the Cauchy--Schwarz inequality in Euclidean space. -/
 theorem cauchy_schwarz_0_1 {n : ℕ} (x y : E n) :
     (inner ℝ x y) ^ 2 ≤ ‖x‖ ^ 2 * ‖y‖ ^ 2 := by
   simpa [pow_two, real_inner_self_eq_norm_sq] using real_inner_mul_inner_self_le x y
 
-/-- Proposition 0.2: the triangle inequality for the Euclidean norm. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.2: the triangle inequality for the Euclidean norm. -/
 theorem norm_triangle_0_2 {n : ℕ} (x y : E n) :
     ‖x + y‖ ≤ ‖x‖ + ‖y‖ := by
   exact norm_add_le x y
@@ -41,17 +42,17 @@ The Euclidean distance between `x` and `y` is the norm of `x - y`.
 Mathlib's standard notation is `dist x y`.
 -/
 
-/-- Proposition 0.3, first property: Euclidean distance vanishes exactly on equal points. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.3, first property: Euclidean distance vanishes exactly on equal points. -/
 theorem dist_eq_zero_iff_0_3 {n : ℕ} (x y : E n) :
     dist x y = 0 ↔ x = y := by
   exact dist_eq_zero
 
-/-- Proposition 0.3, second property: Euclidean distance is symmetric. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.3, second property: Euclidean distance is symmetric. -/
 theorem dist_comm_0_3 {n : ℕ} (x y : E n) :
     dist x y = dist y x := by
   exact PseudoMetricSpace.dist_comm x y
 
-/-- Proposition 0.3, third property: Euclidean distance satisfies the triangle inequality. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.3, third property: Euclidean distance satisfies the triangle inequality. -/
 theorem dist_triangle_0_3 {n : ℕ} (x y z : E n) :
     dist x z ≤ dist x y + dist y z := by
   exact dist_triangle x y z
@@ -61,7 +62,7 @@ Definition 0.4 introduces open balls directly from the Euclidean distance:
 `B(x, r)` is the set of points whose distance from `x` is less than `r`.
 -/
 
-/-- Definition 0.4: the open ball in Euclidean space. -/
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 0.4: the open ball in Euclidean space. -/
 abbrev openBall_0_4 {n : ℕ} (x : E n) (r : ℝ) : Set (E n) :=
   {y : E n | dist y x < r}
 
@@ -69,7 +70,7 @@ abbrev openBall_0_4 {n : ℕ} (x : E n) (r : ℝ) : Set (E n) :=
 The article's open ball is the same object as mathlib's standard metric ball.
 -/
 
-/-- Certification for Definition 0.4: the article open ball equals `Metric.ball`. -/
+/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the article open ball equals `Metric.ball`. -/
 theorem openBall_eq_metric_ball_0_4 {n : ℕ} (x : E n) (r : ℝ) :
     openBall_0_4 x r = Metric.ball x r := by
   rfl
@@ -86,7 +87,7 @@ Proposition 0.5 rewrites epsilon-delta continuity at a point using open balls:
 small balls around `a` are mapped into small balls around `f a`.
 -/
 
-/-- Proposition 0.5: continuity at a point described by images of open balls. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.5: continuity at a point described by images of open balls. -/
 theorem continuousAt_iff_ball_0_5 {n m : ℕ} (f : E n -> E m) (a : E n) :
     ContinuousAt f a <->
       ∀ ε > 0, ∃ δ > 0,
@@ -119,7 +120,7 @@ The article's ball-based definition agrees with mathlib's standard topological
 predicate `IsOpen` on Euclidean space.
 -/
 
-/-- Certification for Definition 0.6: the article definition is equivalent to `IsOpen`. -/
+/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the article definition is equivalent to `IsOpen`. -/
 theorem isOpenEuclidean_iff_isOpen_0_6 {n : ℕ} (U : Set (E n)) :
     isOpenEuclidean_0_6 U ↔ IsOpen U := by
   simpa [isOpenEuclidean_0_6, openBall_eq_metric_ball_0_4] using
@@ -129,11 +130,12 @@ theorem isOpenEuclidean_iff_isOpen_0_6 {n : ℕ} (U : Set (E n)) :
 Proposition 0.7 states that every Euclidean open ball is an open set.
 -/
 
-/-- Proposition 0.7: every open ball in Euclidean space is open. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.7: every open ball in Euclidean space is open. -/
 theorem isOpen_ball_0_7 {n : ℕ} (x : E n) (r : ℝ) :
     isOpenEuclidean_0_6 (openBall_0_4 x r) := by
   intro y yinBall
-  simp only [openBall_0_4, mem_setOf_eq, gt_iff_lt, setOf_subset_setOf] at yinBall ⊢
+  simp only [openBall_0_4, mem_setOf_eq,
+    gt_iff_lt, setOf_subset_setOf] at yinBall ⊢
   set r' := r - dist y x with r'df
   have r'pos : 0 < r' := by
     rw [r'df]
@@ -156,7 +158,7 @@ the empty set and whole space are open, finite intersections are open, and
 arbitrary unions are open.
 -/
 
-/-- Proposition 0.8, first property: both `∅` and the whole Euclidean space are open. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.8, first property: both `∅` and the whole Euclidean space are open. -/
 theorem isOpen_empty_univ_0_8 {n : ℕ} :
     isOpenEuclidean_0_6 (∅ : Set (E n)) ∧ isOpenEuclidean_0_6 (univ : Set (E n)) := by
   constructor
@@ -167,7 +169,7 @@ theorem isOpen_empty_univ_0_8 {n : ℕ} :
     use 1; use zero_lt_one;
     simp
 
-/-- Proposition 0.8, second property: the intersection of two open sets is open. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.8, second property: the intersection of two open sets is open. -/
 theorem isOpen_inter_0_8 {n : ℕ} {U₁ U₂ : Set (E n)}
     (hU₁ : isOpenEuclidean_0_6 U₁) (hU₂ : isOpenEuclidean_0_6 U₂) :
     isOpenEuclidean_0_6 (U₁ ∩ U₂) := by
@@ -186,7 +188,7 @@ theorem isOpen_inter_0_8 {n : ℕ} {U₁ U₂ : Set (E n)}
     · have : r ≤ r₂ := Std.min_le_right
       exact (openBall_mono_0_4 this).trans hr₂
 
-/-- Proposition 0.8, third property: an arbitrary union of open sets is open. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.8, third property: an arbitrary union of open sets is open. -/
 theorem isOpen_iUnion_0_8 {n : ℕ} {ι : Type*} {U : ι -> Set (E n)}
     (hU : ∀ i, isOpenEuclidean_0_6 (U i)) :
     isOpenEuclidean_0_6 (⋃ i, U i) := by
@@ -203,7 +205,7 @@ a map between Euclidean spaces is continuous exactly when preimages of open
 sets are open.
 -/
 
-/-- Theorem 0.9: continuity is equivalent to openness of all preimages. -/
+/-- 𝒯𝒽ℯℴ𝓇ℯ𝓂 0.9: continuity is equivalent to openness of all preimages. -/
 theorem continuous_iff_preimage_open_0_9 {n m : ℕ} (f : E n -> E m) :
     Continuous f <->
       ∀ V : Set (E m), isOpenEuclidean_0_6 V → isOpenEuclidean_0_6 (f ⁻¹' V) := by
