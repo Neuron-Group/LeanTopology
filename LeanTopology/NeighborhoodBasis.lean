@@ -88,49 +88,35 @@ Proposition 2.4 gives a neighborhood-based criterion for openness.
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 2.4: a set is open iff each of its points has a neighborhood contained in it. -/
 theorem isOpen_iff_neighborhood_2_4 {X : Type u} {𝒪 : Set (Set X)}
     (h𝒪 : IsTopology_1_1 X 𝒪) (U : Set X) :
-    U ∈ 𝒪 ↔ ∀ x ∈ U, ∃ V : Set X, IsNeighborhood_2_1 𝒪 x V ∧ V ⊆ U := open Classical in by
+    U ∈ 𝒪 <-> ∀ x ∈ U, ∃ V : Set X, IsNeighborhood_2_1 𝒪 x V ∧ V ⊆ U
+      := by
   constructor
   · intro hU x xinU
-    have UisNeib := (openNeighborhood_iff_2_2 h𝒪 _ _).mpr ⟨hU, xinU⟩
-    use U; use UisNeib.left;
+    exact ⟨U, ⟨U, hU, xinU, Subset.rfl⟩, Subset.rfl⟩
   · intro hyp
-    choose f hf using hyp
-    choose g hg using hf
-    choose h hh using g
-    set ι := {x : X // x ∈ U} with ιdf
-    set prj : ι -> Set X
-      := λ i ↦ h i.val i.property
-        with prj_df
-    set 𝒮 : Set (Set X) := prj '' univ
-      with 𝒮df
-    have : ∀ S ∈ 𝒮, S ∈ 𝒪 := by
-      intro S hS
-      simp only [𝒮df, prj_df, image_univ, mem_range] at hS
-      rcases hS with ⟨⟨y, ay⟩, hy⟩; rw [← hy]
-      exact (hh y ay).left
-    set U' := ⋃₀ 𝒮 with U'df
-    have hU' : U' ∈ 𝒪 := by
-      rw [U'df]
-      exact h𝒪.O3_sUnion 𝒮 this
-    have Ueq : U = U' := by
-      refine ext ?_
-      intro x
-      constructor
-      <;> intro hx
-      · simp only [U'df, 𝒮df, prj_df,
-          image_univ, sUnion_range, mem_iUnion]
-        use ⟨x, hx⟩;
-        specialize hh x hx
-        rcases hh with ⟨_, hh, _⟩
-        exact hh
-      · simp only [U'df, 𝒮df, prj_df, image_univ,
-          sUnion_range, mem_iUnion] at hx
-        rcases hx with ⟨⟨y, ay⟩, hy⟩
-        rcases hh y ay with ⟨_, _, hh⟩
-        specialize hg y ay
-        exact hh.trans hg hy
-    rw [Ueq]
-    exact hU'
+    let 𝒮 : Set (Set X) := {W : Set X | W ∈ 𝒪 ∧ W ⊆ U}
+    have h𝒮 : ∀ W ∈ 𝒮, W ∈ 𝒪 := by
+      intro W hW
+      have hW' : W ∈ 𝒪 ∧ W ⊆ U := by
+        simpa [𝒮] using hW
+      exact hW'.1
+    have hUnion : ⋃₀ 𝒮 ∈ 𝒪 := h𝒪.O3_sUnion 𝒮 h𝒮
+    have hSubset : ⋃₀ 𝒮 ⊆ U := by
+      intro x hx
+      rcases mem_sUnion.mp hx with ⟨W, hW𝒮, hxW⟩
+      have hW' : W ∈ 𝒪 ∧ W ⊆ U := by
+        simpa [𝒮] using hW𝒮
+      exact hW'.2 hxW
+    have hSuperset : U ⊆ ⋃₀ 𝒮 := by
+      intro x hx
+      rcases hyp x hx with ⟨V, hVneigh, hVU⟩
+      rcases hVneigh with ⟨W, hWOpen, hxW, hWV⟩
+      apply mem_sUnion.mpr
+      refine ⟨W, ?_, hxW⟩
+      change W ∈ 𝒪 ∧ W ⊆ U
+      exact ⟨hWOpen, hWV.trans hVU⟩
+    have hEq : ⋃₀ 𝒮 = U := Subset.antisymm hSubset hSuperset
+    simpa [hEq] using hUnion
 
 /-!
 Definition 2.5 singles out representative neighborhoods that refine all
