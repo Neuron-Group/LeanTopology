@@ -3,6 +3,12 @@ import Mathlib.Topology.MetricSpace.Basic
 
 /-!
 # 拓扑学入门1: 拓扑空间
+
+This section abstracts the essential properties of those open sets into the general notion
+  of a topological space.
+We introduce the open‑set axioms,
+  examine basic examples (discrete, indiscrete, cofinite, and Euclidean topologies),
+    and show how a distance function induces a topology.
 -/
 
 noncomputable section
@@ -21,9 +27,9 @@ the three open-set axioms.
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 1.1: the open-set axioms for a family of subsets of `X`. -/
 structure IsTopology_1_1 (X : Type u) (𝒪 : Set (Set X)) : Prop where
-  O1_empty : (∅ : Set X) ∈ 𝒪
-  O1_univ : (univ : Set X) ∈ 𝒪
-  O2_inter : ∀ ⦃U V : Set X⦄, U ∈ 𝒪 -> V ∈ 𝒪 -> U ∩ V ∈ 𝒪
+  O1_empty  : (∅    : Set X) ∈ 𝒪
+  O1_univ   : (univ : Set X) ∈ 𝒪
+  O2_inter  : ∀ ⦃U V : Set X⦄, U ∈ 𝒪 -> V ∈ 𝒪 -> U ∩ V ∈ 𝒪
   O3_sUnion : ∀ 𝒮 : Set (Set X), (∀ U ∈ 𝒮, U ∈ 𝒪) -> ⋃₀ 𝒮 ∈ 𝒪
 
 theorem IsTopology_1_1.O2_inter' {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTopology_1_1 X 𝒪)
@@ -62,9 +68,9 @@ def IsClosed_1_2 {X : Type u} (𝒪 : Set (Set X)) (F : Set X) : Prop :=
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 1.3: the closed-set axioms for a family of subsets of `X`. -/
 structure IsClosedFamily_1_3 (X : Type u) (ℱ : Set (Set X)) : Prop where
-  C1_empty : (∅ : Set X) ∈ ℱ
-  C1_univ : (univ : Set X) ∈ ℱ
-  C2_union : ∀ ⦃F G : Set X⦄, F ∈ ℱ → G ∈ ℱ → F ∪ G ∈ ℱ
+  C1_empty  : (∅    : Set X) ∈ ℱ
+  C1_univ   : (univ : Set X) ∈ ℱ
+  C2_union  : ∀ ⦃F G : Set X⦄, F ∈ ℱ → G ∈ ℱ → F ∪ G ∈ ℱ
   C3_sInter : ∀ 𝒮 : Set (Set X), (∀ F ∈ 𝒮, F ∈ ℱ) → ⋂₀ 𝒮 ∈ ℱ
 
 theorem IsClosedFamily_1_3.C2_union' {X : Type u} {ℱ : Set (Set X)}
@@ -86,7 +92,7 @@ theorem IsClosedFamily_1_3.C2_union' {X : Type u} {ℱ : Set (Set X)}
 
 theorem IsClosedFamily_1_3.C3_iInter {X : Type u} {ℱ : Set (Set X)}
     (hℱ : IsClosedFamily_1_3 X ℱ) {ι : Type*} (F : ι → Set X) :
-    (∀ i, F i ∈ ℱ) → (⋂ i, F i) ∈ ℱ := by
+    (∀ i, F i ∈ ℱ) -> (⋂ i, F i) ∈ ℱ := by
   intro hF
   let S : Set (Set X) := Set.range F
   have hS : ∀ V ∈ S, V ∈ ℱ := by
@@ -280,7 +286,8 @@ theorem indiscreteTopology_isTopology_1_7 (X : Type u) :
       <;> simp [Ueq, Veq],
     by
       intro 𝒮 h
-      grind,
+      grind only [= mem_insert_iff, = mem_singleton_iff,
+        = mem_empty_iff_false, = mem_sUnion, ← mem_univ],
   ⟩
 
 /-!
@@ -307,7 +314,7 @@ theorem finiteComplementTopology_isTopology_1_8 (X : Type u) :
       simp only [mem_setOf_eq]; intro U V Ueq Veq;
       nth_rw 2 [inter_eq_compl_compl_union_compl]
       rw [compl_compl, finite_union]
-      grind,
+      grind only [= mem_inter_iff, = mem_empty_iff_false],
     by
       simp only [mem_setOf_eq, sUnion_eq_empty]
       intro 𝒮 h𝒮
@@ -325,8 +332,7 @@ theorem finiteComplementTopology_isTopology_1_8 (X : Type u) :
         · exact (hUne hUe).elim
         · have hsubset : (⋃₀ 𝒮)ᶜ ⊆ Uᶜ := by
             exact compl_subset_compl.mpr (subset_sUnion_of_mem hU𝒮)
-          exact hUf.subset hsubset
-    ,
+          exact hUf.subset hsubset,
   ⟩
 
 /-!
@@ -393,11 +399,11 @@ of a distance on an arbitrary set.
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 1.12: a distance function. -/
 class DistanceSpace_1_12 (X : Type u) where
-  dist : X -> X -> ℝ
-  nonneg : ∀ x y, 0 ≤ dist x y
-  D1 : ∀ x y, dist x y = 0 <-> x = y
-  D2 : ∀ x y, dist x y = dist y x
-  D3 : ∀ x y z, dist x z ≤ dist x y + dist y z
+  dist    : X -> X -> ℝ
+  nonneg  : ∀ x y   , 0 ≤ dist x y
+  D1      : ∀ x y   , dist x y = 0 <-> x = y
+  D2      : ∀ x y   , dist x y = dist y x
+  D3      : ∀ x y z , dist x z ≤ dist x y + dist y z
 
 /-!
 Remark 1.13 restricts a distance to a nonempty subset and obtains a new
@@ -563,7 +569,7 @@ Example 1.20 metrizes the discrete topology by the usual `0/1` distance.
 -/
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.20: the discrete distance on an arbitrary set. -/
-noncomputable def discreteDistance_1_20 {X : Type u} : X → X → ℝ
+noncomputable def discreteDistance_1_20 {X : Type u} : X -> X -> ℝ
   := open Classical in λ x y ↦ if x = y then 0 else 1
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.20: the discrete distance satisfies the distance axioms. -/

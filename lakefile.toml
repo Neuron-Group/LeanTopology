@@ -10,6 +10,7 @@ weak.linter.mathlibStandardSet = true
 maxSynthPendingDepth = 3
 weak.linter.style.lambdaSyntax = false
 weak.linter.style.emptyLine = false
+weak.linter.style.whitespace = false
 
 [[require]]
 name = "Paperproof"

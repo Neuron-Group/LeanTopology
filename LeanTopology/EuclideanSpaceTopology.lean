@@ -7,7 +7,7 @@ import Mathlib.Topology.MetricSpace.Basic
 
 As a basic discipline that permeates different aspects of modern mathematics,
   topology plays an important role in notions such as "continuous", "tend to", or "approach".
-This article focuses on the topological structure in Euclidean space,
+This section focuses on the topological structure in Euclidean space,
   serving as a lead-in to more abstract topological notions.
 -/
 
@@ -88,7 +88,7 @@ small balls around `a` are mapped into small balls around `f a`.
 -/
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.5: continuity at a point described by images of open balls. -/
-theorem continuousAt_iff_ball_0_5 {n m : ℕ} (f : E n -> E m) (a : E n) :
+theorem continuousAt_iff_ball_0_5 {n m : ℕ} (f : E n → E m) (a : E n) :
     ContinuousAt f a <->
       ∀ ε > 0, ∃ δ > 0,
         f '' openBall_0_4 a δ ⊆ openBall_0_4 (f a) ε := by
@@ -122,7 +122,7 @@ predicate `IsOpen` on Euclidean space.
 
 /-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the article definition is equivalent to `IsOpen`. -/
 theorem isOpenEuclidean_iff_isOpen_0_6 {n : ℕ} (U : Set (E n)) :
-    isOpenEuclidean_0_6 U ↔ IsOpen U := by
+    isOpenEuclidean_0_6 U <-> IsOpen U := by
   simpa [isOpenEuclidean_0_6, openBall_eq_metric_ball_0_4] using
     (Metric.isOpen_iff (s := U)).symm
 
@@ -189,7 +189,7 @@ theorem isOpen_inter_0_8 {n : ℕ} {U₁ U₂ : Set (E n)}
       exact (openBall_mono_0_4 this).trans hr₂
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 0.8, third property: an arbitrary union of open sets is open. -/
-theorem isOpen_iUnion_0_8 {n : ℕ} {ι : Type*} {U : ι -> Set (E n)}
+theorem isOpen_iUnion_0_8 {n : ℕ} {ι : Type*} {U : ι → Set (E n)}
     (hU : ∀ i, isOpenEuclidean_0_6 (U i)) :
     isOpenEuclidean_0_6 (⋃ i, U i) := by
   intro x hx
@@ -206,7 +206,7 @@ sets are open.
 -/
 
 /-- 𝒯𝒽ℯℴ𝓇ℯ𝓂 0.9: continuity is equivalent to openness of all preimages. -/
-theorem continuous_iff_preimage_open_0_9 {n m : ℕ} (f : E n -> E m) :
+theorem continuous_iff_preimage_open_0_9 {n m : ℕ} (f : E n → E m) :
     Continuous f <->
       ∀ V : Set (E m), isOpenEuclidean_0_6 V → isOpenEuclidean_0_6 (f ⁻¹' V) := by
   constructor
