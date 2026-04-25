@@ -2,3 +2,4 @@
 import LeanTopology.Import
 import LeanTopology.EuclideanSpaceTopology
 import LeanTopology.TopologicalSpace
+import LeanTopology.NeighborhoodBasis

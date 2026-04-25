@@ -1,5 +1,6 @@
 
 import LeanTopology.Basic
+import LeanTopology.FinChoose
 
 import Mathlib.Tactic
 import Mathlib.Util.Delaborators
