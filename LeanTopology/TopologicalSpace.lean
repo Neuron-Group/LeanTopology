@@ -622,7 +622,7 @@ The final statements certify that the viewpoint we currently construct agrees
   with mathlib's bundled notions when one chooses to pass to them.
 -/
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : an article topology family yields a mathlib `TopologicalSpace`. -/
+/-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our topology family yields a mathlib `TopologicalSpace`. -/
 abbrev toMathlibTopologicalSpace_cert {X : Type u} (𝒪 : Set (Set X))
     (hO : IsTopology_1_1 X 𝒪) : TopologicalSpace X := by
   classical
@@ -641,7 +641,7 @@ abbrev toMathlibTopologicalSpace_cert {X : Type u} (𝒪 : Set (Set X))
           exact hS s.1 s.2
         simpa [U, sUnion_eq_iUnion] using hO.O3_iUnion U hU }
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the open family of a mathlib topology satisfies the article axioms. -/
+/-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the open family of a mathlib topology satisfies our axioms. -/
 theorem fromMathlibTopologicalSpace_cert {X : Type u} (T : TopologicalSpace X) :
     IsTopology_1_1 X {U : Set X | @IsOpen X T U} := by
   classical
@@ -655,13 +655,13 @@ theorem fromMathlibTopologicalSpace_cert {X : Type u} (T : TopologicalSpace X) :
         intro S hS
         exact isOpen_sUnion hS }
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the article's Euclidean topology agrees with the mathlib topology. -/
+/-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our Euclidean topology agrees with the mathlib topology. -/
 theorem euclideanTopology_iff_mathlibOpen_cert (n : ℕ) (U : Set (EuclideanSpaceTopology.E n)) :
     U ∈ euclideanTopology_1_9 n ↔ IsOpen U := by
   change EuclideanSpaceTopology.isOpenEuclidean_0_6 U ↔ IsOpen U
   exact EuclideanSpaceTopology.isOpenEuclidean_iff_isOpen_0_6 U
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the distance-induced topology yields a mathlib topological space. -/
+/-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our distance-induced topology yields a mathlib topological space. -/
 abbrev inducedMathlibTopologicalSpace_cert {X : Type u} [DistanceSpace_1_12 X] :
     TopologicalSpace X :=
   toMathlibTopologicalSpace_cert inducedTopology_1_17 inducedTopology_isTopology_1_17

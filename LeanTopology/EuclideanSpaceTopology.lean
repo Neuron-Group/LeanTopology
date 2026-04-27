@@ -70,7 +70,7 @@ abbrev openBall_0_4 {n : ℕ} (x : E n) (r : ℝ) : Set (E n) :=
 The article's open ball is the same object as mathlib's standard metric ball.
 -/
 
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the article open ball equals `Metric.ball`. -/
+/-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our open ball equals `Metric.ball`. -/
 theorem openBall_eq_metric_ball_0_4 {n : ℕ} (x : E n) (r : ℝ) :
     openBall_0_4 x r = Metric.ball x r := by
   rfl
@@ -111,16 +111,11 @@ every point of the set must contain some open ball around it still contained
 in the set.
 -/
 
-/-- Definition 0.6: an open subset of Euclidean space. -/
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 0.6: an open subset of Euclidean space. -/
 abbrev isOpenEuclidean_0_6 {n : ℕ} (U : Set (E n)) : Prop :=
   ∀ x ∈ U, ∃ r > 0, openBall_0_4 x r ⊆ U
 
-/-!
-The article's ball-based definition agrees with mathlib's standard topological
-predicate `IsOpen` on Euclidean space.
--/
-
-/-- 𝒞ℯ𝓇𝓉𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : the article definition is equivalent to `IsOpen`. -/
+/-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our definition is equivalent to `IsOpen`. -/
 theorem isOpenEuclidean_iff_isOpen_0_6 {n : ℕ} (U : Set (E n)) :
     isOpenEuclidean_0_6 U <-> IsOpen U := by
   simpa [isOpenEuclidean_0_6, openBall_eq_metric_ball_0_4] using
