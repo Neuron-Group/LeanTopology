@@ -617,6 +617,11 @@ theorem uncountable_finiteComplement_not_firstCountable_2_14 {X : Type u}
     ¬ FirstCountable_2_12 (finiteComplementTopology_1_8 X) :=
   open Classical in by
     intro hyp
+
+    /-
+      Assume for contradiction that the cofinite topology on `X` is first countable.
+      We first note that `X` must be nonempty, since the empty space is countable.
+    -/
     have hne : (univ : Set X).Nonempty := by
       by_contra hEmpty
       apply hX
@@ -624,10 +629,23 @@ theorem uncountable_finiteComplement_not_firstCountable_2_14 {X : Type u}
       rw [hEmpty]
       exact (Set.toFinite (∅ : Set X)).countable
     rcases hne with ⟨x, _⟩
+
+    /-
+      Let `𝒰` be a countable neighborhood basis at the chosen point `x`.
+    -/
     rcases hyp x with ⟨𝒰, hBasis, h𝒰count⟩
+
+    /-
+      For each `U ∈ 𝒰`, choose an open set `O` such that `x ∈ O ⊆ U`.
+    -/
     have hOpenWitness : ∀ U ∈ 𝒰, ∃ O : Set X, O ∈ finiteComplementTopology_1_8 X ∧ x ∈ O ∧ O ⊆ U :=
       hBasis.isNeighborhood
     choose O hOop hxO hOsub using hOpenWitness
+
+    /-
+      In the cofinite topology, every nonempty open set has finite complement.
+      Since each chosen `O` contains `x`, it is nonempty, so `Oᶜ` is finite.
+    -/
     have hOcomplFinite : ∀ U (hU : U ∈ 𝒰), Set.Finite (O U hU)ᶜ := by
       intro U hU
       have h := hOop U hU
@@ -635,6 +653,13 @@ theorem uncountable_finiteComplement_not_firstCountable_2_14 {X : Type u}
       · exfalso
         simpa [hEmpty] using hxO U hU
       · exact hfin
+
+    /-
+      Therefore the union of all these complements is countable.
+      After adjoining the point `x`, the resulting set is still countable.
+      Because `X` itself is uncountable, we can choose a point `y ≠ x`
+        outside this countable set.
+    -/
     let S : Set X := ⋃ u : 𝒰, (O u.1 u.2)ᶜ
     have hScount : S.Countable := by
       unfold S
@@ -650,11 +675,22 @@ theorem uncountable_finiteComplement_not_firstCountable_2_14 {X : Type u}
         apply h
         exact ⟨y, by simpa [Set.mem_insert_iff] using hy⟩
       exact Set.Countable.mono (fun y _ ↦ hall y) hSxcount
+
+    /-
+      The set `{y}ᶜ` is an open neighborhood of `x`.
+      Since `𝒰` is a neighborhood basis at `x`, some `U ∈ 𝒰` satisfies `U ⊆ {y}ᶜ`.
+    -/
     have hV : IsNeighborhood_2_1 (finiteComplementTopology_1_8 X) x ({y}ᶜ) := by
       refine ⟨{y}ᶜ, ?_, ?_, fun _ ha ↦ ha⟩
       · simp [finiteComplementTopology_1_8]
       · simpa [Set.mem_singleton_iff] using hyx.symm
     rcases hBasis.hasRefinement {y}ᶜ hV with ⟨U, hU𝒰, hUsub⟩
+
+    /-
+      But `y ∉ S` means that `y ∉ Oᶜ`, hence `y ∈ O`, for the particular `O ⊆ U`
+        attached to this basis element `U`.
+      Thus `y ∈ U`, contradicting `U ⊆ {y}ᶜ`.
+    -/
     have hyU : y ∈ U := by
       by_contra hyU
       apply hyS
