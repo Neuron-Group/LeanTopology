@@ -1,5 +1,6 @@
 import LeanTopology.TopologicalSpace
 import Mathlib.Data.PNat.Basic
+import Mathlib.Topology.Filter
 
 /-!
 # 拓扑学入门2: 邻域、邻域基
@@ -49,7 +50,7 @@ theorem openNeighborhood_iff_2_2 {X : Type u} {𝒪 : Set (Set X)}
     rcases hV with ⟨U, Uop, xinU, UsubV⟩
     exact ⟨Vop, UsubV xinU⟩
   · rintro ⟨Vop, xinV⟩
-    exact ⟨⟨V, Vop, xinV, LE.le.subset λ _ a_1 ↦ a_1⟩, Vop⟩
+    exact ⟨⟨V, Vop, xinV, LE.le.subset λ _ ↦ id⟩, Vop⟩
 
 /-!
 Proposition 2.3 says that finite intersections of neighborhoods are still
@@ -154,7 +155,7 @@ theorem allNeighborhoods_isNeighborhoodBasis_2_6 {X : Type u} {𝒪 : Set (Set X
         isNeighborhood  := λ _ hU   ↦ mem_setOf.mp hU,
         hasRefinement   := λ V hyp  ↦ ⟨V, ⟨
           mem_setOf.mpr hyp,
-          LE.le.subset λ ⦃_⦄ a ↦ a
+          LE.le.subset λ ⦃_⦄ ↦ id
         ⟩⟩
       }
 
@@ -174,7 +175,7 @@ theorem allOpenNeighborhoods_isNeighborhoodBasis_2_7 {X : Type u} {𝒪 : Set (S
     rcases hyp with ⟨U, Uop, xinU, UsubV⟩
     refine ⟨U, ?_, UsubV⟩
     simp only [mem_setOf_eq]
-    exact ⟨⟨U, Uop, xinU, LE.le.subset λ ⦃_⦄ a ↦ a⟩, Uop⟩
+    exact ⟨⟨U, Uop, xinU, LE.le.subset λ ⦃_⦄ ↦ id⟩, Uop⟩
 
 /-!
 Example 2.8 specializes the definition to distance spaces. Open balls centered
@@ -603,12 +604,14 @@ theorem countable_finiteComplement_firstCountable_2_14 {X : Type u}
     Set.Countable.setOf_finite
   haveI : Countable {F : Set X | F.Finite} := hFiniteSets.to_subtype
   change Countable 𝒰
-  let f : 𝒰 → {F : Set X | F.Finite} := fun U => ⟨U.1ᶜ, hfiniteCompl U.1 U.2⟩
+  let f : 𝒰 → {F : Set X | F.Finite}
+    := λ U ↦ ⟨U.1ᶜ, hfiniteCompl U.1 U.2⟩
   refine Function.Injective.countable (f := f) ?_
   intro U₁ U₂ h
   apply Subtype.ext
   ext y
-  have hy : (y ∉ U₁.1ᶜ) = (y ∉ U₂.1ᶜ) := congrArg (fun s => y ∉ s) (congrArg Subtype.val h)
+  have hy : (y ∉ U₁.1ᶜ) = (y ∉ U₂.1ᶜ)
+    := congrArg (λ s ↦ y ∉ s) (congrArg Subtype.val h)
   simpa using hy
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 2.14: an uncountable cofinite space is not first countable. -/
@@ -664,7 +667,7 @@ theorem uncountable_finiteComplement_not_firstCountable_2_14 {X : Type u}
     have hScount : S.Countable := by
       unfold S
       haveI : Countable 𝒰 := h𝒰count.to_subtype
-      exact Set.countable_iUnion fun u ↦ (hOcomplFinite u.1 u.2).countable
+      exact Set.countable_iUnion λ u ↦ (hOcomplFinite u.1 u.2).countable
     have hSxcount : (insert x S).Countable := hScount.insert x
     obtain ⟨y, hyx, hyS⟩ : ∃ y : X, y ≠ x ∧ y ∉ S := by
       by_contra h
@@ -674,14 +677,14 @@ theorem uncountable_finiteComplement_not_firstCountable_2_14 {X : Type u}
         by_contra hy
         apply h
         exact ⟨y, by simpa [Set.mem_insert_iff] using hy⟩
-      exact Set.Countable.mono (fun y _ ↦ hall y) hSxcount
+      exact Set.Countable.mono (λ y _ ↦ hall y) hSxcount
 
     /-
       The set `{y}ᶜ` is an open neighborhood of `x`.
       Since `𝒰` is a neighborhood basis at `x`, some `U ∈ 𝒰` satisfies `U ⊆ {y}ᶜ`.
     -/
     have hV : IsNeighborhood_2_1 (finiteComplementTopology_1_8 X) x ({y}ᶜ) := by
-      refine ⟨{y}ᶜ, ?_, ?_, fun _ ha ↦ ha⟩
+      refine ⟨{y}ᶜ, ?_, ?_, λ _ ↦ id⟩
       · simp [finiteComplementTopology_1_8]
       · simpa [Set.mem_singleton_iff] using hyx.symm
     rcases hBasis.hasRefinement {y}ᶜ hV with ⟨U, hU𝒰, hUsub⟩
@@ -710,22 +713,103 @@ neighborhood basis.
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 2.15: a first-countable point admits a decreasing countable neighborhood basis. -/
 theorem decreasing_neighborhoodBasis_2_15 {X : Type u} {𝒪 : Set (Set X)}
-    (hFirst : FirstCountable_2_12 𝒪) (x : X) :
+    (h𝒪 : IsTopology_1_1 X 𝒪) (hFirst : FirstCountable_2_12 𝒪) (x : X) :
     ∃ V : ℕ → Set X, IsNeighborhoodBasis_2_5 𝒪 x (Set.range V) ∧
       ∀ n : ℕ, V (n + 1) ⊆ V n := by
-  sorry
+  specialize hFirst x
+  rcases hFirst with ⟨𝒰, h𝒰, 𝒰_countable⟩
+  unfold Set.Countable at 𝒰_countable
+  by_cases 𝒰_nempt : ¬ 𝒰.Nonempty
+  <;> push Not at 𝒰_nempt
+  · exfalso
+    have hUniv : IsNeighborhood_2_1 𝒪 x (univ : Set X) := by
+      refine ⟨univ, h𝒪.O1_univ, mem_univ x, ?_⟩
+      exact subset_rfl
+    rcases h𝒰.hasRefinement univ hUniv with ⟨U, hU, _⟩
+    simp [𝒰_nempt] at hU
+  · have 𝒰_nempt : Nonempty 𝒰.Elem := Nonempty.to_subtype 𝒰_nempt
+    have idx := countable_iff_exists_surjective.mp 𝒰_countable
+    rcases idx with ⟨idx, hidx⟩
+    set Vₙ : ℕ -> Set X
+      := Nat.rec (idx 0).val (λ i prev ↦ prev ∩ (idx (i + 1)).val)
+        with Vₙdf
+    use Vₙ
+    constructor
+    · have Vₙ_is_neighborhood : ∀ n : ℕ, IsNeighborhood_2_1 𝒪 x (Vₙ n) := by
+        intro n
+        induction n with
+        | zero =>
+          simp only [Vₙdf, Nat.rec_zero]
+          have : (idx 0).val ∈ 𝒰
+            := Subtype.coe_prop (idx 0)
+          exact h𝒰.isNeighborhood ↑(idx 0) this
+        | succ n hn =>
+          have : Vₙ (n + 1) = Vₙ n ∩ (idx (n + 1)).val := by
+            simp only [Vₙdf]
+          rw [this]
+          have : ↑(idx (n + 1)) ∈ 𝒰
+            := Subtype.coe_prop (idx (n + 1))
+          have hnsucc : IsNeighborhood_2_1 𝒪 x ↑(idx (n + 1))
+            := h𝒰.isNeighborhood (↑(idx (n + 1))) this
+          exact neighborhood_inter_2_3 h𝒪 x (Vₙ n) hn (↑(idx (n + 1))) hnsucc
+      have ex_idx : ∀ U, IsNeighborhood_2_1 𝒪 x U -> ∃ n, x ∈ (idx n).val ∧ (idx n).val ⊆ U := by
+        intro U hU
+        rcases h𝒰.hasRefinement U hU with ⟨Uₙ, hUₙ, UₙsubU⟩
+        have xinUₙ : x ∈ Uₙ := by
+          rcases h𝒰.isNeighborhood Uₙ hUₙ with ⟨O, _, hOl, hOr⟩
+          exact mem_of_subset_of_mem hOr hOl
+        have : ∃ n, (idx n).val = Uₙ := by
+          specialize hidx ⟨Uₙ, hUₙ⟩
+          rcases hidx with ⟨n, hidx⟩
+          use n; simp only [hidx];
+        rcases this with ⟨n, idx_eq⟩
+        use n; rw [idx_eq];
+        exact ⟨xinUₙ, UₙsubU⟩
+      have ex_n : ∀ U, IsNeighborhood_2_1 𝒪 x U-> ∃ n, x ∈ Vₙ n ∧ Vₙ n ⊆ U := by
+        intro U hU
+        specialize ex_idx U hU
+        rcases ex_idx with ⟨n, hxn, hnU⟩
+        use n; constructor
+        · specialize Vₙ_is_neighborhood n
+          rcases Vₙ_is_neighborhood with ⟨W, _, hxW, hWV⟩
+          exact mem_of_subset_of_mem hWV hxW
+        · have : Vₙ n ⊆ ↑(idx n) := by
+            induction n with
+            | zero =>
+              simp only [Vₙdf, Nat.rec_zero, subset_refl]
+            | succ n hn =>
+              simp only [Vₙdf, inter_subset_right]
+          exact LE.le.subset λ ⦃_⦄ a ↦ hnU (this a)
+      refine ⟨?_, ?_⟩
+      · intro U hU
+        have := (range_eq_iff Vₙ (range Vₙ)).mp (by rfl)
+        have := this.right U hU
+        rcases this with ⟨n, neq⟩
+        rw [← neq]
+        exact Vₙ_is_neighborhood n
+      · intro U hU
+        specialize ex_n U hU
+        rcases ex_n with ⟨n, hxV, hVU⟩
+        use Vₙ n; constructor;
+        · exact mem_range_self n
+        · exact hVU
+    · intro n x hx
+      have : Vₙ (n + 1) = Vₙ n ∩ ↑(idx (n + 1)) := by
+        exact Subtype.preimage_coe_eq_preimage_coe_iff.mp rfl
+      rw [this] at hx
+      exact hx.left
 
 /-!
 Definition 2.16 introduces convergence of sequences in a topological space.
 -/
 
-/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 2.16: a sequence in `X` is a map `ℕ+ → X`. -/
-abbrev Sequence_2_16 (X : Type u) := ℕ+ → X
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 2.16: a sequence in `X` is a map `ℕ → X`. -/
+abbrev Sequence_2_16 (X : Type u) := ℕ → X
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 2.16: topological convergence of a sequence to a point. -/
 def TendstoSeq_2_16 {X : Type u} (𝒪 : Set (Set X)) (xₙ : Sequence_2_16 X) (x : X) : Prop :=
   ∀ V : Set X, IsNeighborhood_2_1 𝒪 x V →
-    ∃ N : ℕ+, ∀ n : ℕ+, N ≤ n → xₙ n ∈ V
+    ∃ N : ℕ, ∀ n : ℕ, N ≤ n → xₙ n ∈ V
 
 /-!
 Remark 2.17 notes that sequence limits need not be unique in general.
@@ -737,7 +821,34 @@ theorem indiscrete_nonunique_limit_2_17 :
     let 𝒪 := indiscreteTopology_1_7 X
     let xₙ : Sequence_2_16 X := λ _ ↦ false
     TendstoSeq_2_16 𝒪 xₙ false ∧ TendstoSeq_2_16 𝒪 xₙ true := by
-  sorry
+  intro X 𝒪 xₙ
+  have 𝒪df : 𝒪 = indiscreteTopology_1_7 X := by
+    rfl
+  set h𝒪 : IsTopology_1_1 X 𝒪
+    := indiscreteTopology_isTopology_1_7 X
+      with h𝒪_df
+  unfold indiscreteTopology_1_7 at 𝒪df
+  constructor
+  <;> intro U hU
+  all_goals
+    have Ueq : U = univ := by
+      rcases hU with ⟨V, Vop, hV, VsubU⟩
+      have V_nempt : V.Nonempty := by
+        exact nonempty_of_mem hV
+      have V_neq_empt : V ≠ ∅ := by
+        exact Set.Nonempty.ne_empty V_nempt
+      rw [𝒪df] at Vop
+      have V_eq_univ : V = univ := by
+        simp only [mem_insert_iff, V_neq_empt,
+          mem_singleton_iff, false_or] at Vop
+        exact Vop
+      have : univ ⊆ U := by
+        simpa [V_eq_univ] using VsubU
+      exact univ_subset_iff.mp this
+    use 0
+    rw [Ueq]
+    intro n nnonneg
+    simp only [mem_univ]
 
 end DistancePart
 end TopologyPart
@@ -748,11 +859,22 @@ Proposition 2.18 reduces convergence to checking a neighborhood basis.
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 2.18: convergence may be tested on a neighborhood basis. -/
 theorem tendstoSeq_iff_neighborhoodBasis_2_18 {X : Type u} {𝒪 : Set (Set X)}
-    (xₙ : Sequence_2_16 X) (x : X) {𝒰 : Set (Set X)}
+  (xₙ : Sequence_2_16 X) (x : X) {𝒰 : Set (Set X)}
     (h𝒰 : IsNeighborhoodBasis_2_5 𝒪 x 𝒰) :
     TendstoSeq_2_16 𝒪 xₙ x <->
-      ∀ U ∈ 𝒰, ∃ N : ℕ+, ∀ n : ℕ+, N ≤ n -> xₙ n ∈ U := by
-  sorry
+      ∀ U ∈ 𝒰, ∃ N : ℕ, ∀ n : ℕ, N ≤ n -> xₙ n ∈ U := by
+  constructor
+  · intro hyp U hU
+    have := h𝒰.isNeighborhood U hU
+    exact hyp U this
+  · intro hyp U hU
+    rcases h𝒰.hasRefinement U hU
+      with ⟨V, hV, VsubU⟩
+    specialize hyp V hV
+    rcases hyp with ⟨N, h⟩
+    use N; intro n hn;
+    specialize h n hn
+    exact mem_preimage.mp (VsubU h)
 
 /-!
 Proposition 2.19 compares topological convergence in a distance space with the
@@ -764,31 +886,133 @@ section MetricConvergencePart
 open LeanTopology.TopologicalSpace
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 2.19: epsilon-convergence of a real sequence to a real limit. -/
-def RealSequenceConvergesTo_2_19 (a : ℕ+ → ℝ) (l : ℝ) : Prop :=
-  ∀ ε > 0, ∃ N : ℕ+, ∀ n : ℕ+, N ≤ n -> |a n - l| < ε
+def RealSequenceConvergesTo_2_19 (a : ℕ → ℝ) (l : ℝ) : Prop :=
+  ∀ ε > 0, ∃ N : ℕ, ∀ n : ℕ, N ≤ n -> |a n - l| < ε
+
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 2.19: the data of the equivalent formulations of metric convergence. -/
+structure TendstoSeqMetricData_2_19 {X : Type u} [DistanceSpace_1_12 X]
+    (xₙ : Sequence_2_16 X) (x : X) : Prop where
+  topo_iff_eps :
+    TendstoSeq_2_16 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) xₙ x <->
+      ∀ ε > 0, ∃ N : ℕ, ∀ n : ℕ, N ≤ n -> DistanceSpace_1_12.dist (xₙ n) x < ε
+  eps_iff_real :
+    (∀ ε > 0, ∃ N : ℕ, ∀ n : ℕ, N ≤ n -> DistanceSpace_1_12.dist (xₙ n) x < ε) <->
+      RealSequenceConvergesTo_2_19 (λ n : ℕ ↦ DistanceSpace_1_12.dist (xₙ n) x) 0
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 2.19: the three usual formulations of metric convergence are equivalent. -/
-theorem tendstoSeq_metric_2_19 {X : Type u}
-    [DistanceSpace_1_12 X]
-    (xₙ : Sequence_2_16 X) (x : X) :
-    (TendstoSeq_2_16 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) xₙ x <->
-      ∀ ε > 0, ∃ N : ℕ+, ∀ n : ℕ+, N ≤ n -> DistanceSpace_1_12.dist (xₙ n) x < ε) ∧
-    ((∀ ε > 0, ∃ N : ℕ+, ∀ n : ℕ+, N ≤ n -> DistanceSpace_1_12.dist (xₙ n) x < ε) <->
-      RealSequenceConvergesTo_2_19 (λ n : ℕ+ ↦ DistanceSpace_1_12.dist (xₙ n) x) 0) := by
-  sorry
+theorem tendstoSeq_metric_2_19 {X : Type u} [DistanceSpace_1_12 X]
+  (xₙ : Sequence_2_16 X) (x : X) :
+    TendstoSeqMetricData_2_19 xₙ x := by
+  refine ⟨?_, ?_⟩
+  <;> constructor
+  all_goals
+    set 𝒰 := {U : Set X | ∃ r : ℝ, 0 < r ∧ U = openBall_1_14 x r}
+      with 𝒰df
+    have h𝒰 := distance_openBall_isNeighborhoodBasis_2_8 x
+    rw [← 𝒰df] at h𝒰
+    simp only [gt_iff_lt]; intro hyp;
+  · have hyp := (tendstoSeq_iff_neighborhoodBasis_2_18
+      xₙ x h𝒰).mp hyp
+    intro ε εpos
+    set U := openBall_1_14 x ε with Udf
+    have hU : U ∈ 𝒰 := by
+      rw [𝒰df]; simp only [mem_setOf_eq]; use ε;
+    specialize hyp U hU
+    rcases hyp with ⟨N, hyp⟩
+    use N; intro n hn;
+    specialize hyp n hn
+    rw [Udf] at hyp
+    simpa [DistanceSpace_1_12.D2]
+  · apply (tendstoSeq_iff_neighborhoodBasis_2_18
+      xₙ x h𝒰).mpr
+    intro U hU
+    rcases hU with ⟨ε, εpos, Ueq⟩
+    specialize hyp ε εpos
+    rcases hyp with ⟨N, hN⟩
+    use N; intro n hn;
+    specialize hN n hn
+    simp only [Ueq, openBall_1_14, mem_setOf_eq]
+    rw [DistanceSpace_1_12.D2]
+    exact hN
+  · intro ε εpos;
+    simp only [abs, sub_zero, neg_le_self_iff,
+      DistanceSpace_1_12.nonneg, sup_of_le_left];
+    exact hyp ε εpos
+  · intro ε εpos
+    specialize hyp ε εpos
+    simp only [abs, sub_zero, neg_le_self_iff,
+      DistanceSpace_1_12.nonneg,
+      sup_of_le_left] at hyp;
+    exact hyp
 
 /-!
 Proposition 2.20 says that metric limits are unique.
 -/
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 2.20: a convergent sequence in a distance space has at most one limit. -/
-theorem tendstoSeq_metric_limit_unique_2_20 {X : Type u}
-    [DistanceSpace_1_12 X]
-    (xₙ : Sequence_2_16 X) {x y : X} :
+theorem tendstoSeq_metric_limit_unique_2_20 {X : Type u} [DistanceSpace_1_12 X]
+  (xₙ : Sequence_2_16 X) {x y : X} :
     TendstoSeq_2_16 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) xₙ x →
       TendstoSeq_2_16 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) xₙ y →
         x = y := by
-  sorry
+  intro lim₁ lim₂
+  by_contra neq
+  push Not at neq
+  set d := DistanceSpace_1_12.dist x y with ddf
+  have dpos : d > 0 := by
+    have d_neq_0 : d ≠ 0 := by
+      intro hyp
+      rw [ddf] at hyp
+      have := (DistanceSpace_1_12.D1 x y).mp hyp
+      contradiction
+    have d_nonneg := DistanceSpace_1_12.nonneg x y
+    rw [← ddf] at d_nonneg
+    exact Std.lt_of_le_of_ne d_nonneg (id (Ne.symm d_neq_0))
+  set ε := d / 2 with εdf
+  have εpos : ε > 0 := half_pos dpos
+  rcases lim₁ (openBall_1_14 x ε) ⟨
+    openBall_1_14 x ε,
+    openBall_open_1_16 x ε,
+    by
+      simp only [
+        openBall_1_14,
+        mem_setOf_eq,
+        (DistanceSpace_1_12.D1 x x).mpr
+      ]
+      exact εpos,
+    subset_rfl
+  ⟩ with ⟨N₁, hN₁⟩
+  rcases lim₂ (openBall_1_14 y ε) ⟨
+    openBall_1_14 y ε,
+    openBall_open_1_16 y ε,
+        by
+      simp only [
+        openBall_1_14,
+        mem_setOf_eq,
+        (DistanceSpace_1_12.D1 y y).mpr
+      ]
+      exact εpos,
+    subset_rfl
+  ⟩ with ⟨N₂, hN₂⟩
+  set N := max N₁ N₂
+  specialize hN₁ N (le_max_left N₁ N₂)
+  specialize hN₂ N (le_max_right N₁ N₂)
+  simp [openBall_1_14, mem_setOf_eq] at hN₁ hN₂
+  have c1 : d ≤ DistanceSpace_1_12.dist (xₙ N) x + DistanceSpace_1_12.dist (xₙ N) y := by
+    rw [ddf]
+    nth_rw 2 [DistanceSpace_1_12.D2]
+    exact DistanceSpace_1_12.D3 x (xₙ N) y
+  have c2 : DistanceSpace_1_12.dist (xₙ N) x + DistanceSpace_1_12.dist (xₙ N) y < d := by
+    calc
+      _ < ε + ε := by
+        nth_rw 1 [DistanceSpace_1_12.D2]
+        nth_rw 2 [DistanceSpace_1_12.D2]
+        linarith
+      _ = _ := by
+        rw [εdf]; simp only [add_halves];
+  have c2 : ¬d ≤ DistanceSpace_1_12.dist (xₙ N) x + DistanceSpace_1_12.dist (xₙ N) y := by
+    exact Std.not_le.mpr c2
+  contradiction
 
 /-!
 Before Proposition 2.21, we record the Euclidean metric on `E n` as an
@@ -827,12 +1051,107 @@ coordinate.
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 2.21: convergence in a Euclidean subspace is equivalent to
 coordinatewise convergence. -/
 theorem tendstoSeq_euclideanSubspace_2_21 {n : ℕ}
-    (A : Set (EuclideanSpaceTopology.E n))
-    (xᵢ : Sequence_2_16 A) (x : A) :
-    TendstoSeq_2_16 (euclideanSubspaceTopology_2_21 n A) xᵢ x ↔
-      ∀ k : Fin n,
-        RealSequenceConvergesTo_2_19 (λ i : ℕ+ ↦ (xᵢ i).1 k) (x.1 k) := by
-  sorry
+  (A : Set (EuclideanSpaceTopology.E n)) (xᵢ : Sequence_2_16 A) (x : A) :
+    TendstoSeq_2_16 (euclideanSubspaceTopology_2_21 n A) xᵢ x
+      <-> ∀ k : Fin n,
+        RealSequenceConvergesTo_2_19 (λ i : ℕ ↦ (xᵢ i).1 k) (x.1 k) := by
+  letI : DistanceSpace_1_12 (EuclideanSpaceTopology.E n) :=
+    euclideanDistanceSpace_cert_2_21 n
+  letI : DistanceSpace_1_12 A :=
+    restrictDistance_1_13 (D := inferInstance) A
+  let hMetric := tendstoSeq_metric_2_19 xᵢ x
+  constructor
+  <;> intro hyp
+  · intro k ε εpos
+    have hε := hMetric.topo_iff_eps.mp hyp ε εpos
+    rcases hε with ⟨N, hN⟩
+    refine ⟨N, ?_⟩
+    intro i hi
+    have hi' : dist (xᵢ i).1 x.1 < ε := by
+      simpa [restrictDistance_1_13, euclideanDistanceSpace_cert_2_21] using hN i hi
+    have hcoord : dist ((xᵢ i).1 k) (x.1 k) ≤ dist (xᵢ i).1 x.1 := by
+      rw [EuclideanSpace.dist_eq]
+      refine (sq_le_sq₀ dist_nonneg (Real.sqrt_nonneg _)).mp ?_
+      calc
+        dist ((xᵢ i).1 k) (x.1 k) ^ 2
+            ≤ ∑ j : Fin n, dist ((xᵢ i).1 j) (x.1 j) ^ 2 := by
+                simpa using
+                  (Finset.single_le_sum
+                    (f := fun j : Fin n ↦ dist ((xᵢ i).1 j) (x.1 j) ^ 2)
+                    (fun _ _ ↦ sq_nonneg _)
+                    (by simp))
+        _ = Real.sqrt (∑ j : Fin n, dist ((xᵢ i).1 j) (x.1 j) ^ 2) ^ 2 := by
+              rw [Real.sq_sqrt]
+              exact Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)
+    have : dist ((xᵢ i).1 k) (x.1 k) < ε := lt_of_le_of_lt hcoord hi'
+    simpa [Real.dist_eq] using this
+  · by_cases hn : n = 0
+    · subst hn
+      apply hMetric.topo_iff_eps.mpr
+      intro ε εpos
+      refine ⟨0, ?_⟩
+      intro i hi
+      have hx : (xᵢ i : A) = x := by
+        apply Subtype.ext
+        ext k
+        exact Fin.elim0 k
+      rw [(DistanceSpace_1_12.D1 _ _).mpr hx]
+      exact εpos
+    · have hnpos : 0 < n := Nat.pos_iff_ne_zero.mpr hn
+      apply hMetric.topo_iff_eps.mpr
+      intro ε εpos
+      have hsqrtpos : 0 < Real.sqrt n := by
+        exact Real.sqrt_pos.mpr (Nat.cast_pos.mpr hnpos)
+      have hcoordConv :
+          ∀ k : Fin n, ∃ N : ℕ, ∀ i : ℕ, N ≤ i →
+            |(xᵢ i).1 k - x.1 k| < ε / Real.sqrt n := by
+        intro k
+        exact hyp k (ε / Real.sqrt n) (div_pos εpos hsqrtpos)
+      choose Nₖ hNₖ using hcoordConv
+      let N : ℕ := Finset.univ.sup Nₖ
+      refine ⟨N, ?_⟩
+      intro i hi
+      have hcoord :
+          ∀ k : Fin n, |(xᵢ i).1 k - x.1 k| < ε / Real.sqrt n := by
+        intro k
+        have hkN : Nₖ k ≤ N := by
+          exact Finset.le_sup (s := Finset.univ) (f := Nₖ) (by simp)
+        exact hNₖ k i (le_trans hkN hi)
+      have hsq_le :
+          ∀ k ∈ (Finset.univ : Finset (Fin n)),
+            ((xᵢ i).1 k - x.1 k) ^ 2 ≤ (ε / Real.sqrt n) ^ 2 := by
+        intro k hk
+        have hk' := abs_lt.mp (hcoord k)
+        nlinarith
+      have hsq_lt :
+          ∃ k ∈ (Finset.univ : Finset (Fin n)),
+            ((xᵢ i).1 k - x.1 k) ^ 2 < (ε / Real.sqrt n) ^ 2 := by
+        refine ⟨⟨0, hnpos⟩, by simp, ?_⟩
+        have h0 := abs_lt.mp (hcoord ⟨0, hnpos⟩)
+        nlinarith
+      have hsum_lt :
+          ∑ k : Fin n, ((xᵢ i).1 k - x.1 k) ^ 2 <
+            ∑ k : Fin n, (ε / Real.sqrt n) ^ 2 := by
+        simpa using
+          (Finset.sum_lt_sum
+            (s := Finset.univ)
+            hsq_le
+            hsq_lt)
+      have hnormsq :
+          ‖(xᵢ i).1 - x.1‖ ^ 2 < ε ^ 2 := by
+        calc
+          ‖(xᵢ i).1 - x.1‖ ^ 2
+              = ∑ k : Fin n, ((xᵢ i).1 k - x.1 k) ^ 2 := by
+                  simpa using EuclideanSpace.real_norm_sq_eq ((xᵢ i).1 - x.1)
+          _ < ∑ k : Fin n, (ε / Real.sqrt n) ^ 2 := hsum_lt
+          _ = (n : ℝ) * (ε / Real.sqrt n) ^ 2 := by simp
+          _ = ε ^ 2 := by
+            field_simp [hsqrtpos.ne']
+            rw [Real.sq_sqrt (Nat.cast_nonneg n)]
+      have hnorm : ‖(xᵢ i).1 - x.1‖ < ε := by
+        nlinarith [norm_nonneg ((xᵢ i).1 - x.1), εpos, hnormsq]
+      change dist (xᵢ i).1 x.1 < ε
+      simpa [dist_eq_norm] using hnorm
 
 end MetricConvergencePart
 
@@ -840,17 +1159,44 @@ end MetricConvergencePart
 The final statements connect the article's neighborhood language with mathlib's
 neighborhood filters and convergence notions.
 -/
+open Filter Topology in
+section
 
 /-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our neighborhood agrees with membership in `𝓝 x`. -/
-theorem isNeighborhood_iff_mem_nhds_cert {X : Type u} (T : TopologicalSpace X) (x : X) (V : Set X) :
-    IsNeighborhood_2_1 {U : Set X | @IsOpen X T U} x V ↔ V ∈ nhds x := by
-  sorry
+theorem isNeighborhood_iff_mem_nhds_cert {X : Type u}
+  (T : TopologicalSpace X) (x : X) (V : Set X) :
+    IsNeighborhood_2_1 {U : Set X | @IsOpen X T U} x V
+      <-> V ∈ 𝓝 x := by
+  constructor
+  · rintro ⟨U, hU, hxU, hUV⟩
+    exact mem_nhds_iff.mpr ⟨U, hUV, hU, hxU⟩
+  · intro hV
+    rcases mem_nhds_iff.mp hV with ⟨U, hUV, hU, hxU⟩
+    exact ⟨U, hU, hxU, hUV⟩
 
 /-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our topological sequence convergence matches filter convergence in mathlib. -/
-theorem tendstoSeq_iff_tendsto_cert {X : Type u} (T : TopologicalSpace X)
-    (xₙ : Sequence_2_16 X) (x : X) :
-    TendstoSeq_2_16 {U : Set X | @IsOpen X T U} xₙ x ↔ Filter.Tendsto xₙ Filter.atTop (nhds x) := by
-  sorry
+theorem tendstoSeq_iff_tendsto_cert {X : Type u}
+  (T : TopologicalSpace X) (xₙ : Sequence_2_16 X) (x : X) :
+    TendstoSeq_2_16 {U : Set X | @IsOpen X T U} xₙ x
+      <-> Tendsto xₙ atTop (𝓝 x) := by
+  constructor
+  · intro h
+    rw [tendsto_atTop_nhds]
+    intro U hxU hU
+    have hNeigh : IsNeighborhood_2_1 {U : Set X | @IsOpen X T U} x U :=
+      ⟨U, hU, hxU, Subset.rfl⟩
+    exact h U hNeigh
+  · intro h
+    rw [tendsto_atTop_nhds] at h
+    intro V hV
+    rcases mem_nhds_iff.mp ((isNeighborhood_iff_mem_nhds_cert T x V).mp hV) with
+      ⟨U, hUV, hU, hxU⟩
+    rcases h U hxU hU with ⟨N, hN⟩
+    refine ⟨N, ?_⟩
+    intro n hn
+    exact hUV (hN n hn)
+
+end
 
 end NeighborhoodBasis
 end LeanTopology
