@@ -1077,12 +1077,12 @@ theorem tendstoSeq_euclideanSubspace_2_21 {n : ℕ}
             ≤ ∑ j : Fin n, dist ((xᵢ i).1 j) (x.1 j) ^ 2 := by
                 simpa using
                   (Finset.single_le_sum
-                    (f := fun j : Fin n ↦ dist ((xᵢ i).1 j) (x.1 j) ^ 2)
+                    (f := λ j : Fin n ↦ dist ((xᵢ i).1 j) (x.1 j) ^ 2)
                     (fun _ _ ↦ sq_nonneg _)
                     (by simp))
         _ = Real.sqrt (∑ j : Fin n, dist ((xᵢ i).1 j) (x.1 j) ^ 2) ^ 2 := by
               rw [Real.sq_sqrt]
-              exact Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)
+              exact Finset.sum_nonneg (λ _ _ ↦ sq_nonneg _)
     have : dist ((xᵢ i).1 k) (x.1 k) < ε := lt_of_le_of_lt hcoord hi'
     simpa [Real.dist_eq] using this
   · by_cases hn : n = 0
