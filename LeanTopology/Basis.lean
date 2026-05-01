@@ -485,8 +485,8 @@ structure BasisTopologyData_3_10 {X : Type u} (ℬ : Set (Set X)) : Prop where
   isBasis :
     IsTopologicalBasis_3_1 (topologyFromTopologicalBasis_3_10 ℬ) ℬ
   unique :
-    ∀ 𝒪 : Set (Set X), IsTopology_1_1 X 𝒪 →
-      IsTopologicalBasis_3_1 𝒪 ℬ →
+    ∀ 𝒪 : Set (Set X), IsTopology_1_1 X 𝒪 ->
+      IsTopologicalBasis_3_1 𝒪 ℬ ->
         𝒪 = topologyFromTopologicalBasis_3_10 ℬ
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 3.10: `OB1` and `OB2` generate a unique topology. -/
@@ -656,12 +656,62 @@ def SorgenfreyTopology_3_12 : Set (Set ℝ) :=
 theorem Sorgenfrey_intervalNeighborhoodBasis_3_12 (x : ℝ) :
     IsNeighborhoodBasis_2_5 SorgenfreyTopology_3_12 x
       {U : Set ℝ | ∃ n : ℕ+, U = Set.Ico x (x + 1 / (n : ℝ))} := by
-  sorry
+  refine ⟨?_, ?_⟩
+  · intro U hU
+    rcases hU with ⟨n, rfl⟩
+    have hBasis : IsTopologicalBasis_3_1 SorgenfreyTopology_3_12 SorgenfreyBasis_3_12 :=
+      (topology_from_topologicalBasis_3_10 SorgenfreyBasis_properties_3_12).isBasis
+    have hn_pos : (0 : ℝ) < 1 / (n : ℝ) := by
+      positivity
+    refine ⟨Set.Ico x (x + 1 / (n : ℝ)), ?_, ?_, LE.le.subset fun ⦃_⦄ a ↦ a⟩
+    · exact hBasis.left ⟨x, x + 1 / (n : ℝ), by simp, rfl⟩
+    · simp only [mem_Ico]
+      constructor
+      · exact le_rfl
+      · simp
+  · intro V hV
+    rcases hV with ⟨W, hWOpen, hxW, hWsubV⟩
+    have hBasis : IsTopologicalBasis_3_1 SorgenfreyTopology_3_12 SorgenfreyBasis_3_12 :=
+      (topology_from_topologicalBasis_3_10 SorgenfreyBasis_properties_3_12).isBasis
+    rcases hBasis.right W hWOpen x hxW with ⟨B, hB, hxB, hBsubW⟩
+    rcases hB with ⟨a, b, hab, rfl⟩
+    rw [mem_Ico] at hxB
+    rcases hxB with ⟨hax, hxb⟩
+    obtain ⟨m, hm⟩ := exists_nat_gt (1 / (b - x))
+    set n : ℕ+ := ⟨max 1 m, by simp⟩ with hndef
+    have hn : 1 / (n : ℝ) < b - x := by
+      have hpos : 0 < b - x := by linarith
+      have hm' : 1 / (b - x) < (n : ℝ) := by
+        have hle : (m : ℝ) ≤ (n : ℝ) := by
+          rw [hndef]
+          exact_mod_cast le_max_right 1 m
+        exact lt_of_lt_of_le hm hle
+      exact (one_div_lt (by positivity : 0 < (n : ℝ)) hpos).2 hm'
+    refine ⟨Set.Ico x (x + 1 / (n : ℝ)), ?_, ?_⟩
+    · exact ⟨n, rfl⟩
+    · intro y hy
+      apply hWsubV
+      apply hBsubW
+      rw [mem_Ico] at hy ⊢
+      rcases hy with ⟨hxy, hyupper⟩
+      constructor
+      · exact le_trans hax hxy
+      · linarith
 
-/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 3.12: the Sorgenfrey line is first countable. -/
 theorem Sorgenfrey_firstCountable_3_12 :
     FirstCountable_2_12 SorgenfreyTopology_3_12 := by
-  sorry
+  intro x
+  let 𝒰 : Set (Set ℝ) := {U : Set ℝ | ∃ n : ℕ+, U = Set.Ico x (x + 1 / (n : ℝ))}
+  refine ⟨𝒰, Sorgenfrey_intervalNeighborhoodBasis_3_12 x, ?_⟩
+  have hEq : 𝒰 = Set.range (fun n : ℕ+ => Set.Ico x (x + 1 / (n : ℝ))) := by
+    ext U
+    constructor
+    · rintro ⟨n, rfl⟩
+      exact ⟨n, rfl⟩
+    · rintro ⟨n, hn⟩
+      exact ⟨n, hn.symm⟩
+  rw [hEq]
+  exact Set.countable_range fun n : ℕ+ => Set.Ico x (x + 1 / (n : ℝ))
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 3.12: the Sorgenfrey line is not second countable. -/
 theorem Sorgenfrey_not_secondCountable_3_12 :
