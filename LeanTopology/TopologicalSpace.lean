@@ -423,6 +423,13 @@ abbrev restrictDistance_1_13 {X : Type u} [D : DistanceSpace_1_12 X] (A : Set X)
       D3      := λ x y z  ↦ D.D3 x y z,
     }
 
+instance : DistanceSpace_1_12 ℝ where
+  dist    := λ x y ↦ dist x y
+  nonneg  := λ _ _ ↦ dist_nonneg
+  D1      := λ _ _ ↦ dist_eq_zero
+  D2      := PseudoMetricSpace.dist_comm
+  D3      := λ x y z ↦ dist_triangle x y z
+
 /-!
 Definition 1.14 introduces open and closed balls in a distance space.
 -/

@@ -1,5 +1,6 @@
 import LeanTopology.NeighborhoodBasis
 import Mathlib.Data.PNat.Basic
+import Mathlib.Analysis.Real.Cardinality
 
 /-!
 # 拓扑学入门3: 基
@@ -89,6 +90,19 @@ theorem topologicalBasis_iff_sUnion_3_2 {X : Type u} {𝒪 ℬ : Set (Set X)} :
     rcases this with ⟨B, hB, xinB⟩
     use B; use ℬ'subℬ hB; use xinB
     simpa [hℬ'] using subset_sUnion_of_mem hB
+
+/-!
+If the underlying space is nonempty, then every topological basis is itself a
+nonempty family.
+-/
+
+/-- A topological basis on a nonempty space contains at least one basis element. -/
+theorem topologicalBasis_nonempty {X : Type u} [Nonempty X] {𝒪 ℬ : Set (Set X)}
+    (h𝒪 : IsTopology_1_1 X 𝒪) (hℬ : IsTopologicalBasis_3_1 𝒪 ℬ) :
+    ℬ.Nonempty := by
+  rcases ‹Nonempty X› with ⟨x⟩
+  rcases hℬ.right univ h𝒪.O1_univ x (mem_univ x) with ⟨B, hB, _, _⟩
+  exact ⟨B, hB⟩
 
 /-!
 Example 3.3 says that the topology itself is always a basis.
@@ -716,12 +730,117 @@ theorem Sorgenfrey_firstCountable_3_12 :
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 3.12: the Sorgenfrey line is not second countable. -/
 theorem Sorgenfrey_not_secondCountable_3_12 :
     ¬ SecondCountable_3_6 SorgenfreyTopology_3_12 := by
-  sorry
+  /-
+    Assume there is an at-most-countable basis `ℬ`.
+    Define a subcollection `ℬ'` of `ℬ` consisting of those sets that are
+      nonempty and bounded below.
+    Since `ℬ` is at-most-countable, so is `ℬ'`.
+
+    Because `ℝ` is conditionally complete, every set in `ℬ'` has an infimum.
+    Hence we obtain a map `f : ℬ' → ℝ` given by `f(B) = inf B`.
+    Since `ℬ'` is at-most-countable, its image `f '' ℬ'` is also at-most-countable.
+
+    Since `ℝ` is uncountable, choose `x : ℝ` with `x ∉ f '' ℬ'`.
+    Consider the Sorgenfrey-open set `[x, x + 1)`.
+    Because `ℬ` is a basis, there exists `B₀ ∈ ℬ` such that
+      `x ∈ B₀` and `B₀ ⊆ [x, x + 1)`.
+
+    Then `B₀` is nonempty, since `x ∈ B₀`, and it is bounded below by `x`,
+      since every point of `B₀` lies in `[x, x + 1)`.
+    Thus `B₀ ∈ ℬ'`.
+
+    Moreover, `x` is exactly the infimum of `B₀`:
+      it is a lower bound of `B₀`, and since `x ∈ B₀`, the infimum cannot be
+      strictly greater than `x`.
+    Therefore `x ∈ f '' ℬ'`, contradicting the choice of `x`.
+  -/
+  rintro ⟨ℬ, hℬ, ℬ_ctb⟩
+  have hSorgenfreyBasis :
+      IsTopologicalBasis_3_1 SorgenfreyTopology_3_12 SorgenfreyBasis_3_12 :=
+    (topology_from_topologicalBasis_3_10 SorgenfreyBasis_properties_3_12).isBasis
+  classical
+  set ℬ' : Set (Set ℝ) := {B : Set ℝ | B ∈ ℬ ∧ B.Nonempty ∧ BddBelow B}
+  have hℬ'sub : ℬ' ⊆ ℬ := by
+    intro B hB
+    exact hB.1
+  have hℬ'_ctb : ℬ'.Countable := ℬ_ctb.mono hℬ'sub
+  have hf_ctb : (sInf '' ℬ').Countable := by
+    exact hℬ'_ctb.image sInf
+  have hx : ∃ x : ℝ, x ∉ sInf '' ℬ' := by
+    by_contra h
+    push Not at h
+    have hReal_ctb : (univ : Set ℝ).Countable := by
+      exact hf_ctb.mono (by
+        intro x hxuniv
+        simpa using h x)
+    exact Cardinal.not_countable_real hReal_ctb
+  rcases hx with ⟨x, hx⟩
+  have hIntervalOpen : Set.Ico x (x + 1) ∈ SorgenfreyTopology_3_12 := by
+    exact hSorgenfreyBasis.left ⟨x, x + 1, by linarith, rfl⟩
+  rcases hℬ.right (Set.Ico x (x + 1)) hIntervalOpen x (by
+    simp only [mem_Ico]
+    constructor
+    · exact le_rfl
+    · linarith) with ⟨B₀, hB₀, hxB₀, hB₀sub⟩
+  have hB₀_nonempty : B₀.Nonempty := ⟨x, hxB₀⟩
+  have hB₀_bddBelow : BddBelow B₀ := by
+    refine ⟨x, ?_⟩
+    intro y hy
+    exact (hB₀sub hy).1
+  have hB₀' : B₀ ∈ ℬ' := by
+    exact ⟨hB₀, hB₀_nonempty, hB₀_bddBelow⟩
+  have hsInf_eq : sInf B₀ = x := by
+    apply le_antisymm
+    · exact csInf_le hB₀_bddBelow hxB₀
+    · exact le_csInf hB₀_nonempty (by
+        intro y hy
+        exact (hB₀sub hy).1)
+  have hx' : x ∈ sInf '' ℬ' := by
+    refine ⟨B₀, hB₀', ?_⟩
+    simp [hsInf_eq]
+  exact hx hx'
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 3.12: the usual Euclidean topology on `ℝ` is contained in the Sorgenfrey topology. -/
 theorem euclideanTopology_subset_sorgenfreyTopology_3_12 :
     IsCoarser_1_10 {U : Set ℝ | IsOpen U} SorgenfreyTopology_3_12 := by
-  sorry
+  set 𝒪R := {U : Set ℝ | IsOpen U} with 𝒪Rdf
+  set ℬR := {U | ∃ a b : ℝ, a < b ∧ U = Ioo a b} with ℬRdf
+  have interval_is_basis
+    := real_openInterval_isTopologicalBasis_3_5
+  rw [← 𝒪Rdf, ← ℬRdf] at interval_is_basis
+  have ℬsubS : ℬR ⊆ SorgenfreyTopology_3_12 := by
+    intro B hB
+    rcases hB with ⟨a, b, altb, Beq⟩
+    rw [Beq, SorgenfreyTopology_3_12, topologyFromTopologicalBasis_3_10]
+    intro x hx
+    rw [mem_Ioo] at hx
+    refine ⟨Set.Ico x b, ?_, ?_, ?_⟩
+    · exact ⟨x, b, hx.2, rfl⟩
+    · exact ⟨le_rfl, hx.2⟩
+    · intro y hy
+      rw [mem_Ico] at hy
+      rw [mem_Ioo]
+      exact ⟨lt_of_lt_of_le hx.1 hy.1, hy.2⟩
+  have Sor_is_top : IsTopology_1_1 ℝ SorgenfreyTopology_3_12
+    := (topology_from_topologicalBasis_3_10
+      SorgenfreyBasis_properties_3_12).isTopology
+  have hBasisFamR : IsTopologicalBasisFamily_3_9 ℝ ℬR
+    := topologicalBasis_properties_3_9
+      (fromMathlibTopologicalSpace_cert
+        (inferInstance : TopologicalSpace ℝ))
+      interval_is_basis
+  have hEq : 𝒪R = topologyFromTopologicalBasis_3_10 ℬR
+    := (topology_from_topologicalBasis_3_10 hBasisFamR).unique
+      𝒪R
+      (fromMathlibTopologicalSpace_cert (inferInstance : TopologicalSpace ℝ))
+      interval_is_basis
+  have hCoarser : IsCoarser_1_10 (topologyFromTopologicalBasis_3_10 ℬR)
+    SorgenfreyTopology_3_12 :=
+      (topologyFromTopologicalBasis_minimal_3_11
+        hBasisFamR).right
+          SorgenfreyTopology_3_12 Sor_is_top ℬsubS
+  rw [hEq]
+  exact hCoarser
 
 /-!
 Definition 3.13 weakens a basis to a subbasis by taking finite intersections.
@@ -730,18 +849,44 @@ Definition 3.13 weakens a basis to a subbasis by taking finite intersections.
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 3.13: the family of nonempty finite intersections of elements of `𝒮`. -/
 def finiteIntersections_3_13 {X : Type u} (𝒮 : Set (Set X)) : Set (Set X) :=
   {B : Set X |
-    ∃ 𝒜 : Finset (Set X), 𝒜.Nonempty ∧
-      (∀ S ∈ 𝒜, S ∈ 𝒮) ∧ B = ⋂₀ (↑𝒜 : Set (Set X))}
+    ∃ 𝒜 : Finset (Set X),
+      𝒜.Nonempty ∧
+      ↑𝒜 ⊆ 𝒮 ∧
+      B = ⋂₀ (↑𝒜 : Set (Set X))}
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 3.13: a subbasis is a family whose finite intersections form a basis. -/
-def IsTopologicalSubbasis_3_13 {X : Type u} (𝒪 : Set (Set X)) (𝒮 : Set (Set X)) : Prop :=
+def IsTopologicalSubbasis_3_13 {X : Type u} (𝒪 𝒮 : Set (Set X)) : Prop :=
   IsTopologicalBasis_3_1 𝒪 (finiteIntersections_3_13 𝒮)
+
+/-- Every member of a family appears as a singleton finite intersection. -/
+theorem subset_finiteIntersections_3_13 {X : Type u} {ℬ : Set (Set X)} :
+    ℬ ⊆ finiteIntersections_3_13 ℬ := by
+  intro B hB
+  refine ⟨{B}, by simp, ?_, by simp⟩
+  intro C hC
+  simp at hC
+  simpa [hC] using hB
+
+/-- Any subbasis family consists of open sets of the ambient topology. -/
+theorem topologicalSubbasis_subset_3_13 {X : Type u} {𝒪 ℬ : Set (Set X)} :
+    IsTopologicalSubbasis_3_13 𝒪 ℬ -> ℬ ⊆ 𝒪 := by
+  intro hyp
+  rcases hyp with ⟨hyp, -⟩
+  exact subset_finiteIntersections_3_13.trans hyp
 
 /-- ℛℯ𝓂𝒶𝓇𝓀 3.13: every basis may also be regarded as a subbasis. -/
 theorem topologicalBasis_isTopologicalSubbasis_3_13 {X : Type u} {𝒪 ℬ : Set (Set X)}
-    (hℬ : IsTopologicalBasis_3_1 𝒪 ℬ) :
+    (h𝒪 : IsTopology_1_1 X 𝒪) (hℬ : IsTopologicalBasis_3_1 𝒪 ℬ) :
     IsTopologicalSubbasis_3_13 𝒪 ℬ := by
-  sorry
+  constructor
+  · intro B hB
+    rcases hB with ⟨𝒜, -, h𝒜sub, rfl⟩
+    exact h𝒪.O2_inter' 𝒜 (by
+      intro U hU
+      exact hℬ.left (h𝒜sub (by simpa using hU)))
+  · intro U hU x hx
+    rcases hℬ.right U hU x hx with ⟨B, hB, hxB, hBU⟩
+    refine ⟨B, subset_finiteIntersections_3_13 hB, hxB, hBU⟩
 
 /-!
 Example 3.14 gives the standard ray subbasis of the real line.
@@ -752,26 +897,105 @@ def realRaySubbasis_3_14 : Set (Set ℝ) :=
   {U : Set ℝ | ∃ a : ℝ, U = Set.Ioi a} ∪
     {U : Set ℝ | ∃ b : ℝ, U = Set.Iio b}
 
+/-- Every open ray belongs to the usual topology on `ℝ`. -/
+theorem realRaySubbasis_subset_open_3_14 :
+    realRaySubbasis_3_14 ⊆ {U : Set ℝ | IsOpen U} := by
+  intro U hU
+  rcases hU with hU | hU
+  · rcases hU with ⟨a, rfl⟩
+    simpa using (isOpen_Ioi : IsOpen (Set.Ioi a))
+  · rcases hU with ⟨b, rfl⟩
+    simpa using (isOpen_Iio : IsOpen (Set.Iio b))
+
+/-- Every open interval is a finite intersection of two open rays. -/
+theorem real_openInterval_mem_finiteIntersections_realRay_3_14 {a b : ℝ}
+    (_ : a < b) :
+    Set.Ioo a b ∈ finiteIntersections_3_13 realRaySubbasis_3_14 := by
+  refine ⟨{Set.Ioi a, Set.Iio b}, by simp, ?_, ?_⟩
+  · intro U hU
+    simp only [Finset.coe_insert, Finset.coe_singleton,
+      Set.mem_insert_iff, Set.mem_singleton_iff] at hU
+    rcases hU with rfl | rfl
+    · exact Or.inl ⟨a, rfl⟩
+    · exact Or.inr ⟨b, rfl⟩
+  · ext x
+    constructor
+    · intro hx
+      rw [Set.mem_Ioo] at hx
+      rw [Set.mem_sInter]
+      intro U hU
+      simp only [Finset.coe_insert, Finset.coe_singleton,
+        Set.mem_insert_iff, Set.mem_singleton_iff] at hU
+      rcases hU with rfl | rfl
+      · exact hx.1
+      · exact hx.2
+    · intro hx
+      rw [Set.mem_sInter] at hx
+      rw [Set.mem_Ioo]
+      exact ⟨hx (Set.Ioi a) (by simp), hx (Set.Iio b) (by simp)⟩
+
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 3.14: the open rays form a subbasis of the usual topology on `ℝ`. -/
 theorem realRay_isTopologicalSubbasis_3_14 :
     IsTopologicalSubbasis_3_13
       {U : Set ℝ | IsOpen U}
       realRaySubbasis_3_14 := by
-  sorry
+  constructor
+  · intro U hU
+    rcases hU with ⟨𝒜, -, h𝒜, rfl⟩
+    have hTop : IsTopology_1_1 ℝ {U : Set ℝ | IsOpen U} :=
+      fromMathlibTopologicalSpace_cert (inferInstance : TopologicalSpace ℝ)
+    exact hTop.O2_inter' 𝒜 (by
+      intro V hV
+      exact realRaySubbasis_subset_open_3_14 (h𝒜 hV))
+  · intro U hU x hx
+    rcases real_openInterval_isTopologicalBasis_3_5.right U hU x hx with
+      ⟨B, hB, hxB, hBU⟩
+    rcases hB with ⟨a, b, hab, rfl⟩
+    exact ⟨Set.Ioo a b,
+      real_openInterval_mem_finiteIntersections_realRay_3_14 hab,
+      hxB, hBU⟩
 
 /-!
 Proposition 3.15 extracts the very weak covering property of a subbasis.
 -/
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 3.15: the abstract covering property of a subbasis family. -/
-structure IsTopologicalSubbasisFamily_3_15 (X : Type u) (𝒮 : Set (Set X)) : Prop where
-  SB_cover : ∀ x : X, ∃ S ∈ 𝒮, x ∈ S
+def IsTopologicalSubbasisFamily_3_15 (X : Type u) (𝒮 : Set (Set X)) : Prop :=
+  univ = ⋃₀ 𝒮
+
+/-- A subbasis-family cover condition is equivalent to pointwise coverage. -/
+theorem isTopologicalSubbasisFamily_iff_pointwise_3_15 {X : Type u} {𝒮 : Set (Set X)} :
+  (∀ x : X, ∃ S ∈ 𝒮, x ∈ S)
+    <-> IsTopologicalSubbasisFamily_3_15 X 𝒮 := by
+  constructor
+  · intro h
+    ext x
+    constructor
+    · intro hx
+      rcases h x with ⟨S, hS, hxS⟩
+      exact mem_sUnion.mpr ⟨S, hS, hxS⟩
+    · intro _
+      simp
+  · intro h x
+    unfold IsTopologicalSubbasisFamily_3_15 at h
+    have hx : x ∈ ⋃₀ 𝒮 := by
+      simpa [h] using (show x ∈ (univ : Set X) by simp)
+    rw [mem_sUnion] at hx
+    exact hx
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 3.15: every subbasis satisfies the covering property `SB`. -/
 theorem topologicalSubbasis_property_3_15 {X : Type u} {𝒪 𝒮 : Set (Set X)}
-    (h𝒮 : IsTopologicalSubbasis_3_13 𝒪 𝒮) :
+    (h𝒪 : IsTopology_1_1 X 𝒪) (h𝒮 : IsTopologicalSubbasis_3_13 𝒪 𝒮) :
     IsTopologicalSubbasisFamily_3_15 X 𝒮 := by
-  sorry
+  have hcover : ∀ x : X, ∃ S ∈ 𝒮, x ∈ S := by
+    intro x
+    rcases h𝒮.right univ h𝒪.O1_univ x (by simp) with ⟨B, hB, hxB, hBU⟩
+    rcases hB with ⟨𝒜, 𝒜_nonempty, h𝒜, rfl⟩
+    rcases 𝒜_nonempty with ⟨S, hS⟩
+    refine ⟨S, h𝒜 hS, ?_⟩
+    rw [Set.mem_sInter] at hxB
+    exact hxB S hS
+  exact (isTopologicalSubbasisFamily_iff_pointwise_3_15.mp hcover)
 
 /-!
 Proposition 3.16 reconstructs a topology from any family satisfying the weak
@@ -781,6 +1005,43 @@ covering condition `SB`.
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 3.16: the topology generated by a subbasis. -/
 def topologyFromTopologicalSubbasis_3_16 {X : Type u} (𝒮 : Set (Set X)) : Set (Set X) :=
   topologyFromTopologicalBasis_3_10 (finiteIntersections_3_13 𝒮)
+
+/-- The nonempty finite intersections of a covering family satisfy the basis axioms. -/
+theorem finiteIntersections_topologicalBasisFamily_3_16 {X : Type u}
+    {𝒮 : Set (Set X)}
+    (h𝒮 : IsTopologicalSubbasisFamily_3_15 X 𝒮) :
+    IsTopologicalBasisFamily_3_9 X (finiteIntersections_3_13 𝒮) := by
+  refine ⟨?_, ?_⟩
+  · intro x
+    have hcover : ∀ x : X, ∃ S ∈ 𝒮, x ∈ S :=
+      isTopologicalSubbasisFamily_iff_pointwise_3_15.mpr h𝒮
+    rcases hcover x with ⟨S, hS, hxS⟩
+    exact ⟨S, subset_finiteIntersections_3_13 hS, hxS⟩
+  · intro B₁ B₂ hB₁ hB₂ x hx
+    rcases hB₁ with ⟨𝒜₁, h𝒜₁ne, h𝒜₁sub, rfl⟩
+    rcases hB₂ with ⟨𝒜₂, h𝒜₂ne, h𝒜₂sub, rfl⟩
+    refine ⟨⋂₀ (↑(𝒜₁ ∪ 𝒜₂) : Set (Set X)), ?_, ?_, ?_⟩
+    · refine ⟨𝒜₁ ∪ 𝒜₂, ?_, ?_, rfl⟩
+      · rcases h𝒜₁ne with ⟨U, hU⟩
+        exact ⟨U, Finset.mem_union_left 𝒜₂ hU⟩
+      · intro U hU
+        rcases Finset.mem_union.mp hU with hU | hU
+        · exact h𝒜₁sub hU
+        · exact h𝒜₂sub hU
+    · rw [Set.mem_inter_iff, Set.mem_sInter, Set.mem_sInter] at hx
+      rw [Set.mem_sInter]
+      intro U hU
+      rcases Finset.mem_union.mp hU with hU | hU
+      · exact hx.1 U hU
+      · exact hx.2 U hU
+    · intro y hy
+      rw [Set.mem_sInter] at hy
+      rw [Set.mem_inter_iff, Set.mem_sInter, Set.mem_sInter]
+      constructor
+      · intro U hU
+        exact hy U (Finset.mem_union_left 𝒜₂ hU)
+      · intro U hU
+        exact hy U (Finset.mem_union_right 𝒜₁ hU)
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 3.16: the generated topology, its subbasis property, and uniqueness. -/
 structure SubbasisTopologyData_3_16 {X : Type u} (𝒮 : Set (Set X)) : Prop where
@@ -797,7 +1058,19 @@ structure SubbasisTopologyData_3_16 {X : Type u} (𝒮 : Set (Set X)) : Prop whe
 theorem topology_from_topologicalSubbasis_3_16 {X : Type u} [Nonempty X] {𝒮 : Set (Set X)}
     (h𝒮 : IsTopologicalSubbasisFamily_3_15 X 𝒮) :
     SubbasisTopologyData_3_16 𝒮 := by
-  sorry
+  set ℬₛ := finiteIntersections_3_13 𝒮 with ℬₛdf
+  /- define ℬₛ as a topology basis and using propositions of 3_10 -/
+  /- use the unique of basis generated topology to prove unique -/
+  have hℬₛ : IsTopologicalBasisFamily_3_9 X ℬₛ := by
+    simpa [ℬₛdf] using finiteIntersections_topologicalBasisFamily_3_16 h𝒮
+  let hData := topology_from_topologicalBasis_3_10 hℬₛ
+  refine ⟨?_, ?_, ?_⟩
+  · simpa [topologyFromTopologicalSubbasis_3_16, ℬₛdf] using hData.isTopology
+  · simpa [IsTopologicalSubbasis_3_13, topologyFromTopologicalSubbasis_3_16, ℬₛdf] using hData.isBasis
+  · intro 𝒪 h𝒪 hSub
+    have hBasis : IsTopologicalBasis_3_1 𝒪 ℬₛ := by
+      simpa [IsTopologicalSubbasis_3_13, ℬₛdf] using hSub
+    simpa [topologyFromTopologicalSubbasis_3_16, ℬₛdf] using hData.unique 𝒪 h𝒪 hBasis
 
 /-!
 Remark 3.17 records the minimality of the topology generated by a subbasis.
@@ -809,9 +1082,25 @@ theorem topologyFromTopologicalSubbasis_minimal_3_17 {X : Type u} [Nonempty X]
     𝒮 ⊆ topologyFromTopologicalSubbasis_3_16 𝒮 ∧
       ∀ 𝒪 : Set (Set X), IsTopology_1_1 X 𝒪 → 𝒮 ⊆ 𝒪 →
         IsCoarser_1_10 (topologyFromTopologicalSubbasis_3_16 𝒮) 𝒪 := by
+  have hℬₛ : IsTopologicalBasisFamily_3_9 X (finiteIntersections_3_13 𝒮) :=
+    finiteIntersections_topologicalBasisFamily_3_16 h𝒮
+  have hMin := topologyFromTopologicalBasis_minimal_3_11 hℬₛ
   constructor
-  · sorry
-  · sorry
+  · exact subset_finiteIntersections_3_13.trans hMin.left
+  · intro 𝒪 h𝒪 𝒮op B hB
+    unfold IsTopologicalSubbasisFamily_3_15 at h𝒮
+    /-
+      Prove there is a fincollection 𝒮' which satisfy
+        B = ⋂₀ 𝒮' with the definition of sub basis.
+      Follow O2, B obviously become a open set.
+    -/
+    have hℬₛsub𝒪 : finiteIntersections_3_13 𝒮 ⊆ 𝒪 := by
+      intro B hB
+      rcases hB with ⟨𝒜, -, h𝒜sub, rfl⟩
+      exact h𝒪.O2_inter' 𝒜 (by
+        intro U hU
+        exact 𝒮op (h𝒜sub hU))
+    exact hMin.right 𝒪 h𝒪 hℬₛsub𝒪 hB
 
 /-!
 The final certification relates the article's basis definition to mathlib's
@@ -822,8 +1111,21 @@ open Topology in
 /-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our basis definition agrees with mathlib's `IsTopologicalBasis`. -/
 theorem isTopologicalBasis_iff_mathlib_cert {X : Type u}
     (T : TopologicalSpace X) (ℬ : Set (Set X)) :
-    IsTopologicalBasis_3_1 {U : Set X | @IsOpen X T U} ℬ <-> TopologicalSpace.IsTopologicalBasis ℬ := by
-  sorry
+    IsTopologicalBasis_3_1 {U : Set X | @IsOpen X T U} ℬ
+      <-> TopologicalSpace.IsTopologicalBasis ℬ := by
+  constructor
+  · intro hℬ
+    refine TopologicalSpace.isTopologicalBasis_of_isOpen_of_nhds ?_ ?_
+    · intro U hU
+      exact hℬ.left hU
+    · intro x U hx hU
+      exact hℬ.right U hU x hx
+  · intro hℬ
+    constructor
+    · intro U hU
+      exact hℬ.isOpen hU
+    · intro U hU x hx
+      exact hℬ.exists_subset_of_mem_open hx hU
 
 end TopologyPart
 
