@@ -66,6 +66,23 @@ Definition 1.2 introduces closed sets as complements of open sets.
 def IsClosed_1_2 {X : Type u} (𝒪 : Set (Set X)) (F : Set X) : Prop :=
   Fᶜ ∈ 𝒪
 
+/-- A complement is closed exactly when the original set is open. -/
+theorem isClosed_compl_iff_open {X : Type u} {𝒪 : Set (Set X)} (U : Set X) :
+    IsClosed_1_2 𝒪 Uᶜ ↔ U ∈ 𝒪 := by
+  simp only [IsClosed_1_2, compl_compl]
+
+/-- The complement of a closed set is open. -/
+theorem open_of_closed_compl {X : Type u} {𝒪 : Set (Set X)} {F : Set X}
+    (hF : IsClosed_1_2 𝒪 F) :
+    Fᶜ ∈ 𝒪 :=
+  hF
+
+/-- The complement of an open set is closed. -/
+theorem closed_of_open_compl {X : Type u} {𝒪 : Set (Set X)} {U : Set X}
+    (hU : U ∈ 𝒪) :
+    IsClosed_1_2 𝒪 Uᶜ := by
+  simpa only [IsClosed_1_2, compl_compl]
+
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 1.3: the closed-set axioms for a family of subsets of `X`. -/
 structure IsClosedFamily_1_3 (X : Type u) (ℱ : Set (Set X)) : Prop where
   C1_empty  : (∅    : Set X) ∈ ℱ

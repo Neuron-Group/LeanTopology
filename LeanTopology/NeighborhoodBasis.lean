@@ -36,6 +36,12 @@ def IsOpenNeighborhood_2_1 {X : Type u} (𝒪 : Set (Set X)) (x : X) (V : Set X)
 def IsClosedNeighborhood_2_1 {X : Type u} (𝒪 : Set (Set X)) (x : X) (V : Set X) : Prop :=
   IsNeighborhood_2_1 𝒪 x V ∧ IsClosed_1_2 𝒪 V
 
+/-- An open set containing `x` is a neighborhood of `x`. -/
+theorem neighborhood_of_open_mem {X : Type u} {𝒪 : Set (Set X)}
+  {x : X} {U : Set X} (hU : U ∈ 𝒪) (hx : x ∈ U) :
+    IsNeighborhood_2_1 𝒪 x U := by
+  exact ⟨U, hU, hx, Subset.rfl⟩
+
 /-!
 Proposition 2.2 identifies open neighborhoods with open sets containing the
 point.
@@ -187,12 +193,11 @@ section DistancePart
 open LeanTopology.TopologicalSpace
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 2.8: all open balls centered at `x` form a neighborhood basis. -/
-theorem distance_openBall_isNeighborhoodBasis_2_8 {X : Type u}
-    [DistanceSpace_1_12 X]
-    (x : X) :
+theorem distance_openBall_isNeighborhoodBasis_2_8 {X : Type u} [DistanceSpace_1_12 X]
+  (x : X) :
     IsNeighborhoodBasis_2_5
       (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) x
-      {U : Set X | ∃ r : ℝ, 0 < r ∧ U = openBall_1_14 x r} := by
+        {U : Set X | ∃ r : ℝ, 0 < r ∧ U = openBall_1_14 x r} := by
   refine ⟨?_, ?_⟩
   · intro U hU
     rcases hU with ⟨r, rpos, rfl⟩
@@ -211,8 +216,7 @@ theorem distance_openBall_isNeighborhoodBasis_2_8 {X : Type u}
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 2.8: the balls of radius `1 / n` form a countable neighborhood basis. -/
 theorem distance_invPNatBall_isNeighborhoodBasis_2_8 {X : Type u}
-    [DistanceSpace_1_12 X]
-    (x : X) :
+  [DistanceSpace_1_12 X] (x : X) :
     IsNeighborhoodBasis_2_5
       (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) x
       {U : Set X | ∃ n : ℕ+, U = openBall_1_14 x (1 / (n : ℝ))} := by
@@ -243,6 +247,40 @@ theorem distance_invPNatBall_isNeighborhoodBasis_2_8 {X : Type u}
         intro y hy
         exact Std.lt_trans hy hn'
       exact LE.le.subset λ ⦃_⦄ a ↦ WsubV (this a)
+
+/-- In `ℝ`, an open interval centered at `x` with radius `ε`
+  coincides with the open ball of radius `ε`. -/
+theorem real_Ioo_eq_openBall_2_8 (x ε : ℝ) :
+    Set.Ioo (x - ε) (x + ε) = openBall_1_14 x ε := by
+  ext y
+  constructor
+  · intro hy
+    change dist x y < ε
+    rw [Real.dist_eq, abs_lt]
+    rw [Set.mem_Ioo] at hy
+    exact ⟨by linarith [hy.2], by linarith [hy.1]⟩
+  · intro hy
+    rw [Set.mem_Ioo]
+    change dist x y < ε at hy
+    rw [Real.dist_eq, abs_lt] at hy
+    exact ⟨by linarith, by linarith⟩
+
+/-- In `ℝ`, centered open intervals form a neighborhood basis for the metric topology. -/
+theorem real_openInterval_isNeighborhoodBasis_2_8 (x : ℝ) :
+    IsNeighborhoodBasis_2_5
+      (@inducedTopology_1_17 ℝ inferInstance) x
+      {U : Set ℝ | ∃ ε : ℝ, 0 < ε ∧ U = Set.Ioo (x - ε) (x + ε)} := by
+  refine ⟨?_, ?_⟩
+  · intro U hU
+    rcases hU with ⟨ε, εpos, rfl⟩
+    refine (distance_openBall_isNeighborhoodBasis_2_8 x).isNeighborhood _ ?_
+    exact ⟨ε, εpos, real_Ioo_eq_openBall_2_8 x ε⟩
+  · intro V hV
+    obtain ⟨W, hW, hWV⟩ := (distance_openBall_isNeighborhoodBasis_2_8 x).hasRefinement V hV
+    rcases hW with ⟨ε, εpos, rfl⟩
+    refine ⟨Set.Ioo (x - ε) (x + ε), ?_, ?_⟩
+    · exact ⟨ε, εpos, rfl⟩
+    · simpa [real_Ioo_eq_openBall_2_8 x ε] using hWV
 
 /-!
 Example 2.9 records the discrete-space singleton basis and the notion of an
@@ -507,9 +545,8 @@ spaces are first countable.
 -/
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 2.13: every distance space is first countable. -/
-theorem distanceSpace_firstCountable_2_13 {X : Type u}
-    [DistanceSpace_1_12 X] :
-    FirstCountable_2_12 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) :=
+theorem distanceSpace_firstCountable_2_13 {X : Type u} [DistanceSpace_1_12 X] :
+  FirstCountable_2_12 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) :=
     open Classical in by
       intro x
       set 𝒰 := {U | ∃ n : ℕ+, U = openBall_1_14 x (1 / ↑↑n)} with 𝒰df
