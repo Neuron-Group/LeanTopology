@@ -1,0 +1,46 @@
+\usepackage{xcolor}
+
+\definecolor{noteblue}{RGB}{30,55,110}
+\definecolor{notegreen}{RGB}{45,95,55}
+\definecolor{notenavy}{RGB}{35,35,70}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+
+\makeatletter
+\def\th@plain{%
+  \thm@headfont{\color{noteblue}\bfseries}
+  \thm@notefont{\color{noteblue}\bfseries}
+  \itshape
+}
+\def\th@definition{%
+  \thm@headfont{\color{notegreen}\bfseries}
+  \thm@notefont{\color{notegreen}\bfseries}
+  \normalfont
+}
+\def\th@remark{%
+  \thm@headfont{\color{notenavy}\bfseries}
+  \thm@notefont{\color{notenavy}\bfseries}
+  \normalfont
+}
+\makeatother
+
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\BB}{\mathcal{B}}
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\pow}{\mathcal{P}}
+
+\newcommand{\defterm}[1]{\emph{#1}}
+\newcommand{\st}{\mid}

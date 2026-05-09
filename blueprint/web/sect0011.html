@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+	} }
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<meta name="generator" content="plasTeX" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LeanTopology Blueprint: Boundary and geometric examples</title>
+<link rel="next" href="sect0012.html" title="Auxiliary Internal Declarations" />
+<link rel="prev" href="sect0010.html" title="Closure and interior operators" />
+<link rel="up" href="sect0007.html" title="Closure, Interior, Boundary, Density" />
+<link rel="stylesheet" href="styles/theme-white.css" />
+<link rel="stylesheet" href="styles/amsthm.css" />
+<link rel="stylesheet" href="styles/showmore.css" />
+<link rel="stylesheet" href="styles/blueprint.css" />
+<link rel="stylesheet" href="styles/extra_styles.css" />
+</head>
+
+<body>
+<header>
+<svg  id="toc-toggle" class="icon icon-list-numbered "><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html">LeanTopology Blueprint</a></h1>
+</header>
+
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+  <a href="sect0001.html"><span class="toc_ref">1</span> <span class="toc_entry">Overview</span></a>
+ </li>
+<li class="">
+  <a href="sect0002.html"><span class="toc_ref">2</span> <span class="toc_entry">Euclidean and Metric Preliminaries</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="sect0003.html"><span class="toc_ref">2.1</span> <span class="toc_entry">Euclidean-space preliminaries</span></a>
+ </li>
+<li class="">
+  <a href="sect0004.html"><span class="toc_ref">2.2</span> <span class="toc_entry">Topologies and metric spaces</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0005.html"><span class="toc_ref">3</span> <span class="toc_entry">Neighborhoods and Convergence</span></a>
+ </li>
+<li class="">
+  <a href="sect0006.html"><span class="toc_ref">4</span> <span class="toc_entry">Bases, Subbases, and Countability</span></a>
+ </li>
+<li class=" active">
+  <a href="sect0007.html"><span class="toc_ref">5</span> <span class="toc_entry">Closure, Interior, Boundary, Density</span></a>
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
+     <li class="">
+  <a href="sect0008.html"><span class="toc_ref">5.1</span> <span class="toc_entry">Closure theory</span></a>
+ </li>
+<li class="">
+  <a href="sect0009.html"><span class="toc_ref">5.2</span> <span class="toc_entry">Density and separability</span></a>
+ </li>
+<li class="">
+  <a href="sect0010.html"><span class="toc_ref">5.3</span> <span class="toc_entry">Closure and interior operators</span></a>
+ </li>
+<li class=" active current">
+  <a href="sect0011.html"><span class="toc_ref">5.4</span> <span class="toc_entry">Boundary and geometric examples</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0012.html"><span class="toc_ref">6</span> <span class="toc_entry">Auxiliary Internal Declarations</span></a>
+ </li>
+<li class="">
+  <a href="sect0013.html"><span class="toc_ref">7</span> <span class="toc_entry">Roadmap</span></a>
+ </li>
+<li ><a href="dep_graph_document.html">Dependency graph</a></li>
+</ul>
+</nav>
+
+<div class="content">
+<div class="content-wrapper">
+
+
+<div class="main-text">
+<h1 id="a0000000012">5.4 Boundary and geometric examples</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:boundary-4-27">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.21</span>
+    <span class="definition_thmtitle">Boundary</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0011.html#def:boundary-4-27">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.boundary_4_27" class="lean_decl">LeanTopology.ClosureInterior.boundary_4_27</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  The boundary of a set is defined from closure and interior in the standard way. Equivalently, </p>
+<div class="displaymath" id="a0000000072">
+  \[  \partial A = \overline A \setminus \operatorname {int}(A) = \overline A \cap \overline{A^c}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:boundary-abstract-4-27-4-28">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">5.22</span>
+    <span class="proposition_thmtitle">Abstract theory of the boundary</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0011.html#prop:boundary-abstract-4-27-4-28">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0011.html#def:boundary-4-27">Definition 5.21</a></li>
+          
+          <li><a href="sect0005.html#def:neighborhood-basis-2-5">Definition 3.3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.boundary_isClosed_4_27" class="lean_decl">LeanTopology.ClosureInterior.boundary_isClosed_4_27</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.boundary_eq_closure_inter_closure_compl_4_28" class="lean_decl">LeanTopology.ClosureInterior.boundary_eq_closure_inter_closure_compl_4_28</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_boundary_iff_neighborhood_4_28" class="lean_decl">LeanTopology.ClosureInterior.mem_boundary_iff_neighborhood_4_28</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_boundary_iff_openNeighborhood_4_28" class="lean_decl">LeanTopology.ClosureInterior.mem_boundary_iff_openNeighborhood_4_28</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_boundary_iff_neighborhoodBasis_4_28" class="lean_decl">LeanTopology.ClosureInterior.mem_boundary_iff_neighborhoodBasis_4_28</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_boundary_iff_exists_neighborhoodBasis_4_28" class="lean_decl">LeanTopology.ClosureInterior.mem_boundary_iff_exists_neighborhoodBasis_4_28</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   The boundary is closed, satisfies the identity </p>
+<div class="displaymath" id="a0000000073">
+  \[  \partial A = \overline A \cap \overline{A^c},  \]
+</div>
+<p> and is characterized by the property that every neighborhood of a boundary point meets both \(A\) and \(A^c\). </p>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:disk-boundary-4-29">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">5.23</span>
+    <span class="example_thmtitle">Boundary and interior of closed unit disks</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0011.html#ex:disk-boundary-4-29">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>  The development computes explicitly the interior and boundary of the closed unit disk in \(\mathbb {R}^2\), and of the planar closed unit disk sitting inside \(\mathbb {R}^3\). Thus the file identifies concrete formulas of the shape </p>
+<div class="displaymath" id="a0000000074">
+  \[  \operatorname {int}(\overline{B}(0,1)), \qquad \partial \overline{B}(0,1),  \]
+</div>
+<p> both in \(\mathbb {R}^2\) and in the corresponding planar subset of \(\mathbb {R}^3\). </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-definition" id="rem:mathlib-certs-4">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">5.24</span>
+    <span class="remark_thmtitle">Compatibility with mathlib closure, interior, density, and boundary</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0011.html#rem:mathlib-certs-4">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>  The repository concludes by certifying that its notions of closure, interior, density, and boundary agree with the corresponding mathlib constructions. </p>
+
+  </div>
+</div>
+
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+
+<nav class="prev_up_next">
+  <svg  id="showmore-minus" class="icon icon-eye-minus showmore"><use xlink:href="symbol-defs.svg#icon-eye-minus"></use></svg>
+
+  <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
+
+  <a href="sect0010.html" title="Closure and interior operators"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+  <a href="sect0007.html" title="Closure, Interior, Boundary, Density"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+  <a href="sect0012.html" title="Auxiliary Internal Declarations"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/plastex.js"></script>
+<script type="text/javascript" src="js/svgxuse.js"></script>
+<script type="text/javascript" src="js/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/showmore.js"></script>
+</body>
+</html>

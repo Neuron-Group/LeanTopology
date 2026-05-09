@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+	} }
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<meta name="generator" content="plasTeX" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LeanTopology Blueprint: Closure theory</title>
+<link rel="next" href="sect0009.html" title="Density and separability" />
+<link rel="prev" href="sect0007.html" title="Closure, Interior, Boundary, Density" />
+<link rel="up" href="sect0007.html" title="Closure, Interior, Boundary, Density" />
+<link rel="stylesheet" href="styles/theme-white.css" />
+<link rel="stylesheet" href="styles/amsthm.css" />
+<link rel="stylesheet" href="styles/showmore.css" />
+<link rel="stylesheet" href="styles/blueprint.css" />
+<link rel="stylesheet" href="styles/extra_styles.css" />
+</head>
+
+<body>
+<header>
+<svg  id="toc-toggle" class="icon icon-list-numbered "><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html">LeanTopology Blueprint</a></h1>
+</header>
+
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+  <a href="sect0001.html"><span class="toc_ref">1</span> <span class="toc_entry">Overview</span></a>
+ </li>
+<li class="">
+  <a href="sect0002.html"><span class="toc_ref">2</span> <span class="toc_entry">Euclidean and Metric Preliminaries</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="sect0003.html"><span class="toc_ref">2.1</span> <span class="toc_entry">Euclidean-space preliminaries</span></a>
+ </li>
+<li class="">
+  <a href="sect0004.html"><span class="toc_ref">2.2</span> <span class="toc_entry">Topologies and metric spaces</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0005.html"><span class="toc_ref">3</span> <span class="toc_entry">Neighborhoods and Convergence</span></a>
+ </li>
+<li class="">
+  <a href="sect0006.html"><span class="toc_ref">4</span> <span class="toc_entry">Bases, Subbases, and Countability</span></a>
+ </li>
+<li class=" active">
+  <a href="sect0007.html"><span class="toc_ref">5</span> <span class="toc_entry">Closure, Interior, Boundary, Density</span></a>
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
+     <li class=" active current">
+  <a href="sect0008.html"><span class="toc_ref">5.1</span> <span class="toc_entry">Closure theory</span></a>
+ </li>
+<li class="">
+  <a href="sect0009.html"><span class="toc_ref">5.2</span> <span class="toc_entry">Density and separability</span></a>
+ </li>
+<li class="">
+  <a href="sect0010.html"><span class="toc_ref">5.3</span> <span class="toc_entry">Closure and interior operators</span></a>
+ </li>
+<li class="">
+  <a href="sect0011.html"><span class="toc_ref">5.4</span> <span class="toc_entry">Boundary and geometric examples</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0012.html"><span class="toc_ref">6</span> <span class="toc_entry">Auxiliary Internal Declarations</span></a>
+ </li>
+<li class="">
+  <a href="sect0013.html"><span class="toc_ref">7</span> <span class="toc_entry">Roadmap</span></a>
+ </li>
+<li ><a href="dep_graph_document.html">Dependency graph</a></li>
+</ul>
+</nav>
+
+<div class="content">
+<div class="content-wrapper">
+
+
+<div class="main-text">
+<h1 id="a0000000009">5.1 Closure theory</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:closure-4-1">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.1</span>
+    <span class="definition_thmtitle">Closed supersets and closure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#def:closure-4-1">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.ClosedSupersets_4_1" class="lean_decl">LeanTopology.ClosureInterior.ClosedSupersets_4_1</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_4_1" class="lean_decl">LeanTopology.ClosureInterior.closure_4_1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  For a set \(A\subseteq X\), the family of closed supersets of \(A\) is formed first, and the closure \(\overline A\) is defined as their intersection. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:subset-closure-4-1">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">5.2</span>
+    <span class="proposition_thmtitle">The closure contains the original set</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#prop:subset-closure-4-1">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0008.html#def:closure-4-1">Definition 5.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.subset_closure_4_1" class="lean_decl">LeanTopology.ClosureInterior.subset_closure_4_1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   For every \(A\subseteq X\) one has </p>
+<div class="displaymath" id="a0000000057">
+  \[  A\subseteq \overline A.  \]
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:closure-closed-minimal-4-1-4-2">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">5.3</span>
+    <span class="proposition_thmtitle">The closure is closed and minimal</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#prop:closure-closed-minimal-4-1-4-2">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0008.html#def:closure-4-1">Definition 5.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_isClosed_4_1" class="lean_decl">LeanTopology.ClosureInterior.closure_isClosed_4_1</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_minimal_4_2" class="lean_decl">LeanTopology.ClosureInterior.closure_minimal_4_2</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_mem_of_closed_4_2" class="lean_decl">LeanTopology.ClosureInterior.closure_mem_of_closed_4_2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   The closure \(\overline A\) is closed, contains \(A\), and satisfies the minimality property </p>
+<div class="displaymath" id="a0000000058">
+  \[  A\subseteq F,\  F\text{ closed } \implies \overline A\subseteq F.  \]
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:closed-iff-closure-4-3">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">5.4</span>
+    <span class="proposition_thmtitle">Characterization of closed sets by closure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#prop:closed-iff-closure-4-3">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0008.html#def:closure-4-1">Definition 5.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isClosed_iff_eq_closure_4_3" class="lean_decl">LeanTopology.ClosureInterior.isClosed_iff_eq_closure_4_3</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isClosed_of_closure_subset_4_3" class="lean_decl">LeanTopology.ClosureInterior.isClosed_of_closure_subset_4_3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   A set \(A\) is closed if and only if </p>
+<div class="displaymath" id="a0000000059">
+  \[  A=\overline A.  \]
+</div>
+<p> Equivalently, closedness may be recovered from the relation between \(A\) and its closure. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:closure-mono-4-4">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">5.5</span>
+    <span class="proposition_thmtitle">Monotonicity of closure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#prop:closure-mono-4-4">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0008.html#def:closure-4-1">Definition 5.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_mono_4_4" class="lean_decl">LeanTopology.ClosureInterior.closure_mono_4_4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   If </p>
+<div class="displaymath" id="a0000000060">
+  \[  A\subseteq B,  \]
+</div>
+<p> then </p>
+<div class="displaymath" id="a0000000061">
+  \[  \overline A\subseteq \overline B.  \]
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:closure-neighborhoods-4-5">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">5.6</span>
+    <span class="proposition_thmtitle">Neighborhood characterizations of closure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#prop:closure-neighborhoods-4-5">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0008.html#def:closure-4-1">Definition 5.1</a></li>
+          
+          <li><a href="sect0005.html#def:neighborhood-2-1">Definition 3.1</a></li>
+          
+          <li><a href="sect0005.html#def:neighborhood-basis-2-5">Definition 3.3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.inter_nonempty_of_subset_right_4_5" class="lean_decl">LeanTopology.ClosureInterior.inter_nonempty_of_subset_right_4_5</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.inter_empty_of_subset_right" class="lean_decl">LeanTopology.ClosureInterior.inter_empty_of_subset_right</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.inter_empty_iff_subset_compl_right" class="lean_decl">LeanTopology.ClosureInterior.inter_empty_iff_subset_compl_right</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5'" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5'</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_openNeighborhood_4_5" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_openNeighborhood_4_5</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_neighborhoodBasis_4_5" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_neighborhoodBasis_4_5</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_exists_neighborhoodBasis_4_5" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_exists_neighborhoodBasis_4_5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   A point lies in the closure of \(A\) if and only if every neighborhood of that point meets \(A\). The repository proves this criterion in several equivalent forms: using arbitrary neighborhoods, open neighborhoods, a fixed neighborhood basis, or the existence of a suitable basis. </p>
+<div class="proof_wrapper" id="a0000000062">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Suppose first that \(x\in \overline A\) and let \(V\) be a neighborhood of \(x\). If \(A\cap V\) were empty, then \(A\subseteq V^c\). But a neighborhood of \(x\) contains an open set around \(x\), so its complement gives a closed set missing \(x\) yet still containing \(A\). This contradicts the fact that \(x\) belongs to the intersection of all closed supersets of \(A\). Equivalently, one argues by contradiction from the chain </p>
+<div class="displaymath" id="a0000000063">
+  \[  A\cap V = \varnothing \implies A\subseteq V^c \implies \exists F \text{ closed with } A\subseteq F \text{ and } x\notin F,  \]
+</div>
+<p> which is impossible if \(x\in \overline A\). </p>
+<p>Conversely, assume every neighborhood of \(x\) meets \(A\). If \(x\notin \overline A\), then since \(\overline A\) is closed, its complement is an open neighborhood of \(x\). But this complement is disjoint from \(A\), contradicting the hypothesis. Hence \(x\in \overline A\). </p>
+
+  </div>
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:ssup-sinf-closure-4-6">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">5.7</span>
+    <span class="proposition_thmtitle">Suprema and infima lie in the closure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#prop:ssup-sinf-closure-4-6">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0008.html#def:closure-4-1">Definition 5.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.sSup_mem_closure_4_6" class="lean_decl">LeanTopology.ClosureInterior.sSup_mem_closure_4_6</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.sInf_mem_closure_4_6" class="lean_decl">LeanTopology.ClosureInterior.sInf_mem_closure_4_6</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.sSup_mem_of_isClosed_4_6" class="lean_decl">LeanTopology.ClosureInterior.sSup_mem_of_isClosed_4_6</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.sInf_mem_of_isClosed_4_6" class="lean_decl">LeanTopology.ClosureInterior.sInf_mem_of_isClosed_4_6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   For appropriate real subsets \(A\), the least upper bound and greatest lower bound satisfy </p>
+<div class="displaymath" id="a0000000064">
+  \[  \sup A \in \overline A, \qquad \inf A \in \overline A,  \]
+</div>
+<p> and if \(A\) is closed then these extremal points belong to \(A\) itself. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:closure-sequential-4-7-4-8">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">5.8</span>
+    <span class="proposition_thmtitle">Sequential characterization of closure and closedness</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#prop:closure-sequential-4-7-4-8">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0005.html#def:tendsto-seq-2-16">Definition 3.9</a></li>
+          
+          <li><a href="sect0008.html#def:closure-4-1">Definition 5.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_exists_tendstoSeq_4_7" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_exists_tendstoSeq_4_7</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isClosed_iff_tendstoSeq_mem_4_8" class="lean_decl">LeanTopology.ClosureInterior.isClosed_iff_tendstoSeq_mem_4_8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   The closure of \(A\) can be characterized by the existence of sequences in \(A\) converging to the point, and a set is closed exactly when it contains the limits of all convergent sequences of its points. Schematically, </p>
+<div class="displaymath" id="a0000000065">
+  \[  x\in \overline A \iff \exists (x_n)_{n\in \mathbb {N}}, \quad x_n\in A, \quad x_n\to x,  \]
+</div>
+<p> and </p>
+<div class="displaymath" id="a0000000066">
+  \[  A \text{ closed } \iff \bigl(x_n\in A\  \forall n \text{ and } x_n\to x\bigr) \implies x\in A.  \]
+</div>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:closure-examples-4-9">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">5.9</span>
+    <span class="example_thmtitle">Closures in standard spaces</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0008.html#ex:closure-examples-4-9">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>  The closure operator is computed explicitly in several standard examples: discrete spaces, indiscrete spaces, finite-complement spaces, the interval \((-1,1)\) in \(\mathbb {R}\), and the rational points inside Euclidean space. </p>
+
+  </div>
+</div>
+
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+
+<nav class="prev_up_next">
+  <svg  id="showmore-minus" class="icon icon-eye-minus showmore"><use xlink:href="symbol-defs.svg#icon-eye-minus"></use></svg>
+
+  <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
+
+  <a href="sect0007.html" title="Closure, Interior, Boundary, Density"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+  <a href="sect0007.html" title="Closure, Interior, Boundary, Density"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+  <a href="sect0009.html" title="Density and separability"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/plastex.js"></script>
+<script type="text/javascript" src="js/svgxuse.js"></script>
+<script type="text/javascript" src="js/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/showmore.js"></script>
+</body>
+</html>

@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+	} }
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<meta name="generator" content="plasTeX" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bases, Subbases, and Countability</title>
+<link rel="next" href="sect0007.html" title="Closure, Interior, Boundary, Density" />
+<link rel="prev" href="sect0005.html" title="Neighborhoods and Convergence" />
+<link rel="up" href="index.html" title="LeanTopology Blueprint" />
+<link rel="stylesheet" href="styles/theme-white.css" />
+<link rel="stylesheet" href="styles/amsthm.css" />
+<link rel="stylesheet" href="styles/showmore.css" />
+<link rel="stylesheet" href="styles/blueprint.css" />
+<link rel="stylesheet" href="styles/extra_styles.css" />
+</head>
+
+<body>
+<header>
+<svg  id="toc-toggle" class="icon icon-list-numbered "><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html">LeanTopology Blueprint</a></h1>
+</header>
+
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+  <a href="sect0001.html"><span class="toc_ref">1</span> <span class="toc_entry">Overview</span></a>
+ </li>
+<li class="">
+  <a href="sect0002.html"><span class="toc_ref">2</span> <span class="toc_entry">Euclidean and Metric Preliminaries</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="sect0003.html"><span class="toc_ref">2.1</span> <span class="toc_entry">Euclidean-space preliminaries</span></a>
+ </li>
+<li class="">
+  <a href="sect0004.html"><span class="toc_ref">2.2</span> <span class="toc_entry">Topologies and metric spaces</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0005.html"><span class="toc_ref">3</span> <span class="toc_entry">Neighborhoods and Convergence</span></a>
+ </li>
+<li class=" active current">
+  <a href="sect0006.html"><span class="toc_ref">4</span> <span class="toc_entry">Bases, Subbases, and Countability</span></a>
+ </li>
+<li class="">
+  <a href="sect0007.html"><span class="toc_ref">5</span> <span class="toc_entry">Closure, Interior, Boundary, Density</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="sect0008.html"><span class="toc_ref">5.1</span> <span class="toc_entry">Closure theory</span></a>
+ </li>
+<li class="">
+  <a href="sect0009.html"><span class="toc_ref">5.2</span> <span class="toc_entry">Density and separability</span></a>
+ </li>
+<li class="">
+  <a href="sect0010.html"><span class="toc_ref">5.3</span> <span class="toc_entry">Closure and interior operators</span></a>
+ </li>
+<li class="">
+  <a href="sect0011.html"><span class="toc_ref">5.4</span> <span class="toc_entry">Boundary and geometric examples</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0012.html"><span class="toc_ref">6</span> <span class="toc_entry">Auxiliary Internal Declarations</span></a>
+ </li>
+<li class="">
+  <a href="sect0013.html"><span class="toc_ref">7</span> <span class="toc_entry">Roadmap</span></a>
+ </li>
+<li ><a href="dep_graph_document.html">Dependency graph</a></li>
+</ul>
+</nav>
+
+<div class="content">
+<div class="content-wrapper">
+
+
+<div class="main-text">
+<h1 id="a0000000007">4 Bases, Subbases, and Countability</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:topological-basis-3-1">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">4.1</span>
+    <span class="definition_thmtitle">Topological bases</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#def:topological-basis-3-1">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.IsTopologicalBasis_3_1" class="lean_decl">LeanTopology.Basis.IsTopologicalBasis_3_1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A family \(\mathcal{B}\) of subsets of \(X\) is a basis for a topology \(\mathcal{O}\) if every basis element is open and every open set is locally refined by some basis element. Equivalently, </p>
+<div class="displaymath" id="a0000000047">
+  \[  \mathcal{B}\subseteq \mathcal{O}, \qquad \forall U\in \mathcal{O}\  \forall x\in U\  \exists B\in \mathcal{B}, \quad x\in B\subseteq U.  \]
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:basis-union-3-2">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.2</span>
+    <span class="proposition_thmtitle">Union description of bases</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:basis-union-3-2">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:topological-basis-3-1">Definition 4.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalBasis_iff_sUnion_3_2" class="lean_decl">LeanTopology.Basis.topologicalBasis_iff_sUnion_3_2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   A family is a basis if and only if every open set is a union of members of that family. </p>
+<div class="proof_wrapper" id="a0000000048">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Assume first that \(\mathcal{B}\) is a basis and let \(U\) be open. For each \(x\in U\), choose a basis element \(B_x\) such that \(x\in B_x\subseteq U\). The union of all these \(B_x\) clearly contains every point of \(U\), and every \(B_x\) lies inside \(U\), so this union is exactly \(U\). </p>
+<p>Conversely, suppose every open set is a union of basis elements from \(\mathcal{B}\), and also \(\mathcal{B}\subseteq \mathcal{O}\). If \(x\in U\) with \(U\) open, then writing \(U\) as such a union shows that \(x\) belongs to one chosen basis element \(B\subseteq U\). This is precisely the local refinement condition. </p>
+
+  </div>
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:basis-nonempty-3-2a">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.3</span>
+    <span class="proposition_thmtitle">Nonemptiness of a basis on a nonempty space</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:basis-nonempty-3-2a">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:topological-basis-3-1">Definition 4.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalBasis_nonempty" class="lean_decl">LeanTopology.Basis.topologicalBasis_nonempty</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   If \(X\neq \varnothing \) and \(\mathcal{B}\) is a basis for a topology \(\mathcal{O}\) on \(X\), then </p>
+<div class="displaymath" id="a0000000049">
+  \[  \mathcal{B}\neq \varnothing .  \]
+</div>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:all-open-basis-3-3">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">4.4</span>
+    <span class="example_thmtitle">The topology itself is a basis</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#ex:all-open-basis-3-3">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:topological-basis-3-1">Definition 4.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>   For every topology \(\mathcal{O}\) one has </p>
+<div class="displaymath" id="a0000000050">
+  \[  \mathcal{O}\text{ is a basis for } \mathcal{O}.  \]
+</div>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:metric-euclidean-bases-3-4-3-5">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">4.5</span>
+    <span class="example_thmtitle">Metric and Euclidean basis families</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#ex:metric-euclidean-bases-3-4-3-5">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:topological-basis-3-1">Definition 4.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>   The repository proves the following standard basis results: </p>
+<div class="displaymath" id="a0000000051">
+  \[  \{ B(x,r)\mid r{\gt}0\}   \]
+</div>
+<p> is a basis in every distance space, </p>
+<div class="displaymath" id="a0000000052">
+  \[  \{ B(x,1/n)\mid n\in \mathbb {N}_{{\gt}0}\}   \]
+</div>
+<p> is likewise a basis, Euclidean open balls form a basis on \(\mathbb {R}^n\), open intervals form a basis on \(\mathbb {R}\), and Euclidean space admits a rational reciprocal-radius basis. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:second-countable-3-6">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">4.6</span>
+    <span class="definition_thmtitle">Second countability</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#def:second-countable-3-6">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SecondCountable_3_6" class="lean_decl">LeanTopology.Basis.SecondCountable_3_6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A topology is second countable if it admits a countable basis. In symbols, </p>
+<div class="displaymath" id="a0000000053">
+  \[  \exists \mathcal{B}\subseteq \mathcal{P}(X) \quad \text{such that} \quad \mathcal{B}\text{ is a basis for } \mathcal{O}\quad \text{and} \quad \mathcal{B}\text{ is countable}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:euclidean-second-countable-3-6">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.7</span>
+    <span class="proposition_thmtitle">Euclidean spaces are second countable</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:euclidean-second-countable-3-6">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:second-countable-3-6">Definition 4.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.euclideanSpace_secondCountable_3_6" class="lean_decl">LeanTopology.Basis.euclideanSpace_secondCountable_3_6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   For every \(n\in \mathbb {N}\), the Euclidean topology on \(\mathbb {R}^n\) is second countable. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:second-implies-first-3-7">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.8</span>
+    <span class="proposition_thmtitle">Second countability implies first countability</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:second-implies-first-3-7">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:second-countable-3-6">Definition 4.6</a></li>
+          
+          <li><a href="sect0005.html#def:first-countable-2-12">Definition 3.7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.secondCountable_implies_firstCountable_3_7" class="lean_decl">LeanTopology.Basis.secondCountable_implies_firstCountable_3_7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   If a topology admits a countable basis, then each point admits a countable neighborhood basis. </p>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:discrete-countability-3-8">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">4.9</span>
+    <span class="example_thmtitle">Discrete countability results</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#ex:discrete-countability-3-8">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:second-countable-3-6">Definition 4.6</a></li>
+          
+          <li><a href="sect0005.html#def:first-countable-2-12">Definition 3.7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>   Discrete spaces are first countable, whereas an uncountable discrete space is not second countable. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:basis-family-3-9">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">4.10</span>
+    <span class="definition_thmtitle">Abstract basis-family axioms</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#def:basis-family-3-9">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.IsTopologicalBasisFamily_3_9" class="lean_decl">LeanTopology.Basis.IsTopologicalBasisFamily_3_9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  The project isolates the two internal basis-family axioms usually denoted \(\mathrm{OB1}\) and \(\mathrm{OB2}\), describing point coverage and local compatibility under intersections. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:basis-properties-3-9">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.11</span>
+    <span class="proposition_thmtitle">Every basis satisfies the abstract basis-family axioms</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:basis-properties-3-9">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:basis-family-3-9">Definition 4.10</a></li>
+          
+          <li><a href="sect0006.html#def:topological-basis-3-1">Definition 4.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalBasis_properties_3_9" class="lean_decl">LeanTopology.Basis.topologicalBasis_properties_3_9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   If \(\mathcal{B}\) is a genuine basis for a topology, then \(\mathcal{B}\) satisfies the internal axioms \(\mathrm{OB1}\) and \(\mathrm{OB2}\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:topology-from-basis-3-10">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">4.12</span>
+    <span class="definition_thmtitle">Topology generated by a basis family</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#def:topology-from-basis-3-10">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:basis-family-3-9">Definition 4.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologyFromTopologicalBasis_3_10" class="lean_decl">LeanTopology.Basis.topologyFromTopologicalBasis_3_10</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.BasisTopologyData_3_10" class="lean_decl">LeanTopology.Basis.BasisTopologyData_3_10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Given a family satisfying the abstract basis axioms, the repository defines the generated topology and packages the corresponding existence-and-uniqueness data. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:basis-generated-topology-3-10-3-11">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.13</span>
+    <span class="proposition_thmtitle">Existence, uniqueness, and minimality of the basis-generated topology</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:basis-generated-topology-3-10-3-11">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:topology-from-basis-3-10">Definition 4.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topology_from_topologicalBasis_3_10" class="lean_decl">LeanTopology.Basis.topology_from_topologicalBasis_3_10</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologyFromTopologicalBasis_minimal_3_11" class="lean_decl">LeanTopology.Basis.topologyFromTopologicalBasis_minimal_3_11</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   If a family \(\mathcal{B}\) satisfies the basis-family axioms, then there exists a unique topology generated by \(\mathcal{B}\), and this topology is the smallest topology containing \(\mathcal{B}\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:sorgenfrey-3-12">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">4.14</span>
+    <span class="definition_thmtitle">The Sorgenfrey basis and topology</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#def:sorgenfrey-3-12">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SorgenfreyBasis_3_12" class="lean_decl">LeanTopology.Basis.SorgenfreyBasis_3_12</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SorgenfreyTopology_3_12" class="lean_decl">LeanTopology.Basis.SorgenfreyTopology_3_12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  The Sorgenfrey line is built from the half-open interval basis </p>
+<div class="displaymath" id="a0000000054">
+  \[  \{ [a,b)\subseteq \mathbb {R}\mid a{\lt}b\} ,  \]
+</div>
+<p> and its generated topology. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:sorgenfrey-basis-3-12">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.15</span>
+    <span class="proposition_thmtitle">Structural properties of the Sorgenfrey basis</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:sorgenfrey-basis-3-12">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SorgenfreyBasis_properties_3_12" class="lean_decl">LeanTopology.Basis.SorgenfreyBasis_properties_3_12</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.Sorgenfrey_intervalNeighborhoodBasis_3_12" class="lean_decl">LeanTopology.Basis.Sorgenfrey_intervalNeighborhoodBasis_3_12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>  The half-open interval family satisfies the abstract basis axioms, and for each \(x\in \mathbb {R}\) the intervals </p>
+<div class="displaymath" id="a0000000055">
+  \[  \left[x, x+\frac{1}{n}\right) \qquad (n\in \mathbb {N}_{{\gt}0})  \]
+</div>
+<p> form a neighborhood basis at \(x\). </p>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:sorgenfrey-countability-3-12">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">4.16</span>
+    <span class="example_thmtitle">Countability and comparison properties of the Sorgenfrey line</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#ex:sorgenfrey-countability-3-12">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>  The Sorgenfrey line is first countable but not second countable, and the usual Euclidean topology on \(\mathbb {R}\) is contained in the Sorgenfrey topology. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:subbasis-3-13">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">4.17</span>
+    <span class="definition_thmtitle">Finite intersections and topological subbases</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#def:subbasis-3-13">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.finiteIntersections_3_13" class="lean_decl">LeanTopology.Basis.finiteIntersections_3_13</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.IsTopologicalSubbasis_3_13" class="lean_decl">LeanTopology.Basis.IsTopologicalSubbasis_3_13</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  Given a family \(\mathcal S\), one forms the family of its nonempty finite intersections. A subbasis is then a family whose finite intersections form a basis. Thus one first considers </p>
+<div class="displaymath" id="a0000000056">
+  \[  \operatorname {FinInt}(\mathcal S) = \left\{ \bigcap _{i=1}^n S_i \mid n\ge 1,\  S_i\in \mathcal S\right\} ,  \]
+</div>
+<p> and then asks that \(\operatorname {FinInt}(\mathcal S)\) be a basis. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:subbasis-basic-3-13-3-15">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.18</span>
+    <span class="proposition_thmtitle">Basic subbasis lemmas</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:subbasis-basic-3-13-3-15">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:subbasis-3-13">Definition 4.17</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.subset_finiteIntersections_3_13" class="lean_decl">LeanTopology.Basis.subset_finiteIntersections_3_13</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalSubbasis_subset_3_13" class="lean_decl">LeanTopology.Basis.topologicalSubbasis_subset_3_13</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalBasis_isTopologicalSubbasis_3_13" class="lean_decl">LeanTopology.Basis.topologicalBasis_isTopologicalSubbasis_3_13</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.realRaySubbasis_3_14" class="lean_decl">LeanTopology.Basis.realRaySubbasis_3_14</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.realRaySubbasis_subset_open_3_14" class="lean_decl">LeanTopology.Basis.realRaySubbasis_subset_open_3_14</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.real_openInterval_mem_finiteIntersections_realRay_3_14" class="lean_decl">LeanTopology.Basis.real_openInterval_mem_finiteIntersections_realRay_3_14</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.realRay_isTopologicalSubbasis_3_14" class="lean_decl">LeanTopology.Basis.realRay_isTopologicalSubbasis_3_14</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.IsTopologicalSubbasisFamily_3_15" class="lean_decl">LeanTopology.Basis.IsTopologicalSubbasisFamily_3_15</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.isTopologicalSubbasisFamily_iff_pointwise_3_15" class="lean_decl">LeanTopology.Basis.isTopologicalSubbasisFamily_iff_pointwise_3_15</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalSubbasis_property_3_15" class="lean_decl">LeanTopology.Basis.topologicalSubbasis_property_3_15</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   The development proves that every member of a family appears as a singleton finite intersection, every subbasis consists of open sets, every basis is automatically a subbasis, open rays form a subbasis of the usual topology on \(\mathbb {R}\), and the corresponding abstract subbasis-family axioms admit the expected pointwise reformulation. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:subbasis-generated-topology-3-16-3-17">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">4.19</span>
+    <span class="proposition_thmtitle">Generated topologies from subbasis families</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#prop:subbasis-generated-topology-3-16-3-17">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0006.html#def:subbasis-3-13">Definition 4.17</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologyFromTopologicalSubbasis_3_16" class="lean_decl">LeanTopology.Basis.topologyFromTopologicalSubbasis_3_16</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.finiteIntersections_topologicalBasisFamily_3_16" class="lean_decl">LeanTopology.Basis.finiteIntersections_topologicalBasisFamily_3_16</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SubbasisTopologyData_3_16" class="lean_decl">LeanTopology.Basis.SubbasisTopologyData_3_16</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topology_from_topologicalSubbasis_3_16" class="lean_decl">LeanTopology.Basis.topology_from_topologicalSubbasis_3_16</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologyFromTopologicalSubbasis_minimal_3_17" class="lean_decl">LeanTopology.Basis.topologyFromTopologicalSubbasis_minimal_3_17</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   Finite intersections of a suitable subbasis family satisfy the basis-family axioms. Hence one obtains a generated topology, together with a packaged existence-and-uniqueness statement and a minimality result analogous to the basis case. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-definition" id="rem:mathlib-basis-cert-3-16">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">4.20</span>
+    <span class="remark_thmtitle">Compatibility with mathlib bases</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0006.html#rem:mathlib-basis-cert-3-16">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>  The project’s basis notion is certified to agree with mathlib’s <span class="ttfamily">IsTopologicalBasis</span>. </p>
+
+  </div>
+</div>
+
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+
+<nav class="prev_up_next">
+  <svg  id="showmore-minus" class="icon icon-eye-minus showmore"><use xlink:href="symbol-defs.svg#icon-eye-minus"></use></svg>
+
+  <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
+
+  <a href="sect0005.html" title="Neighborhoods and Convergence"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+  <a href="index.html" title="LeanTopology Blueprint"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+  <a href="sect0007.html" title="Closure, Interior, Boundary, Density"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/plastex.js"></script>
+<script type="text/javascript" src="js/svgxuse.js"></script>
+<script type="text/javascript" src="js/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/showmore.js"></script>
+</body>
+</html>

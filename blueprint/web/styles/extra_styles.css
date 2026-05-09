@@ -1,0 +1,7 @@
+.proof-content {
+  line-height: 1.6;
+}
+
+.theorem_thmcontent, .definition_thmcontent, .proposition_thmcontent {
+  font-size: 1.02rem;
+}

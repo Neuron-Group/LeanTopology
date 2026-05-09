@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+	} }
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<meta name="generator" content="plasTeX" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LeanTopology Blueprint: Topologies and metric spaces</title>
+<link rel="next" href="sect0005.html" title="Neighborhoods and Convergence" />
+<link rel="prev" href="sect0003.html" title="Euclidean-space preliminaries" />
+<link rel="up" href="sect0002.html" title="Euclidean and Metric Preliminaries" />
+<link rel="stylesheet" href="styles/theme-white.css" />
+<link rel="stylesheet" href="styles/amsthm.css" />
+<link rel="stylesheet" href="styles/showmore.css" />
+<link rel="stylesheet" href="styles/blueprint.css" />
+<link rel="stylesheet" href="styles/extra_styles.css" />
+</head>
+
+<body>
+<header>
+<svg  id="toc-toggle" class="icon icon-list-numbered "><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html">LeanTopology Blueprint</a></h1>
+</header>
+
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+  <a href="sect0001.html"><span class="toc_ref">1</span> <span class="toc_entry">Overview</span></a>
+ </li>
+<li class=" active">
+  <a href="sect0002.html"><span class="toc_ref">2</span> <span class="toc_entry">Euclidean and Metric Preliminaries</span></a>
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
+     <li class="">
+  <a href="sect0003.html"><span class="toc_ref">2.1</span> <span class="toc_entry">Euclidean-space preliminaries</span></a>
+ </li>
+<li class=" active current">
+  <a href="sect0004.html"><span class="toc_ref">2.2</span> <span class="toc_entry">Topologies and metric spaces</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0005.html"><span class="toc_ref">3</span> <span class="toc_entry">Neighborhoods and Convergence</span></a>
+ </li>
+<li class="">
+  <a href="sect0006.html"><span class="toc_ref">4</span> <span class="toc_entry">Bases, Subbases, and Countability</span></a>
+ </li>
+<li class="">
+  <a href="sect0007.html"><span class="toc_ref">5</span> <span class="toc_entry">Closure, Interior, Boundary, Density</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="sect0008.html"><span class="toc_ref">5.1</span> <span class="toc_entry">Closure theory</span></a>
+ </li>
+<li class="">
+  <a href="sect0009.html"><span class="toc_ref">5.2</span> <span class="toc_entry">Density and separability</span></a>
+ </li>
+<li class="">
+  <a href="sect0010.html"><span class="toc_ref">5.3</span> <span class="toc_entry">Closure and interior operators</span></a>
+ </li>
+<li class="">
+  <a href="sect0011.html"><span class="toc_ref">5.4</span> <span class="toc_entry">Boundary and geometric examples</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0012.html"><span class="toc_ref">6</span> <span class="toc_entry">Auxiliary Internal Declarations</span></a>
+ </li>
+<li class="">
+  <a href="sect0013.html"><span class="toc_ref">7</span> <span class="toc_entry">Roadmap</span></a>
+ </li>
+<li ><a href="dep_graph_document.html">Dependency graph</a></li>
+</ul>
+</nav>
+
+<div class="content">
+<div class="content-wrapper">
+
+
+<div class="main-text">
+<h1 id="a0000000005">2.2 Topologies and metric spaces</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:topology-open">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.8</span>
+    <span class="definition_thmtitle">Topology by open sets</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#def:topology-open">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsTopology_1_1" class="lean_decl">LeanTopology.TopologicalSpace.IsTopology_1_1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  Let \(X\) be a type and let \(\mathcal{O}\subseteq \mathcal{P}(X)\). We say that \(\mathcal{O}\) is a topology on \(X\) if </p>
+<div class="displaymath" id="a0000000027">
+  \[  \begin{aligned} & \varnothing \in \mathcal{O}, & & X \in \mathcal{O},\\ & U,V \in \mathcal{O}\implies U\cap V \in \mathcal{O},\\ & \mathcal S\subseteq \mathcal{O}\implies \bigcup \mathcal S \in \mathcal{O}\end{aligned}  \]
+</div>
+<p> for every family \(\mathcal S \subseteq \mathcal{O}\). </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:topology-helpers-1-1">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">2.9</span>
+    <span class="proposition_thmtitle">Finite intersections and indexed unions</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#prop:topology-helpers-1-1">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:topology-open">Definition 2.8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsTopology_1_1.O2_inter'" class="lean_decl">LeanTopology.TopologicalSpace.IsTopology_1_1.O2_inter'</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsTopology_1_1.O3_iUnion" class="lean_decl">LeanTopology.TopologicalSpace.IsTopology_1_1.O3_iUnion</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   From the axioms of a topology one derives closure under finite intersections and indexed unions. These are the standard finitary and indexed forms of the basic axioms. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:closed-set">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.10</span>
+    <span class="definition_thmtitle">Closed sets</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#def:closed-set">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:topology-open">Definition 2.8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsClosed_1_2" class="lean_decl">LeanTopology.TopologicalSpace.IsClosed_1_2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A subset \(F \subseteq X\) is closed relative to \(\mathcal{O}\) if its complement \(F^c\) is open. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:closed-open-complements">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">2.11</span>
+    <span class="proposition_thmtitle">Complement lemmas for open and closed sets</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#prop:closed-open-complements">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:closed-set">Definition 2.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.isClosed_compl_iff_open" class="lean_decl">LeanTopology.TopologicalSpace.isClosed_compl_iff_open</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.open_of_closed_compl" class="lean_decl">LeanTopology.TopologicalSpace.open_of_closed_compl</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.closed_of_open_compl" class="lean_decl">LeanTopology.TopologicalSpace.closed_of_open_compl</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   The complement operation interchanges the open and closed predicates exactly as expected. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:closed-family">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.12</span>
+    <span class="definition_thmtitle">Closed-set axioms</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#def:closed-family">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsClosedFamily_1_3" class="lean_decl">LeanTopology.TopologicalSpace.IsClosedFamily_1_3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A family of subsets is a closed family if it contains \(\varnothing \) and \(X\), is closed under finite unions, and is closed under arbitrary intersections. Equivalently, </p>
+<div class="displaymath" id="a0000000028">
+  \[  \begin{aligned} & \varnothing \in \mathcal{F}, & & X \in \mathcal{F},\\ & F,G\in \mathcal{F}\implies F\cup G\in \mathcal{F},\\ & \mathcal S\subseteq \mathcal{F}\implies \bigcap \mathcal S\in \mathcal{F}. \end{aligned}  \]
+</div>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:closed-family-helpers">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">2.13</span>
+    <span class="proposition_thmtitle">Finite unions and indexed intersections for closed families</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#prop:closed-family-helpers">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:closed-family">Definition 2.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C2_union'" class="lean_decl">LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C2_union'</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C3_iInter" class="lean_decl">LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C3_iInter</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   The abstract closed-set axioms imply closure under finite unions and indexed intersections in the expected forms. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:closed-open-equivalence">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">2.14</span>
+    <span class="proposition_thmtitle">Open-set and closed-set axioms are equivalent</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#prop:closed-open-equivalence">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:topology-open">Definition 2.8</a></li>
+          
+          <li><a href="sect0004.html#def:closed-set">Definition 2.10</a></li>
+          
+          <li><a href="sect0004.html#def:closed-family">Definition 2.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.closedSet_properties_1_3" class="lean_decl">LeanTopology.TopologicalSpace.closedSet_properties_1_3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   A family of open sets is a topology if and only if the family of its complements satisfies the closed-set axioms. </p>
+<div class="proof_wrapper" id="a0000000029">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Assume first that \(\mathcal{O}\) is a topology and define </p>
+<div class="displaymath" id="a0000000030">
+  \[  \mathcal{F}:=\{ F\subseteq X \mid F^c\in \mathcal{O}\} .  \]
+</div>
+<p> Because \(X \in \mathcal{O}\), the set \(\varnothing = X^c\) is closed, so \(\varnothing \in \mathcal{F}\). Similarly \(\varnothing \in \mathcal{O}\) implies \(X = \varnothing ^c \in \mathcal{F}\). </p>
+<p>If \(F,G \in \mathcal{F}\), then \(F^c,G^c \in \mathcal{O}\). Since topologies are closed under finite intersections, </p>
+<div class="displaymath" id="a0000000031">
+  \[  F^c \cap G^c \in \mathcal{O}.  \]
+</div>
+<p> By De Morgan, </p>
+<div class="displaymath" id="a0000000032">
+  \[  (F\cup G)^c = F^c \cap G^c,  \]
+</div>
+<p> so \(F\cup G \in \mathcal{F}\). </p>
+<p>Now let \(\mathcal S \subseteq \mathcal{F}\). For each \(F\in \mathcal S\) we have \(F^c \in \mathcal{O}\). Since topologies are closed under arbitrary unions, </p>
+<div class="displaymath" id="a0000000033">
+  \[  \bigcup _{F\in \mathcal S} F^c \in \mathcal{O}.  \]
+</div>
+<p> Again by De Morgan, </p>
+<div class="displaymath" id="a0000000034">
+  \[  \left(\bigcap _{F\in \mathcal S}F\right)^c = \bigcup _{F\in \mathcal S}F^c,  \]
+</div>
+<p> so \(\bigcap \mathcal S \in \mathcal{F}\). Thus \(\mathcal{F}\) is a closed family. </p>
+<p>Conversely, suppose the complement family satisfies the closed-set axioms. Then \(X \in \mathcal{F}\) and \(\varnothing \in \mathcal{F}\) immediately imply \(\varnothing , X \in \mathcal{O}\). If \(U,V \in \mathcal{O}\), then \(U^c,V^c \in \mathcal{F}\), so \(U^c \cup V^c \in \mathcal{F}\). Hence </p>
+<div class="displaymath" id="a0000000035">
+  \[  (U\cap V)^c = U^c \cup V^c  \]
+</div>
+<p> is closed, meaning \(U\cap V\) is open. </p>
+<p>Likewise, if every member of a family \(\mathcal S\) lies in \(\mathcal{O}\), then every complement lies in \(\mathcal{F}\), hence their intersection belongs to \(\mathcal{F}\). Taking complements gives openness of the union of the original family. Therefore \(\mathcal{O}\) is a topology. </p>
+
+  </div>
+</div>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-definition" id="rem:iinter-empty-1-4">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.15</span>
+    <span class="remark_thmtitle">Intersection over the empty family</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#rem:iinter-empty-1-4">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>  Inside a fixed ambient space \(X\), the intersection indexed by the empty type is equal to \(X\) itself. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-definition" id="rem:closed-to-open-1-5">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.16</span>
+    <span class="remark_thmtitle">Constructing a topology from closed sets</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#rem:closed-to-open-1-5">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:closed-family">Definition 2.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>   A closed family determines a topology by declaring the complements of its members to be open. </p>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:basic-topologies-1-6-1-8">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">2.17</span>
+    <span class="example_thmtitle">Discrete, indiscrete, and finite-complement topologies</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#ex:basic-topologies-1-6-1-8">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>  The repository formalizes the discrete topology, the indiscrete topology, and the finite-complement topology as standard examples satisfying the axioms. </p>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:euclidean-topology-1-9">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">2.18</span>
+    <span class="example_thmtitle">Euclidean topology</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#ex:euclidean-topology-1-9">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>  For every \(n\), the family of Euclidean-open subsets of \(\mathbb {R}^n\) defines a topology. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:coarser-finer-1-10">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.19</span>
+    <span class="definition_thmtitle">Coarser and finer topologies</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#def:coarser-finer-1-10">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsCoarser_1_10" class="lean_decl">LeanTopology.TopologicalSpace.IsCoarser_1_10</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsFiner_1_10" class="lean_decl">LeanTopology.TopologicalSpace.IsFiner_1_10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A topology \(\mathcal{O}_1\) is coarser than \(\mathcal{O}_2\) if \(\mathcal{O}_1 \subseteq \mathcal{O}_2\), and \(\mathcal{O}_2\) is finer than \(\mathcal{O}_1\) by the same relation read in the opposite direction. </p>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:indiscrete-discrete-order-1-11">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">2.20</span>
+    <span class="example_thmtitle">Extremal topologies</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#ex:indiscrete-discrete-order-1-11">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:coarser-finer-1-10">Definition 2.19</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>   Every topology on a set lies between the indiscrete and discrete topologies. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:distance-balls-1-12-1-14">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.21</span>
+    <span class="definition_thmtitle">Distance spaces and metric balls</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#def:distance-balls-1-12-1-14">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.openBall_1_14" class="lean_decl">LeanTopology.TopologicalSpace.openBall_1_14</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.closedBall_1_14" class="lean_decl">LeanTopology.TopologicalSpace.closedBall_1_14</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  After introducing the abstract distance-space structure in the source file, the repository defines open and closed balls by the inequalities </p>
+<div class="displaymath" id="a0000000036">
+  \[  B(x,r)=\{ y \mid d(x,y){\lt}r\} , \qquad \overline{B}(x,r)=\{ y \mid d(x,y)\le r\} .  \]
+</div>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-definition" id="rem:distance-restriction-1-13">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.22</span>
+    <span class="remark_thmtitle">Restriction of a distance</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#rem:distance-restriction-1-13">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>  The text records that a distance restricts naturally to any subset, so metric constructions pass to subspaces. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:is-open-distance-1-15">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.23</span>
+    <span class="definition_thmtitle">Metric openness</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#def:is-open-distance-1-15">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.isOpenDistance_1_15" class="lean_decl">LeanTopology.TopologicalSpace.isOpenDistance_1_15</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A set \(U\) in a distance space is open if for every \(x\in U\) there exists \(r{\gt}0\) such that \(B(x,r)\subseteq U\). </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:balls-open-closed-1-16">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">2.24</span>
+    <span class="proposition_thmtitle">Open balls are open and closed balls are closed</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#prop:balls-open-closed-1-16">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:is-open-distance-1-15">Definition 2.23</a></li>
+          
+          <li><a href="sect0004.html#def:closed-set">Definition 2.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.openBall_open_1_16" class="lean_decl">LeanTopology.TopologicalSpace.openBall_open_1_16</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.closedBall_closed_1_16" class="lean_decl">LeanTopology.TopologicalSpace.closedBall_closed_1_16</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   In every distance space, open balls are open and closed balls are closed relative to the metric topology. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:induced-topology-1-17">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.25</span>
+    <span class="definition_thmtitle">Topology induced by a distance</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#def:induced-topology-1-17">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:is-open-distance-1-15">Definition 2.23</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.inducedTopology_1_17" class="lean_decl">LeanTopology.TopologicalSpace.inducedTopology_1_17</a></li>
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.𝒪𝒹" class="lean_decl">LeanTopology.TopologicalSpace.𝒪𝒹</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The topology induced by a distance is the family of all metric-open sets. The auxiliary notation \(\mathcal O_d\) is used for this family. </p>
+
+  </div>
+</div>
+<div class="proposition_thmwrapper theorem-style-plain" id="prop:induced-topology-is-topology-1-17">
+  <div class="proposition_thmheading">
+    <span class="proposition_thmcaption">
+    Proposition
+    </span>
+    <span class="proposition_thmlabel">2.26</span>
+    <span class="proposition_thmtitle">The distance-induced family is a topology</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#prop:induced-topology-is-topology-1-17">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:induced-topology-1-17">Definition 2.25</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.inducedTopology_isTopology_1_17" class="lean_decl">LeanTopology.TopologicalSpace.inducedTopology_isTopology_1_17</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="proposition_thmcontent">
+  <p>   The metric-open subsets satisfy the topology axioms. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:metrizable-1-18">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.27</span>
+    <span class="definition_thmtitle">Metrizable topologies</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#def:metrizable-1-18">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsMetrizable_1_18" class="lean_decl">LeanTopology.TopologicalSpace.IsMetrizable_1_18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A topology is metrizable if it is equal to the topology induced by some distance on the same underlying type. Equivalently, </p>
+<div class="displaymath" id="a0000000037">
+  \[  \mathcal{O}\text{ is metrizable } \iff \exists d \text{ on } X \text{ such that } \mathcal{O}= \mathcal{O}_d.  \]
+</div>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-definition" id="rem:distance-gives-metrizable-1-19">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.28</span>
+    <span class="remark_thmtitle">A chosen distance yields a metrizable topology</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#rem:distance-gives-metrizable-1-19">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:metrizable-1-18">Definition 2.27</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>   Every distance space gives rise to a metrizable topology simply by taking its induced topology. </p>
+
+  </div>
+</div>
+<div class="example_thmwrapper theorem-style-definition" id="ex:discrete-metrizable-1-20">
+  <div class="example_thmheading">
+    <span class="example_thmcaption">
+    Example
+    </span>
+    <span class="example_thmlabel">2.29</span>
+    <span class="example_thmtitle">The discrete topology is metrizable</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#ex:discrete-metrizable-1-20">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0004.html#def:metrizable-1-18">Definition 2.27</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="example_thmcontent">
+  <p>   The standard \(0\)–\(1\) distance induces the discrete topology. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-definition" id="rem:mathlib-certs-1">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.30</span>
+    <span class="remark_thmtitle">Compatibility with mathlib topologies</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sect0004.html#rem:mathlib-certs-1">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>  The repository certifies that its unbundled topology language agrees with mathlib’s bundled <span class="ttfamily">TopologicalSpace</span> formalism, both abstractly and in the Euclidean case. </p>
+
+  </div>
+</div>
+
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+
+<nav class="prev_up_next">
+  <svg  id="showmore-minus" class="icon icon-eye-minus showmore"><use xlink:href="symbol-defs.svg#icon-eye-minus"></use></svg>
+
+  <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
+
+  <a href="sect0003.html" title="Euclidean-space preliminaries"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+  <a href="sect0002.html" title="Euclidean and Metric Preliminaries"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+  <a href="sect0005.html" title="Neighborhoods and Convergence"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/plastex.js"></script>
+<script type="text/javascript" src="js/svgxuse.js"></script>
+<script type="text/javascript" src="js/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/showmore.js"></script>
+</body>
+</html>

@@ -1,0 +1,970 @@
+\tableofcontents
+
+\chapter{Overview}
+
+This blueprint now serves two purposes at once:
+\[
+\text{exposition} \qquad \text{and} \qquad \text{declaration map}.
+\]
+More precisely, it gives a readable mathematical overview of the formalization project \texttt{LeanTopology}, while also recording the numbered definitions, propositions, examples, remarks, and certification results appearing across the repository.
+
+The repository is organized by the thematic progression
+\[
+\text{Euclidean preliminaries}
+\longrightarrow
+\text{topological spaces}
+\longrightarrow
+\text{neighborhoods and convergence}
+\longrightarrow
+\text{bases and subbases}
+\longrightarrow
+\text{closure/interior/boundary/density}.
+\]
+
+The style of exposition intentionally follows handwritten mathematical notes:
+\[
+\text{statements in ordinary notation}
+\;+
+\text{proofs in mathematical prose}.
+\]
+
+\begin{remark}\label{rem:blueprint-scope}
+\lean{LeanTopology.EuclideanSpaceTopology.cauchy_schwarz_0_1, LeanTopology.EuclideanSpaceTopology.norm_triangle_0_2, LeanTopology.TopologicalSpace.IsTopology_1_1, LeanTopology.NeighborhoodBasis.IsNeighborhood_2_1, LeanTopology.Basis.IsTopologicalBasis_3_1, LeanTopology.ClosureInterior.closure_4_1}
+\leanok
+The current blueprint emphasizes all numbered mathematical declarations in the repository. Small purely technical helpers are mentioned only when they clarify the architecture of the formal development.
+\end{remark}
+
+\chapter{Euclidean and Metric Preliminaries}
+
+\section{Euclidean-space preliminaries}
+
+\begin{proposition}[Cauchy--Schwarz inequality]\label{prop:cs-0-1}
+\lean{LeanTopology.EuclideanSpaceTopology.cauchy_schwarz_0_1}
+\leanok
+The Euclidean dot product on $\RR^n$ satisfies the Cauchy--Schwarz inequality.
+In particular,
+\[
+|\langle x,y\rangle| \le \|x\|\,\|y\|.
+\]
+This is one of the analytic inputs used to organize the later metric structure on Euclidean space.
+\end{proposition}
+
+\begin{proposition}[Triangle inequality for the norm]\label{prop:norm-triangle-0-2}
+\uses{prop:cs-0-1}
+\lean{LeanTopology.EuclideanSpaceTopology.norm_triangle_0_2}
+\leanok
+The Euclidean norm on $\RR^n$ satisfies the triangle inequality.
+That is,
+\[
+\|x+y\| \le \|x\|+\|y\|.
+\]
+Consequently it induces the standard Euclidean metric.
+\end{proposition}
+
+\begin{proposition}[Elementary metric identities]\label{prop:metric-identities-0-3}
+\lean{LeanTopology.EuclideanSpaceTopology.dist_eq_zero_iff_0_3, LeanTopology.EuclideanSpaceTopology.dist_comm_0_3, LeanTopology.EuclideanSpaceTopology.dist_triangle_0_3}
+\leanok
+The Euclidean distance satisfies the expected identities:
+\[
+\operatorname{dist}(x,y)=0 \iff x=y,
+\qquad
+\operatorname{dist}(x,y)=\operatorname{dist}(y,x),
+\]
+and
+\[
+\operatorname{dist}(x,z) \le \operatorname{dist}(x,y)+\operatorname{dist}(y,z).
+\]
+\end{proposition}
+
+\begin{definition}[Euclidean open balls]\label{def:euclidean-ball-0-4}
+\lean{LeanTopology.EuclideanSpaceTopology.openBall_eq_metric_ball_0_4, LeanTopology.EuclideanSpaceTopology.openBall_mono_0_4}
+\leanok
+The repository works with Euclidean open balls and records their compatibility with the ambient metric-ball notation, together with their monotonicity in the radius.
+Equivalently, the discussion centers on the family
+\[
+B(x,r):=\{y\in\RR^n \mid d(x,y)<r\},
+\]
+together with the implication
+\[
+r_1\le r_2 \implies B(x,r_1)\subseteq B(x,r_2).
+\]
+\end{definition}
+
+\begin{proposition}[Continuity via balls]\label{prop:continuous-ball-0-5}
+\lean{LeanTopology.EuclideanSpaceTopology.continuousAt_iff_ball_0_5}
+\leanok
+A map between Euclidean spaces is continuous at a point if and only if every target ball around the image contains the image of a sufficiently small source ball around the point.
+That is, for $f : \RR^n \to \RR^m$ and $a\in\RR^n$,
+\[
+f \text{ is continuous at } a
+\iff
+\forall \varepsilon>0\ \exists \delta>0\ \forall x,
+\quad d(x,a)<\delta \implies d\bigl(f(x),f(a)\bigr)<\varepsilon.
+\]
+\end{proposition}
+
+\begin{definition}[Euclidean open sets]\label{def:euclidean-open-0-6}
+\lean{LeanTopology.EuclideanSpaceTopology.isOpenEuclidean_iff_isOpen_0_6}
+\leanok
+Open subsets of Euclidean space are described using the local ball condition, and this notion is certified to agree with mathlib's standard predicate \texttt{IsOpen}.
+In symbols,
+\[
+U \text{ open } \iff \forall x\in U\ \exists r>0,
+\quad B(x,r)\subseteq U.
+\]
+\end{definition}
+
+\begin{proposition}[Basic Euclidean open-set calculus]\label{prop:euclidean-open-calculus-0-7-0-9}
+\lean{LeanTopology.EuclideanSpaceTopology.isOpen_ball_0_7, LeanTopology.EuclideanSpaceTopology.isOpen_empty_univ_0_8, LeanTopology.EuclideanSpaceTopology.isOpen_inter_0_8, LeanTopology.EuclideanSpaceTopology.isOpen_iUnion_0_8, LeanTopology.EuclideanSpaceTopology.continuous_iff_preimage_open_0_9}
+\leanok
+The Euclidean development includes the basic open-set rules: balls are open, both $\varnothing$ and $\RR^n$ are open, finite intersections of open sets are open, arbitrary unions of open sets are open, and continuity can be characterized by openness of preimages.
+In particular, it establishes
+\[
+\begin{aligned}
+&B(x,r) \text{ is open},
+&&\varnothing,\RR^n \text{ are open},\\
+&U_1,U_2 \text{ open } \implies U_1\cap U_2 \text{ open},
+&&\{U_i\}_{i\in I} \text{ open } \implies \bigcup_{i\in I}U_i \text{ open}.
+\end{aligned}
+\]
+along with the preimage formulation of continuity.
+\end{proposition}
+
+\section{Topologies and metric spaces}
+
+\begin{definition}[Topology by open sets]\label{def:topology-open}
+\lean{LeanTopology.TopologicalSpace.IsTopology_1_1}
+\leanok
+Let $X$ be a type and let $\OO \subseteq \pow(X)$. We say that $\OO$ is a topology on $X$ if
+\[
+\begin{aligned}
+&\varnothing \in \OO,
+&&X \in \OO,\\
+&U,V \in \OO \implies U\cap V \in \OO,\\
+&\mathcal S\subseteq\OO \implies \bigcup \mathcal S \in \OO
+\end{aligned}
+\]
+for every family $\mathcal S \subseteq \OO$.
+\end{definition}
+
+\begin{proposition}[Finite intersections and indexed unions]\label{prop:topology-helpers-1-1}
+\uses{def:topology-open}
+\lean{LeanTopology.TopologicalSpace.IsTopology_1_1.O2_inter', LeanTopology.TopologicalSpace.IsTopology_1_1.O3_iUnion}
+\leanok
+From the axioms of a topology one derives closure under finite intersections and indexed unions.
+These are the standard finitary and indexed forms of the basic axioms.
+\end{proposition}
+
+\begin{definition}[Closed sets]\label{def:closed-set}
+\uses{def:topology-open}
+\lean{LeanTopology.TopologicalSpace.IsClosed_1_2}
+\leanok
+A subset $F \subseteq X$ is closed relative to $\OO$ if its complement $F^c$ is open.
+\end{definition}
+
+\begin{proposition}[Complement lemmas for open and closed sets]\label{prop:closed-open-complements}
+\uses{def:closed-set}
+\lean{LeanTopology.TopologicalSpace.isClosed_compl_iff_open, LeanTopology.TopologicalSpace.open_of_closed_compl, LeanTopology.TopologicalSpace.closed_of_open_compl}
+\leanok
+The complement operation interchanges the open and closed predicates exactly as expected.
+\end{proposition}
+
+\begin{definition}[Closed-set axioms]\label{def:closed-family}
+\lean{LeanTopology.TopologicalSpace.IsClosedFamily_1_3}
+\leanok
+A family of subsets is a closed family if it contains $\varnothing$ and $X$, is closed under finite unions, and is closed under arbitrary intersections.
+Equivalently,
+\[
+\begin{aligned}
+&\varnothing \in \FF,
+&&X \in \FF,\\
+&F,G\in\FF \implies F\cup G\in\FF,\\
+&\mathcal S\subseteq\FF \implies \bigcap\mathcal S\in\FF.
+\end{aligned}
+\]
+\end{definition}
+
+\begin{proposition}[Finite unions and indexed intersections for closed families]\label{prop:closed-family-helpers}
+\uses{def:closed-family}
+\lean{LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C2_union', LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C3_iInter}
+\leanok
+The abstract closed-set axioms imply closure under finite unions and indexed intersections in the expected forms.
+\end{proposition}
+
+\begin{proposition}[Open-set and closed-set axioms are equivalent]\label{prop:closed-open-equivalence}
+\uses{def:topology-open,def:closed-set,def:closed-family}
+\lean{LeanTopology.TopologicalSpace.closedSet_properties_1_3}
+\leanok
+A family of open sets is a topology if and only if the family of its complements satisfies the closed-set axioms.
+\begin{proof}
+Assume first that $\OO$ is a topology and define
+\[
+\FF:=\{F\subseteq X \st F^c\in\OO\}.
+\]
+Because $X \in \OO$, the set $\varnothing = X^c$ is closed, so $\varnothing \in \FF$. Similarly $\varnothing \in \OO$ implies $X = \varnothing^c \in \FF$.
+
+If $F,G \in \FF$, then $F^c,G^c \in \OO$. Since topologies are closed under finite intersections,
+\[
+F^c \cap G^c \in \OO.
+\]
+By De Morgan,
+\[
+(F\cup G)^c = F^c \cap G^c,
+\]
+so $F\cup G \in \FF$.
+
+Now let $\mathcal S \subseteq \FF$. For each $F\in\mathcal S$ we have $F^c \in \OO$. Since topologies are closed under arbitrary unions,
+\[
+\bigcup_{F\in\mathcal S} F^c \in \OO.
+\]
+Again by De Morgan,
+\[
+\left(\bigcap_{F\in\mathcal S}F\right)^c = \bigcup_{F\in\mathcal S}F^c,
+\]
+so $\bigcap \mathcal S \in \FF$. Thus $\FF$ is a closed family.
+
+Conversely, suppose the complement family satisfies the closed-set axioms. Then $X \in \FF$ and $\varnothing \in \FF$ immediately imply $\varnothing, X \in \OO$. If $U,V \in \OO$, then $U^c,V^c \in \FF$, so $U^c \cup V^c \in \FF$. Hence
+\[
+(U\cap V)^c = U^c \cup V^c
+\]
+is closed, meaning $U\cap V$ is open.
+
+Likewise, if every member of a family $\mathcal S$ lies in $\OO$, then every complement lies in $\FF$, hence their intersection belongs to $\FF$. Taking complements gives openness of the union of the original family. Therefore $\OO$ is a topology.
+\end{proof}
+\end{proposition}
+
+\begin{remark}[Intersection over the empty family]\label{rem:iinter-empty-1-4}
+\lean{LeanTopology.TopologicalSpace.iInter_empty_eq_univ_1_4}
+\leanok
+Inside a fixed ambient space $X$, the intersection indexed by the empty type is equal to $X$ itself.
+\end{remark}
+
+\begin{remark}[Constructing a topology from closed sets]\label{rem:closed-to-open-1-5}
+\uses{def:closed-family}
+\lean{LeanTopology.TopologicalSpace.topology_from_closed_sets_1_5}
+\leanok
+A closed family determines a topology by declaring the complements of its members to be open.
+\end{remark}
+
+\begin{example}[Discrete, indiscrete, and finite-complement topologies]\label{ex:basic-topologies-1-6-1-8}
+\lean{LeanTopology.TopologicalSpace.discreteTopology_1_6, LeanTopology.TopologicalSpace.discreteTopology_isTopology_1_6, LeanTopology.TopologicalSpace.indiscreteTopology_1_7, LeanTopology.TopologicalSpace.indiscreteTopology_isTopology_1_7, LeanTopology.TopologicalSpace.finiteClosedFamily_1_8, LeanTopology.TopologicalSpace.finiteComplementTopology_1_8, LeanTopology.TopologicalSpace.finiteComplementTopology_isTopology_1_8}
+\leanok
+The repository formalizes the discrete topology, the indiscrete topology, and the finite-complement topology as standard examples satisfying the axioms.
+\end{example}
+
+\begin{example}[Euclidean topology]\label{ex:euclidean-topology-1-9}
+\lean{LeanTopology.TopologicalSpace.euclideanTopology_1_9, LeanTopology.TopologicalSpace.euclideanTopology_isTopology_1_9}
+\leanok
+For every $n$, the family of Euclidean-open subsets of $\RR^n$ defines a topology.
+\end{example}
+
+\begin{definition}[Coarser and finer topologies]\label{def:coarser-finer-1-10}
+\lean{LeanTopology.TopologicalSpace.IsCoarser_1_10, LeanTopology.TopologicalSpace.IsFiner_1_10}
+\leanok
+A topology $\OO_1$ is coarser than $\OO_2$ if $\OO_1 \subseteq \OO_2$, and $\OO_2$ is finer than $\OO_1$ by the same relation read in the opposite direction.
+\end{definition}
+
+\begin{example}[Extremal topologies]\label{ex:indiscrete-discrete-order-1-11}
+\uses{def:coarser-finer-1-10}
+\lean{LeanTopology.TopologicalSpace.indiscrete_le_any_le_discrete_1_11}
+\leanok
+Every topology on a set lies between the indiscrete and discrete topologies.
+\end{example}
+
+\begin{definition}[Distance spaces and metric balls]\label{def:distance-balls-1-12-1-14}
+\lean{LeanTopology.TopologicalSpace.openBall_1_14, LeanTopology.TopologicalSpace.closedBall_1_14}
+\leanok
+After introducing the abstract distance-space structure in the source file, the repository defines open and closed balls by the inequalities
+\[
+B(x,r)=\{y \mid d(x,y)<r\},
+\qquad
+\overline{B}(x,r)=\{y \mid d(x,y)\le r\}.
+\]
+\end{definition}
+
+\begin{remark}[Restriction of a distance]\label{rem:distance-restriction-1-13}
+\lean{LeanTopology.TopologicalSpace.openBall_1_14}
+\leanok
+The text records that a distance restricts naturally to any subset, so metric constructions pass to subspaces.
+\end{remark}
+
+\begin{definition}[Metric openness]\label{def:is-open-distance-1-15}
+\lean{LeanTopology.TopologicalSpace.isOpenDistance_1_15}
+\leanok
+A set $U$ in a distance space is open if for every $x\in U$ there exists $r>0$ such that $B(x,r)\subseteq U$.
+\end{definition}
+
+\begin{proposition}[Open balls are open and closed balls are closed]\label{prop:balls-open-closed-1-16}
+\uses{def:is-open-distance-1-15,def:closed-set}
+\lean{LeanTopology.TopologicalSpace.openBall_open_1_16, LeanTopology.TopologicalSpace.closedBall_closed_1_16}
+\leanok
+In every distance space, open balls are open and closed balls are closed relative to the metric topology.
+\end{proposition}
+
+\begin{definition}[Topology induced by a distance]\label{def:induced-topology-1-17}
+\uses{def:is-open-distance-1-15}
+\lean{LeanTopology.TopologicalSpace.inducedTopology_1_17, LeanTopology.TopologicalSpace.𝒪𝒹}
+\leanok
+The topology induced by a distance is the family of all metric-open sets.
+The auxiliary notation $\mathcal O_d$ is used for this family.
+\end{definition}
+
+\begin{proposition}[The distance-induced family is a topology]\label{prop:induced-topology-is-topology-1-17}
+\uses{def:induced-topology-1-17}
+\lean{LeanTopology.TopologicalSpace.inducedTopology_isTopology_1_17}
+\leanok
+The metric-open subsets satisfy the topology axioms.
+\end{proposition}
+
+\begin{definition}[Metrizable topologies]\label{def:metrizable-1-18}
+\lean{LeanTopology.TopologicalSpace.IsMetrizable_1_18}
+\leanok
+A topology is metrizable if it is equal to the topology induced by some distance on the same underlying type.
+Equivalently,
+\[
+\OO \text{ is metrizable }
+\iff
+\exists d \text{ on } X \text{ such that } \OO = \OO_d.
+\]
+\end{definition}
+
+\begin{remark}[A chosen distance yields a metrizable topology]\label{rem:distance-gives-metrizable-1-19}
+\uses{def:metrizable-1-18}
+\lean{LeanTopology.TopologicalSpace.distanceSpace_gives_metrizableSpace_1_19}
+\leanok
+Every distance space gives rise to a metrizable topology simply by taking its induced topology.
+\end{remark}
+
+\begin{example}[The discrete topology is metrizable]\label{ex:discrete-metrizable-1-20}
+\uses{def:metrizable-1-18}
+\lean{LeanTopology.TopologicalSpace.discreteTopology_isMetrizable_1_20}
+\leanok
+The standard $0$--$1$ distance induces the discrete topology.
+\end{example}
+
+\begin{remark}[Compatibility with mathlib topologies]\label{rem:mathlib-certs-1}
+\lean{LeanTopology.TopologicalSpace.fromMathlibTopologicalSpace_cert, LeanTopology.TopologicalSpace.euclideanTopology_iff_mathlibOpen_cert}
+\leanok
+The repository certifies that its unbundled topology language agrees with mathlib's bundled \texttt{TopologicalSpace} formalism, both abstractly and in the Euclidean case.
+\end{remark}
+
+\chapter{Neighborhoods and Convergence}
+
+\begin{definition}[Neighborhoods]\label{def:neighborhood-2-1}
+\lean{LeanTopology.NeighborhoodBasis.IsNeighborhood_2_1, LeanTopology.NeighborhoodBasis.IsOpenNeighborhood_2_1, LeanTopology.NeighborhoodBasis.IsClosedNeighborhood_2_1}
+\leanok
+The repository distinguishes general neighborhoods, open neighborhoods, and closed neighborhoods of a point.
+A neighborhood of $x$ is any set containing an open set around $x$.
+\end{definition}
+
+\begin{proposition}[Basic neighborhood calculus]\label{prop:neighborhood-basic-2-1-2-4}
+\uses{def:neighborhood-2-1}
+\lean{LeanTopology.NeighborhoodBasis.neighborhood_of_open_mem, LeanTopology.NeighborhoodBasis.openNeighborhood_iff_2_2, LeanTopology.NeighborhoodBasis.neighborhood_sInter_finset_2_3, LeanTopology.NeighborhoodBasis.neighborhood_inter_2_3, LeanTopology.NeighborhoodBasis.isOpen_iff_neighborhood_2_4}
+\leanok
+The first neighborhood results show that open sets containing a point are neighborhoods, open neighborhoods admit a pointwise characterization, finite intersections of neighborhoods remain neighborhoods, and openness of a set is equivalent to every one of its points possessing that set as a neighborhood.
+Concretely, the file proves the pattern
+\[
+x\in U,\ U\text{ open } \implies U\in\mathcal N(x),
+\]
+\[
+V_1,V_2\in\mathcal N(x) \implies V_1\cap V_2\in\mathcal N(x),
+\]
+and
+\[
+U\text{ open } \iff \forall x\in U,\ U\in\mathcal N(x).
+\]
+\end{proposition}
+
+\begin{definition}[Neighborhood bases]\label{def:neighborhood-basis-2-5}
+\lean{LeanTopology.NeighborhoodBasis.IsNeighborhoodBasis_2_5}
+\leanok
+A family $\UU$ is a neighborhood basis at $x$ if every element of $\UU$ is a neighborhood of $x$ and every neighborhood of $x$ contains at least one member of $\UU$.
+Thus the defining conditions are
+\[
+\forall U\in\UU,\quad U\in\mathcal N(x),
+\qquad
+\forall V\in\mathcal N(x)\ \exists U\in\UU,\quad U\subseteq V.
+\]
+\end{definition}
+
+\begin{example}[Canonical neighborhood bases]\label{ex:neighborhood-bases-2-6-2-9}
+\uses{def:neighborhood-basis-2-5}
+\lean{LeanTopology.NeighborhoodBasis.allNeighborhoods_isNeighborhoodBasis_2_6, LeanTopology.NeighborhoodBasis.allOpenNeighborhoods_isNeighborhoodBasis_2_7, LeanTopology.NeighborhoodBasis.distance_openBall_isNeighborhoodBasis_2_8, LeanTopology.NeighborhoodBasis.distance_invPNatBall_isNeighborhoodBasis_2_8, LeanTopology.NeighborhoodBasis.real_Ioo_eq_openBall_2_8, LeanTopology.NeighborhoodBasis.real_openInterval_isNeighborhoodBasis_2_8, LeanTopology.NeighborhoodBasis.IsIsolatedPoint_2_9, LeanTopology.NeighborhoodBasis.discrete_singleton_isNeighborhoodBasis_2_9}
+\leanok
+Several standard neighborhood bases are formalized: all neighborhoods, all open neighborhoods, metric open balls, reciprocal-radius metric balls, open intervals in $\RR$, and singleton bases at isolated points in discrete spaces.
+Among the concrete families are
+\[
+\mathcal N(x),
+\qquad
+\mathcal N_{\mathrm{open}}(x),
+\qquad
+\{B(x,r)\mid r>0\},
+\qquad
+\{B(x,1/n)\mid n\in\NN_{>0}\},
+\]
+as well as the real-interval family
+\[
+\{(x-\varepsilon,x+\varepsilon)\mid \varepsilon>0\}
+\]
+and singleton bases at isolated points.
+\end{example}
+
+\begin{definition}[Neighborhood-basis families on a whole space]\label{def:neighborhood-basis-family-2-10}
+\lean{LeanTopology.NeighborhoodBasis.IsNeighborhoodBasisFamily_2_10}
+\leanok
+A neighborhood-basis family assigns to each point $x$ a local basis $\UU(x)$ satisfying the expected pointwise refinement properties.
+\end{definition}
+
+\begin{proposition}[Abstract basis-family properties and generated topologies]\label{prop:neighborhood-basis-family-generated-topology-2-10-2-11}
+\uses{def:neighborhood-basis-family-2-10}
+\lean{LeanTopology.NeighborhoodBasis.neighborhoodBasis_properties_2_10, LeanTopology.NeighborhoodBasis.topologyFromNeighborhoodBases_2_11, LeanTopology.NeighborhoodBasis.NeighborhoodBasisTopologyData_2_11, LeanTopology.NeighborhoodBasis.topology_from_neighborhoodBases_2_11}
+\leanok
+The source develops the global theory of neighborhood-basis families: it isolates the axioms such families must satisfy, constructs from them a topology, and packages the resulting existence and uniqueness statement.
+\end{proposition}
+
+\begin{definition}[First countability]\label{def:first-countable-2-12}
+\lean{LeanTopology.NeighborhoodBasis.FirstCountable_2_12}
+\leanok
+A space is first countable if each point admits a countable neighborhood basis.
+Equivalently,
+\[
+\forall x\in X\ \exists (U_n)_{n\in\NN}
+\quad \text{such that} \quad
+\forall V\in\mathcal N(x)\ \exists n,\ U_n\subseteq V.
+\]
+\end{definition}
+
+\begin{proposition}[Countability results for neighborhood bases]\label{prop:first-countable-results-2-13-2-15}
+\uses{def:first-countable-2-12}
+\lean{LeanTopology.NeighborhoodBasis.distanceSpace_firstCountable_2_13, LeanTopology.NeighborhoodBasis.discreteSpace_firstCountable_2_13, LeanTopology.NeighborhoodBasis.metrizableSpace_firstCountable_2_13, LeanTopology.NeighborhoodBasis.countable_finiteComplement_firstCountable_2_14, LeanTopology.NeighborhoodBasis.uncountable_finiteComplement_not_firstCountable_2_14, LeanTopology.NeighborhoodBasis.decreasing_neighborhoodBasis_2_15}
+\leanok
+Metric spaces, discrete spaces, and metrizable spaces are shown to be first countable; finite-complement topologies are first countable in the countable case and fail to be first countable in the uncountable case; and one can arrange countable bases into decreasing form.
+\end{proposition}
+
+\begin{definition}[Sequential convergence]\label{def:tendsto-seq-2-16}
+\lean{LeanTopology.NeighborhoodBasis.TendstoSeq_2_16}
+\leanok
+A sequence $(x_n)$ converges to $x$ if for every neighborhood $V$ of $x$ there exists $N$ such that $x_n\in V$ whenever $n\ge N$.
+That is,
+\[
+x_n \to x
+\iff
+\forall V\in\mathcal N(x)\ \exists N\in\NN\ \forall n\ge N,
+\quad x_n\in V.
+\]
+\end{definition}
+
+\begin{remark}[Limits need not be unique]\label{rem:indiscrete-limit-2-17}
+\uses{def:tendsto-seq-2-16}
+\lean{LeanTopology.NeighborhoodBasis.indiscrete_nonunique_limit_2_17}
+\leanok
+In the indiscrete topology, a constant sequence may converge to more than one point.
+\end{remark}
+
+\begin{proposition}[Testing convergence on a basis]\label{prop:tendsto-basis-2-18}
+\uses{def:neighborhood-basis-2-5,def:tendsto-seq-2-16}
+\lean{LeanTopology.NeighborhoodBasis.tendstoSeq_iff_neighborhoodBasis_2_18}
+\leanok
+A sequence converges to $x$ if and only if it is eventually contained in every member of a chosen neighborhood basis at $x$.
+\begin{proof}
+If a sequence converges in the ordinary neighborhood sense, then every basis element is in particular a neighborhood, so the eventual-containment property follows immediately.
+
+Conversely, suppose the eventual-containment property holds for a basis $\UU$ at $x$. Let $V$ be any neighborhood of $x$. Since $\UU$ is a basis, there exists some $U\in\UU$ with $U\subseteq V$. By hypothesis, the sequence is eventually in $U$, hence eventually in $V$. Therefore the original definition of convergence holds.
+\end{proof}
+\end{proposition}
+
+\begin{definition}[Real-sequence convergence and metric convergence data]\label{def:metric-convergence-2-19}
+\lean{LeanTopology.NeighborhoodBasis.RealSequenceConvergesTo_2_19, LeanTopology.NeighborhoodBasis.TendstoSeqMetricData_2_19}
+\leanok
+The repository introduces the classical $\varepsilon$--$N$ notion of convergence for real sequences and a structure packaging the equivalence between topological convergence, metric $\varepsilon$-convergence, and convergence of the real distance sequence.
+\end{definition}
+
+\begin{proposition}[Equivalent formulations of metric convergence]\label{prop:metric-convergence-2-19-2-21}
+\uses{def:metric-convergence-2-19}
+\lean{LeanTopology.NeighborhoodBasis.tendstoSeq_metric_2_19, LeanTopology.NeighborhoodBasis.tendstoSeq_metric_limit_unique_2_20, LeanTopology.NeighborhoodBasis.tendstoSeq_euclideanSubspace_2_21}
+\leanok
+Metric convergence is equivalent to the usual $\varepsilon$--$N$ formulation; in metric spaces limits are unique; and the Euclidean subspace development specializes the general theory to concrete Euclidean settings.
+\end{proposition}
+
+\begin{remark}[Compatibility with mathlib neighborhood and limit notions]\label{rem:mathlib-certs-2}
+\lean{LeanTopology.NeighborhoodBasis.isNeighborhood_iff_mem_nhds_cert, LeanTopology.NeighborhoodBasis.tendstoSeq_iff_tendsto_cert}
+\leanok
+The local neighborhood predicate and sequential convergence notion used in the project are certified to agree with the corresponding mathlib notions \texttt{mem\_nhds} and \texttt{Tendsto}.
+\end{remark}
+
+\chapter{Bases, Subbases, and Countability}
+
+\begin{definition}[Topological bases]\label{def:topological-basis-3-1}
+\lean{LeanTopology.Basis.IsTopologicalBasis_3_1}
+\leanok
+A family $\BB$ of subsets of $X$ is a basis for a topology $\OO$ if every basis element is open and every open set is locally refined by some basis element.
+Equivalently,
+\[
+\BB\subseteq\OO,
+\qquad
+\forall U\in\OO\ \forall x\in U\ \exists B\in\BB,
+\quad x\in B\subseteq U.
+\]
+\end{definition}
+
+\begin{proposition}[Union description of bases]\label{prop:basis-union-3-2}
+\uses{def:topological-basis-3-1}
+\lean{LeanTopology.Basis.topologicalBasis_iff_sUnion_3_2}
+\leanok
+A family is a basis if and only if every open set is a union of members of that family.
+\begin{proof}
+Assume first that $\BB$ is a basis and let $U$ be open. For each $x\in U$, choose a basis element $B_x$ such that $x\in B_x\subseteq U$. The union of all these $B_x$ clearly contains every point of $U$, and every $B_x$ lies inside $U$, so this union is exactly $U$.
+
+Conversely, suppose every open set is a union of basis elements from $\BB$, and also $\BB\subseteq\OO$. If $x\in U$ with $U$ open, then writing $U$ as such a union shows that $x$ belongs to one chosen basis element $B\subseteq U$. This is precisely the local refinement condition.
+\end{proof}
+\end{proposition}
+
+\begin{proposition}[Nonemptiness of a basis on a nonempty space]\label{prop:basis-nonempty-3-2a}
+\uses{def:topological-basis-3-1}
+\lean{LeanTopology.Basis.topologicalBasis_nonempty}
+\leanok
+If $X\neq\varnothing$ and $\BB$ is a basis for a topology $\OO$ on $X$, then
+\[
+\BB \neq \varnothing.
+\]
+\end{proposition}
+
+\begin{example}[The topology itself is a basis]\label{ex:all-open-basis-3-3}
+\uses{def:topological-basis-3-1}
+\lean{LeanTopology.Basis.allOpenSets_isTopologicalBasis_3_3}
+\leanok
+For every topology $\OO$ one has
+\[
+\OO \text{ is a basis for } \OO.
+\]
+\end{example}
+
+\begin{example}[Metric and Euclidean basis families]\label{ex:metric-euclidean-bases-3-4-3-5}
+\uses{def:topological-basis-3-1}
+\lean{LeanTopology.Basis.distance_openBall_isTopologicalBasis_3_4, LeanTopology.Basis.distance_invPNatBall_isTopologicalBasis_3_4, LeanTopology.Basis.euclidean_openBall_isTopologicalBasis_3_5, LeanTopology.Basis.real_openInterval_isTopologicalBasis_3_5, LeanTopology.Basis.rationalInvPNatBallBasis_3_5, LeanTopology.Basis.rationalInvPNatBall_isTopologicalBasis_3_5}
+\leanok
+The repository proves the following standard basis results:
+\[
+\{B(x,r)\mid r>0\}
+\]
+is a basis in every distance space,
+\[
+\{B(x,1/n)\mid n\in\NN_{>0}\}
+\]
+is likewise a basis, Euclidean open balls form a basis on $\RR^n$, open intervals form a basis on $\RR$, and Euclidean space admits a rational reciprocal-radius basis.
+\end{example}
+
+\begin{definition}[Second countability]\label{def:second-countable-3-6}
+\lean{LeanTopology.Basis.SecondCountable_3_6}
+\leanok
+A topology is second countable if it admits a countable basis.
+In symbols,
+\[
+\exists \BB\subseteq\pow(X)
+\quad \text{such that} \quad
+\BB \text{ is a basis for } \OO
+\quad \text{and} \quad
+\BB \text{ is countable}.
+\]
+\end{definition}
+
+\begin{proposition}[Euclidean spaces are second countable]\label{prop:euclidean-second-countable-3-6}
+\uses{def:second-countable-3-6}
+\lean{LeanTopology.Basis.euclideanSpace_secondCountable_3_6}
+\leanok
+For every $n\in\NN$, the Euclidean topology on $\RR^n$ is second countable.
+\end{proposition}
+
+\begin{proposition}[Second countability implies first countability]\label{prop:second-implies-first-3-7}
+\uses{def:second-countable-3-6,def:first-countable-2-12}
+\lean{LeanTopology.Basis.secondCountable_implies_firstCountable_3_7}
+\leanok
+If a topology admits a countable basis, then each point admits a countable neighborhood basis.
+\end{proposition}
+
+\begin{example}[Discrete countability results]\label{ex:discrete-countability-3-8}
+\uses{def:second-countable-3-6,def:first-countable-2-12}
+\lean{LeanTopology.Basis.discreteSpace_firstCountable_3_8, LeanTopology.Basis.uncountable_discrete_not_secondCountable_3_8}
+\leanok
+Discrete spaces are first countable, whereas an uncountable discrete space is not second countable.
+\end{example}
+
+\begin{definition}[Abstract basis-family axioms]\label{def:basis-family-3-9}
+\lean{LeanTopology.Basis.IsTopologicalBasisFamily_3_9}
+\leanok
+The project isolates the two internal basis-family axioms usually denoted $\mathrm{OB1}$ and $\mathrm{OB2}$, describing point coverage and local compatibility under intersections.
+\end{definition}
+
+\begin{proposition}[Every basis satisfies the abstract basis-family axioms]\label{prop:basis-properties-3-9}
+\uses{def:basis-family-3-9,def:topological-basis-3-1}
+\lean{LeanTopology.Basis.topologicalBasis_properties_3_9}
+\leanok
+If $\BB$ is a genuine basis for a topology, then $\BB$ satisfies the internal axioms $\mathrm{OB1}$ and $\mathrm{OB2}$.
+\end{proposition}
+
+\begin{definition}[Topology generated by a basis family]\label{def:topology-from-basis-3-10}
+\uses{def:basis-family-3-9}
+\lean{LeanTopology.Basis.topologyFromTopologicalBasis_3_10, LeanTopology.Basis.BasisTopologyData_3_10}
+\leanok
+Given a family satisfying the abstract basis axioms, the repository defines the generated topology and packages the corresponding existence-and-uniqueness data.
+\end{definition}
+
+\begin{proposition}[Existence, uniqueness, and minimality of the basis-generated topology]\label{prop:basis-generated-topology-3-10-3-11}
+\uses{def:topology-from-basis-3-10}
+\lean{LeanTopology.Basis.topology_from_topologicalBasis_3_10, LeanTopology.Basis.topologyFromTopologicalBasis_minimal_3_11}
+\leanok
+If a family $\BB$ satisfies the basis-family axioms, then there exists a unique topology generated by $\BB$, and this topology is the smallest topology containing $\BB$.
+\end{proposition}
+
+\begin{definition}[The Sorgenfrey basis and topology]\label{def:sorgenfrey-3-12}
+\lean{LeanTopology.Basis.SorgenfreyBasis_3_12, LeanTopology.Basis.SorgenfreyTopology_3_12}
+\leanok
+The Sorgenfrey line is built from the half-open interval basis
+\[
+\{[a,b)\subseteq\RR \mid a<b\},
+\]
+and its generated topology.
+\end{definition}
+
+\begin{proposition}[Structural properties of the Sorgenfrey basis]\label{prop:sorgenfrey-basis-3-12}
+\lean{LeanTopology.Basis.SorgenfreyBasis_properties_3_12, LeanTopology.Basis.Sorgenfrey_intervalNeighborhoodBasis_3_12}
+\leanok
+The half-open interval family satisfies the abstract basis axioms, and for each $x\in\RR$ the intervals
+\[
+\left[x, x+\frac{1}{n}\right)
+\qquad (n\in\NN_{>0})
+\]
+form a neighborhood basis at $x$.
+\end{proposition}
+
+\begin{example}[Countability and comparison properties of the Sorgenfrey line]\label{ex:sorgenfrey-countability-3-12}
+\lean{LeanTopology.Basis.Sorgenfrey_firstCountable_3_12, LeanTopology.Basis.Sorgenfrey_not_secondCountable_3_12, LeanTopology.Basis.euclideanTopology_subset_sorgenfreyTopology_3_12}
+\leanok
+The Sorgenfrey line is first countable but not second countable, and the usual Euclidean topology on $\RR$ is contained in the Sorgenfrey topology.
+\end{example}
+
+\begin{definition}[Finite intersections and topological subbases]\label{def:subbasis-3-13}
+\lean{LeanTopology.Basis.finiteIntersections_3_13, LeanTopology.Basis.IsTopologicalSubbasis_3_13}
+\leanok
+Given a family $\mathcal S$, one forms the family of its nonempty finite intersections. A subbasis is then a family whose finite intersections form a basis.
+Thus one first considers
+\[
+\operatorname{FinInt}(\mathcal S)
+=
+\left\{\bigcap_{i=1}^n S_i \st n\ge 1,\ S_i\in\mathcal S\right\},
+\]
+and then asks that $\operatorname{FinInt}(\mathcal S)$ be a basis.
+\end{definition}
+
+\begin{proposition}[Basic subbasis lemmas]\label{prop:subbasis-basic-3-13-3-15}
+\uses{def:subbasis-3-13}
+\lean{LeanTopology.Basis.subset_finiteIntersections_3_13, LeanTopology.Basis.topologicalSubbasis_subset_3_13, LeanTopology.Basis.topologicalBasis_isTopologicalSubbasis_3_13, LeanTopology.Basis.realRaySubbasis_3_14, LeanTopology.Basis.realRaySubbasis_subset_open_3_14, LeanTopology.Basis.real_openInterval_mem_finiteIntersections_realRay_3_14, LeanTopology.Basis.realRay_isTopologicalSubbasis_3_14, LeanTopology.Basis.IsTopologicalSubbasisFamily_3_15, LeanTopology.Basis.isTopologicalSubbasisFamily_iff_pointwise_3_15, LeanTopology.Basis.topologicalSubbasis_property_3_15}
+\leanok
+The development proves that every member of a family appears as a singleton finite intersection, every subbasis consists of open sets, every basis is automatically a subbasis, open rays form a subbasis of the usual topology on $\RR$, and the corresponding abstract subbasis-family axioms admit the expected pointwise reformulation.
+\end{proposition}
+
+\begin{proposition}[Generated topologies from subbasis families]\label{prop:subbasis-generated-topology-3-16-3-17}
+\uses{def:subbasis-3-13}
+\lean{LeanTopology.Basis.topologyFromTopologicalSubbasis_3_16, LeanTopology.Basis.finiteIntersections_topologicalBasisFamily_3_16, LeanTopology.Basis.SubbasisTopologyData_3_16, LeanTopology.Basis.topology_from_topologicalSubbasis_3_16, LeanTopology.Basis.topologyFromTopologicalSubbasis_minimal_3_17}
+\leanok
+Finite intersections of a suitable subbasis family satisfy the basis-family axioms. Hence one obtains a generated topology, together with a packaged existence-and-uniqueness statement and a minimality result analogous to the basis case.
+\end{proposition}
+
+\begin{remark}[Compatibility with mathlib bases]\label{rem:mathlib-basis-cert-3-16}
+\lean{LeanTopology.Basis.isTopologicalBasis_iff_mathlib_cert}
+\leanok
+The project's basis notion is certified to agree with mathlib's \texttt{IsTopologicalBasis}.
+\end{remark}
+
+\chapter{Closure, Interior, Boundary, Density}
+
+\section{Closure theory}
+
+\begin{definition}[Closed supersets and closure]\label{def:closure-4-1}
+\lean{LeanTopology.ClosureInterior.ClosedSupersets_4_1, LeanTopology.ClosureInterior.closure_4_1}
+\leanok
+For a set $A\subseteq X$, the family of closed supersets of $A$ is formed first, and the closure $\overline A$ is defined as their intersection.
+\end{definition}
+
+\begin{proposition}[The closure contains the original set]\label{prop:subset-closure-4-1}
+\uses{def:closure-4-1}
+\lean{LeanTopology.ClosureInterior.subset_closure_4_1}
+\leanok
+For every $A\subseteq X$ one has
+\[
+A\subseteq\overline A.
+\]
+\end{proposition}
+
+\begin{proposition}[The closure is closed and minimal]\label{prop:closure-closed-minimal-4-1-4-2}
+\uses{def:closure-4-1}
+\lean{LeanTopology.ClosureInterior.closure_isClosed_4_1, LeanTopology.ClosureInterior.closure_minimal_4_2, LeanTopology.ClosureInterior.closure_mem_of_closed_4_2}
+\leanok
+The closure $\overline A$ is closed, contains $A$, and satisfies the minimality property
+\[
+A\subseteq F,\ F\text{ closed } \implies \overline A\subseteq F.
+\]
+\end{proposition}
+
+\begin{proposition}[Characterization of closed sets by closure]\label{prop:closed-iff-closure-4-3}
+\uses{def:closure-4-1}
+\lean{LeanTopology.ClosureInterior.isClosed_iff_eq_closure_4_3, LeanTopology.ClosureInterior.isClosed_of_closure_subset_4_3}
+\leanok
+A set $A$ is closed if and only if
+\[
+A=\overline A.
+\]
+Equivalently, closedness may be recovered from the relation between $A$ and its closure.
+\end{proposition}
+
+\begin{proposition}[Monotonicity of closure]\label{prop:closure-mono-4-4}
+\uses{def:closure-4-1}
+\lean{LeanTopology.ClosureInterior.closure_mono_4_4}
+\leanok
+If
+\[
+A\subseteq B,
+\]
+then
+\[
+\overline A\subseteq\overline B.
+\]
+\end{proposition}
+
+\begin{proposition}[Neighborhood characterizations of closure]\label{prop:closure-neighborhoods-4-5}
+\uses{def:closure-4-1,def:neighborhood-2-1,def:neighborhood-basis-2-5}
+\lean{LeanTopology.ClosureInterior.inter_nonempty_of_subset_right_4_5, LeanTopology.ClosureInterior.inter_empty_of_subset_right, LeanTopology.ClosureInterior.inter_empty_iff_subset_compl_right, LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5', LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5, LeanTopology.ClosureInterior.mem_closure_iff_openNeighborhood_4_5, LeanTopology.ClosureInterior.mem_closure_iff_neighborhoodBasis_4_5, LeanTopology.ClosureInterior.mem_closure_iff_exists_neighborhoodBasis_4_5}
+\leanok
+A point lies in the closure of $A$ if and only if every neighborhood of that point meets $A$.
+The repository proves this criterion in several equivalent forms: using arbitrary neighborhoods, open neighborhoods, a fixed neighborhood basis, or the existence of a suitable basis.
+\begin{proof}
+Suppose first that $x\in\overline A$ and let $V$ be a neighborhood of $x$. If $A\cap V$ were empty, then $A\subseteq V^c$. But a neighborhood of $x$ contains an open set around $x$, so its complement gives a closed set missing $x$ yet still containing $A$. This contradicts the fact that $x$ belongs to the intersection of all closed supersets of $A$.
+Equivalently, one argues by contradiction from the chain
+\[
+A\cap V = \varnothing
+\implies
+A\subseteq V^c
+\implies
+\exists F \text{ closed with } A\subseteq F \text{ and } x\notin F,
+\]
+which is impossible if $x\in\overline A$.
+
+Conversely, assume every neighborhood of $x$ meets $A$. If $x\notin\overline A$, then since $\overline A$ is closed, its complement is an open neighborhood of $x$. But this complement is disjoint from $A$, contradicting the hypothesis. Hence $x\in\overline A$.
+\end{proof}
+\end{proposition}
+
+\begin{proposition}[Suprema and infima lie in the closure]\label{prop:ssup-sinf-closure-4-6}
+\uses{def:closure-4-1}
+\lean{LeanTopology.ClosureInterior.sSup_mem_closure_4_6, LeanTopology.ClosureInterior.sInf_mem_closure_4_6, LeanTopology.ClosureInterior.sSup_mem_of_isClosed_4_6, LeanTopology.ClosureInterior.sInf_mem_of_isClosed_4_6}
+\leanok
+For appropriate real subsets $A$, the least upper bound and greatest lower bound satisfy
+\[
+\sup A \in \overline A,
+\qquad
+\inf A \in \overline A,
+\]
+and if $A$ is closed then these extremal points belong to $A$ itself.
+\end{proposition}
+
+\begin{proposition}[Sequential characterization of closure and closedness]\label{prop:closure-sequential-4-7-4-8}
+\uses{def:tendsto-seq-2-16,def:closure-4-1}
+\lean{LeanTopology.ClosureInterior.mem_closure_iff_exists_tendstoSeq_4_7, LeanTopology.ClosureInterior.isClosed_iff_tendstoSeq_mem_4_8}
+\leanok
+The closure of $A$ can be characterized by the existence of sequences in $A$ converging to the point, and a set is closed exactly when it contains the limits of all convergent sequences of its points.
+Schematically,
+\[
+x\in\overline A
+\iff
+\exists (x_n)_{n\in\NN},
+\quad x_n\in A,
+\quad x_n\to x,
+\]
+and
+\[
+A \text{ closed }
+\iff
+\bigl(x_n\in A\ \forall n \text{ and } x_n\to x\bigr) \implies x\in A.
+\]
+\end{proposition}
+
+\begin{example}[Closures in standard spaces]\label{ex:closure-examples-4-9}
+\lean{LeanTopology.ClosureInterior.closure_eq_self_discrete_4_9_1, LeanTopology.ClosureInterior.closure_eq_univ_of_nonempty_indiscrete_4_9_2, LeanTopology.ClosureInterior.closure_empty_indiscrete_4_9_2, LeanTopology.ClosureInterior.closure_eq_self_finiteComplement_finite_4_9_3, LeanTopology.ClosureInterior.closure_eq_univ_finiteComplement_infinite_4_9_3, LeanTopology.ClosureInterior.closure_Ioo_neg_one_one_4_9_4, LeanTopology.ClosureInterior.closure_eq_univ_rationalPoints_euclidean_4_9_5}
+\leanok
+The closure operator is computed explicitly in several standard examples: discrete spaces, indiscrete spaces, finite-complement spaces, the interval $(-1,1)$ in $\RR$, and the rational points inside Euclidean space.
+\end{example}
+
+\section{Density and separability}
+
+\begin{definition}[Dense sets]\label{def:dense-4-10}
+\lean{LeanTopology.ClosureInterior.IsDense_4_10}
+\leanok
+A set is dense if its closure is the entire ambient space.
+That is,
+\[
+\overline A = X.
+\]
+\end{definition}
+
+\begin{proposition}[Characterizations and examples of density]\label{prop:density-4-11-4-12}
+\uses{def:dense-4-10}
+\lean{LeanTopology.ClosureInterior.isDense_iff_open_4_11, LeanTopology.ClosureInterior.rationalPoints_dense_euclidean_4_12}
+\leanok
+A set is dense exactly when it meets every nonempty open set, and the rational points are dense in Euclidean space.
+\end{proposition}
+
+\begin{definition}[Separable spaces]\label{def:separable-4-13}
+\lean{LeanTopology.ClosureInterior.IsSeparable_4_13}
+\leanok
+A topological space is separable if it contains a countable dense subset.
+Equivalently,
+\[
+\exists D\subseteq X
+\quad \text{such that} \quad
+D \text{ is countable}
+\quad \text{and} \quad
+\overline D = X.
+\]
+\end{definition}
+
+\begin{proposition}[Second countability and separability]\label{prop:second-separable-4-14-4-15}
+\uses{def:separable-4-13,def:second-countable-3-6}
+\lean{LeanTopology.ClosureInterior.secondCountable_implies_separable_4_14, LeanTopology.ClosureInterior.separable_metric_implies_secondCountable_4_15}
+\leanok
+Second-countable spaces are separable, and separable metric spaces are second countable.
+\end{proposition}
+
+\begin{example}[Finite-complement separability and countability failure]\label{ex:finite-complement-separable-4-16}
+\uses{def:separable-4-13,def:second-countable-3-6,def:first-countable-2-12}
+\lean{LeanTopology.ClosureInterior.finiteComplement_separable_4_16, LeanTopology.ClosureInterior.uncountable_finiteComplement_not_firstCountable_4_16, LeanTopology.ClosureInterior.uncountable_finiteComplement_not_secondCountable_4_16}
+\leanok
+Finite-complement spaces are separable, while uncountable finite-complement spaces are neither first countable nor second countable.
+\end{example}
+
+\section{Closure and interior operators}
+
+\begin{definition}[Abstract closure operators]\label{def:closure-operator-4-17}
+\lean{LeanTopology.ClosureInterior.IsClosureOperator_4_17}
+\leanok
+The file abstracts the closure construction to a unary operator on subsets satisfying the standard Kuratowski-style axioms.
+\end{definition}
+
+\begin{proposition}[Closure operator laws]\label{prop:closure-operator-laws-4-17-4-18}
+\uses{def:closure-operator-4-17}
+\lean{LeanTopology.ClosureInterior.closure_empty_4_17, LeanTopology.ClosureInterior.closure_extensive_4_17, LeanTopology.ClosureInterior.closure_union_4_17, LeanTopology.ClosureInterior.closure_idem_4_17, LeanTopology.ClosureInterior.closure_isClosureOperator_4_17, LeanTopology.ClosureInterior.topologyFromClosureOperator_4_18, LeanTopology.ClosureInterior.ClosureOperatorTopologyData_4_18, LeanTopology.ClosureInterior.topology_from_closureOperator_4_18}
+\leanok
+The actual closure operator satisfies the standard axioms; conversely, an abstract closure operator determines a topology, and the repository packages the corresponding existence and uniqueness statement.
+\end{proposition}
+
+\begin{definition}[Open subsets and interior]\label{def:interior-4-19}
+\lean{LeanTopology.ClosureInterior.OpenSubsets_4_19, LeanTopology.ClosureInterior.interior_4_19}
+\leanok
+The interior of a set is defined as the union of all open subsets it contains.
+In symbols,
+\[
+\operatorname{int}(A)
+=
+\bigcup\{U\subseteq A \st U \text{ open}\}.
+\]
+\end{definition}
+
+\begin{proposition}[Basic interior properties]\label{prop:interior-basic-4-19-4-21}
+\uses{def:interior-4-19}
+\lean{LeanTopology.ClosureInterior.interior_isOpen_4_19, LeanTopology.ClosureInterior.interior_subset_4_19, LeanTopology.ClosureInterior.interior_maximal_4_20, LeanTopology.ClosureInterior.isOpen_iff_eq_interior_4_21, LeanTopology.ClosureInterior.isOpen_iff_subset_interior_4_21}
+\leanok
+The interior is open, contained in the original set, maximal among open subsets of that set, and characterizes openness by the equivalences
+\[
+U \text{ open } \iff U=\operatorname{int}(U)
+\iff U\subseteq\operatorname{int}(U).
+\]
+\end{proposition}
+
+\begin{proposition}[Dualities and neighborhood characterizations for interior]\label{prop:interior-duality-neighborhood-4-22-4-24}
+\uses{def:interior-4-19,def:neighborhood-2-1}
+\lean{LeanTopology.ClosureInterior.compl_interior_eq_closure_compl_4_22, LeanTopology.ClosureInterior.closure_eq_compl_interior_compl_4_22, LeanTopology.ClosureInterior.interior_eq_compl_closure_compl_4_22, LeanTopology.ClosureInterior.interior_mono_4_23, LeanTopology.ClosureInterior.mem_interior_iff_neighborhood_4_24, LeanTopology.ClosureInterior.mem_interior_iff_openNeighborhood_4_24, LeanTopology.ClosureInterior.mem_interior_iff_isNeighborhood_4_24}
+\leanok
+Interior and closure are related by complement duality, interior is monotone, and membership in the interior is characterized by neighborhood conditions.
+\end{proposition}
+
+\begin{proposition}[Interior operator laws and generated topologies]\label{prop:interior-operator-4-25-4-26}
+\uses{def:interior-4-19}
+\lean{LeanTopology.ClosureInterior.interior_univ_4_25, LeanTopology.ClosureInterior.interior_contractive_4_25, LeanTopology.ClosureInterior.interior_inter_4_25, LeanTopology.ClosureInterior.interior_idem_4_25, LeanTopology.ClosureInterior.IsInteriorOperator_4_25, LeanTopology.ClosureInterior.interior_isInteriorOperator_4_25, LeanTopology.ClosureInterior.topologyFromInteriorOperator_4_26, LeanTopology.ClosureInterior.InteriorOperatorTopologyData_4_26, LeanTopology.ClosureInterior.topology_from_interiorOperator_4_26}
+\leanok
+The interior operator satisfies the standard identities
+\[
+\operatorname{int}(X)=X,
+\qquad
+\operatorname{int}(A)\subseteq A,
+\qquad
+\operatorname{int}(A\cap B)=\operatorname{int}(A)\cap\operatorname{int}(B),
+\qquad
+\operatorname{int}(\operatorname{int}(A))=\operatorname{int}(A),
+\]
+and abstract interior operators generate topologies in a fully packaged existence-and-uniqueness form.
+\end{proposition}
+
+\section{Boundary and geometric examples}
+
+\begin{definition}[Boundary]\label{def:boundary-4-27}
+\lean{LeanTopology.ClosureInterior.boundary_4_27}
+\leanok
+The boundary of a set is defined from closure and interior in the standard way.
+Equivalently,
+\[
+\partial A
+=
+\overline A \setminus \operatorname{int}(A)
+=
+\overline A \cap \overline{A^c}.
+\]
+\end{definition}
+
+\begin{proposition}[Abstract theory of the boundary]\label{prop:boundary-abstract-4-27-4-28}
+\uses{def:boundary-4-27,def:neighborhood-basis-2-5}
+\lean{LeanTopology.ClosureInterior.boundary_isClosed_4_27, LeanTopology.ClosureInterior.boundary_eq_closure_inter_closure_compl_4_28, LeanTopology.ClosureInterior.mem_boundary_iff_neighborhood_4_28, LeanTopology.ClosureInterior.mem_boundary_iff_openNeighborhood_4_28, LeanTopology.ClosureInterior.mem_boundary_iff_neighborhoodBasis_4_28, LeanTopology.ClosureInterior.mem_boundary_iff_exists_neighborhoodBasis_4_28}
+\leanok
+The boundary is closed, satisfies the identity
+\[
+\partial A = \overline A \cap \overline{A^c},
+\]
+and is characterized by the property that every neighborhood of a boundary point meets both $A$ and $A^c$.
+\end{proposition}
+
+\begin{example}[Boundary and interior of closed unit disks]\label{ex:disk-boundary-4-29}
+\lean{LeanTopology.ClosureInterior.interior_closedUnitDisk_R2_4_29_1, LeanTopology.ClosureInterior.boundary_closedUnitDisk_R2_4_29_1, LeanTopology.ClosureInterior.interior_closedUnitDisk_plane_R3_4_29_2, LeanTopology.ClosureInterior.boundary_closedUnitDisk_plane_R3_4_29_2}
+\leanok
+The development computes explicitly the interior and boundary of the closed unit disk in $\RR^2$, and of the planar closed unit disk sitting inside $\RR^3$.
+Thus the file identifies concrete formulas of the shape
+\[
+\operatorname{int}(\overline{B}(0,1)),
+\qquad
+\partial\overline{B}(0,1),
+\]
+both in $\RR^2$ and in the corresponding planar subset of $\RR^3$.
+\end{example}
+
+\begin{remark}[Compatibility with mathlib closure, interior, density, and boundary]\label{rem:mathlib-certs-4}
+\lean{LeanTopology.ClosureInterior.closure_eq_mathlibClosure_cert, LeanTopology.ClosureInterior.interior_eq_mathlibInterior_cert, LeanTopology.ClosureInterior.isDense_iff_mathlibDense_cert, LeanTopology.ClosureInterior.boundary_eq_mathlibFrontier_cert}
+\leanok
+The repository concludes by certifying that its notions of closure, interior, density, and boundary agree with the corresponding mathlib constructions.
+\end{remark}
+
+\chapter{Auxiliary Internal Declarations}
+
+\begin{remark}\label{rem:internal-auxiliary-closure}
+\lean{LeanTopology.ClosureInterior.False, LeanTopology.ClosureInterior.Not, LeanTopology.ClosureInterior.True, LeanTopology.ClosureInterior.delta, LeanTopology.ClosureInterior.omega, LeanTopology.ClosureInterior.Omega}
+\leanok
+The file on closure contains several internal logical auxiliary declarations used in one part of the formal development. They are not part of the mathematical narrative of elementary topology itself, but they remain linked here so that the blueprint covers the repository faithfully.
+\end{remark}
+
+\chapter{Roadmap}
+
+At this point the blueprint covers the numbered material from all principal source files in the repository:
+\begin{itemize}
+  \item Euclidean preliminaries in \texttt{EuclideanSpaceTopology.lean},
+  \item topological-space foundations in \texttt{TopologicalSpace.lean},
+  \item neighborhood and convergence theory in \texttt{NeighborhoodBasis.lean},
+  \item basis and subbasis theory in \texttt{Basis.lean},
+  \item closure, interior, boundary, density, and operator theory in \texttt{ClosureInterior.lean}.
+\end{itemize}
+
+This makes the blueprint both a readable companion to the formalization and a complete navigational map of its principal definitions and propositions.

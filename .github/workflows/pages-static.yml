@@ -1,0 +1,110 @@
+name: Deploy Static Pages
+
+on:
+  workflow_run:
+    workflows:
+      - Compile blueprint
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Prepare static site
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site/blueprint
+          touch _site/.nojekyll
+          test -f blueprint/web/index.html
+          test -f blueprint/web/dep_graph_document.html
+          test -d blueprint/web/js
+          test -d blueprint/web/styles
+          test -f blueprint/src/print.pdf
+          cp -R blueprint/web/. _site/blueprint/
+          cp blueprint/src/print.pdf _site/blueprint.pdf
+          cat > _site/index.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>LeanTopology</title>
+            <style>
+              body {
+                margin: 0;
+                font-family: Georgia, "Times New Roman", serif;
+                background: #f6f1e8;
+                color: #1c1b18;
+              }
+              main {
+                max-width: 760px;
+                margin: 8vh auto;
+                padding: 0 24px;
+              }
+              h1 {
+                font-size: 3rem;
+                margin-bottom: 0.5rem;
+              }
+              p {
+                font-size: 1.1rem;
+                line-height: 1.6;
+              }
+              ul {
+                padding-left: 1.2rem;
+                line-height: 1.8;
+              }
+              a {
+                color: #8a2f1d;
+              }
+            </style>
+          </head>
+          <body>
+            <main>
+              <h1>LeanTopology</h1>
+              <p>Published artifacts for the Lean formalization project by †ℕ∃URON†.</p>
+              <ul>
+                <li><a href="./blueprint/">Blueprint</a></li>
+                <li><a href="./blueprint.pdf">Blueprint PDF</a></li>
+              </ul>
+            </main>
+          </body>
+          </html>
+          EOF
+          cp _site/index.html _site/404.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

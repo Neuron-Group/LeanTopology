@@ -1,0 +1,2804 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dependency graph</title>
+  <meta name="generator" content="plasTeX" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles/theme-white.css" />
+  <link rel="stylesheet" href="styles/dep_graph.css" />
+  
+  <script type="text/x-mathjax-config">
+  
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  
+  </script>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">  </script>
+
+
+<link rel="stylesheet" href="styles/extra_styles.css" />
+
+</head>
+
+<body>
+<header>
+  <a class="toc" href="index.html">Home</a>
+  <h1 id="doc_title">Dependencies</h1>
+</header>
+<div class="wrapper">
+<div class="content">
+  <div id="Legend">
+    <span id="legend_title" class="title">Legend
+    <div class="btn">
+       <div class="bar"></div>
+       <div class="bar"></div>
+       <div class="bar"></div>
+    </div></span> 
+    <dl class="legend">
+      
+      <dt>Boxes</dt><dd>definitions</dd>
+      
+      <dt>Ellipses</dt><dd>theorems and lemmas</dd>
+      
+      <dt>Blue border</dt><dd>the <em>statement</em> of this result is ready to be formalized; all prerequisites are done</dd>
+      
+      <dt>Orange border</dt><dd>the <em>statement</em> of this result is not ready to be formalized; the blueprint needs more work</dd>
+      
+      <dt>Blue background</dt><dd>the <em>proof</em> of this result is ready to be formalized; all prerequisites are done</dd>
+      
+      <dt>Green border</dt><dd>the <em>statement</em> of this result is formalized</dd>
+      
+      <dt>Green background</dt><dd>the <em>proof</em> of this result is formalized</dd>
+      
+      <dt>Dark green background</dt><dd>the <em>proof</em> of this result and all its ancestors are formalized</dd>
+      
+      <dt>Dark green border</dt><dd>this is in Mathlib</dd>
+      
+    </dl>
+  </div>
+    <div id="graph"></div>
+<div id="statements">
+
+    
+    <div class="dep-modal-container" id="def:basis-family-3-9_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:basis-family-3-9" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">4.10</span><span class="definition_thmtitle">Abstract basis-family axioms</span></div>
+    <div class="thm_thmcontent"><p>  The project isolates the two internal basis-family axioms usually denoted \(\mathrm{OB1}\) and \(\mathrm{OB2}\), describing point coverage and local compatibility under intersections. </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#def:basis-family-3-9">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.IsTopologicalBasisFamily_3_9">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:boundary-4-27_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:boundary-4-27" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">5.21</span><span class="definition_thmtitle">Boundary</span></div>
+    <div class="thm_thmcontent"><p>  The boundary of a set is defined from closure and interior in the standard way. Equivalently, </p>
+<div class="displaymath" id="a0000000072">
+  \[  \partial A = \overline A \setminus \operatorname {int}(A) = \overline A \cap \overline{A^c}.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0011.html#def:boundary-4-27">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.boundary_4_27">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:closed-family_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:closed-family" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.12</span><span class="definition_thmtitle">Closed-set axioms</span></div>
+    <div class="thm_thmcontent"><p>  A family of subsets is a closed family if it contains \(\varnothing \) and \(X\), is closed under finite unions, and is closed under arbitrary intersections. Equivalently, </p>
+<div class="displaymath" id="a0000000028">
+  \[  \begin{aligned} & \varnothing \in \mathcal{F}, & & X \in \mathcal{F},\\ & F,G\in \mathcal{F}\implies F\cup G\in \mathcal{F},\\ & \mathcal S\subseteq \mathcal{F}\implies \bigcap \mathcal S\in \mathcal{F}. \end{aligned}  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0004.html#def:closed-family">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsClosedFamily_1_3">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:closed-set_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:closed-set" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.10</span><span class="definition_thmtitle">Closed sets</span></div>
+    <div class="thm_thmcontent"><p>   A subset \(F \subseteq X\) is closed relative to \(\mathcal{O}\) if its complement \(F^c\) is open. </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#def:closed-set">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsClosed_1_2">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:closure-4-1_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:closure-4-1" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">5.1</span><span class="definition_thmtitle">Closed supersets and closure</span></div>
+    <div class="thm_thmcontent"><p>  For a set \(A\subseteq X\), the family of closed supersets of \(A\) is formed first, and the closure \(\overline A\) is defined as their intersection. </p>
+</div>
+
+    <a class="latex_link" href="sect0008.html#def:closure-4-1">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.ClosedSupersets_4_1" class="lean_decl">LeanTopology.ClosureInterior.ClosedSupersets_4_1</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_4_1" class="lean_decl">LeanTopology.ClosureInterior.closure_4_1</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:closure-operator-4-17_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:closure-operator-4-17" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">5.15</span><span class="definition_thmtitle">Abstract closure operators</span></div>
+    <div class="thm_thmcontent"><p>  The file abstracts the closure construction to a unary operator on subsets satisfying the standard Kuratowski-style axioms. </p>
+</div>
+
+    <a class="latex_link" href="sect0010.html#def:closure-operator-4-17">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.IsClosureOperator_4_17">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:coarser-finer-1-10_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:coarser-finer-1-10" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.19</span><span class="definition_thmtitle">Coarser and finer topologies</span></div>
+    <div class="thm_thmcontent"><p>  A topology \(\mathcal{O}_1\) is coarser than \(\mathcal{O}_2\) if \(\mathcal{O}_1 \subseteq \mathcal{O}_2\), and \(\mathcal{O}_2\) is finer than \(\mathcal{O}_1\) by the same relation read in the opposite direction. </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#def:coarser-finer-1-10">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsCoarser_1_10" class="lean_decl">LeanTopology.TopologicalSpace.IsCoarser_1_10</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsFiner_1_10" class="lean_decl">LeanTopology.TopologicalSpace.IsFiner_1_10</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:dense-4-10_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:dense-4-10" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">5.10</span><span class="definition_thmtitle">Dense sets</span></div>
+    <div class="thm_thmcontent"><p>  A set is dense if its closure is the entire ambient space. That is, </p>
+<div class="displaymath" id="a0000000067">
+  \[  \overline A = X.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0009.html#def:dense-4-10">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.IsDense_4_10">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:distance-balls-1-12-1-14_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:distance-balls-1-12-1-14" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.21</span><span class="definition_thmtitle">Distance spaces and metric balls</span></div>
+    <div class="thm_thmcontent"><p>  After introducing the abstract distance-space structure in the source file, the repository defines open and closed balls by the inequalities </p>
+<div class="displaymath" id="a0000000036">
+  \[  B(x,r)=\{ y \mid d(x,y){\lt}r\} , \qquad \overline{B}(x,r)=\{ y \mid d(x,y)\le r\} .  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0004.html#def:distance-balls-1-12-1-14">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.openBall_1_14" class="lean_decl">LeanTopology.TopologicalSpace.openBall_1_14</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.closedBall_1_14" class="lean_decl">LeanTopology.TopologicalSpace.closedBall_1_14</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:euclidean-ball-0-4_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:euclidean-ball-0-4" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.4</span><span class="definition_thmtitle">Euclidean open balls</span></div>
+    <div class="thm_thmcontent"><p>  The repository works with Euclidean open balls and records their compatibility with the ambient metric-ball notation, together with their monotonicity in the radius. Equivalently, the discussion centers on the family </p>
+<div class="displaymath" id="a0000000022">
+  \[  B(x,r):=\{ y\in \mathbb {R}^n \mid d(x,y){\lt}r\} ,  \]
+</div>
+<p> together with the implication </p>
+<div class="displaymath" id="a0000000023">
+  \[  r_1\le r_2 \implies B(x,r_1)\subseteq B(x,r_2).  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0003.html#def:euclidean-ball-0-4">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.openBall_eq_metric_ball_0_4" class="lean_decl">LeanTopology.EuclideanSpaceTopology.openBall_eq_metric_ball_0_4</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.openBall_mono_0_4" class="lean_decl">LeanTopology.EuclideanSpaceTopology.openBall_mono_0_4</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:euclidean-open-0-6_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:euclidean-open-0-6" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.6</span><span class="definition_thmtitle">Euclidean open sets</span></div>
+    <div class="thm_thmcontent"><p>  Open subsets of Euclidean space are described using the local ball condition, and this notion is certified to agree with mathlib’s standard predicate <span class="ttfamily">IsOpen</span>. In symbols, </p>
+<div class="displaymath" id="a0000000025">
+  \[  U \text{ open } \iff \forall x\in U\  \exists r{\gt}0, \quad B(x,r)\subseteq U.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0003.html#def:euclidean-open-0-6">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.isOpenEuclidean_iff_isOpen_0_6">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:first-countable-2-12_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:first-countable-2-12" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">3.7</span><span class="definition_thmtitle">First countability</span></div>
+    <div class="thm_thmcontent"><p>  A space is first countable if each point admits a countable neighborhood basis. Equivalently, </p>
+<div class="displaymath" id="a0000000044">
+  \[  \forall x\in X\  \exists (U_n)_{n\in \mathbb {N}} \quad \text{such that} \quad \forall V\in \mathcal N(x)\  \exists n,\  U_n\subseteq V.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0005.html#def:first-countable-2-12">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.FirstCountable_2_12">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:induced-topology-1-17_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:induced-topology-1-17" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.25</span><span class="definition_thmtitle">Topology induced by a distance</span></div>
+    <div class="thm_thmcontent"><p>   The topology induced by a distance is the family of all metric-open sets. The auxiliary notation \(\mathcal O_d\) is used for this family. </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#def:induced-topology-1-17">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.inducedTopology_1_17" class="lean_decl">LeanTopology.TopologicalSpace.inducedTopology_1_17</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.𝒪𝒹" class="lean_decl">LeanTopology.TopologicalSpace.𝒪𝒹</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:interior-4-19_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:interior-4-19" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">5.17</span><span class="definition_thmtitle">Open subsets and interior</span></div>
+    <div class="thm_thmcontent"><p>  The interior of a set is defined as the union of all open subsets it contains. In symbols, </p>
+<div class="displaymath" id="a0000000069">
+  \[  \operatorname {int}(A) = \bigcup \{ U\subseteq A \mid U \text{ open}\} .  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0010.html#def:interior-4-19">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.OpenSubsets_4_19" class="lean_decl">LeanTopology.ClosureInterior.OpenSubsets_4_19</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_4_19" class="lean_decl">LeanTopology.ClosureInterior.interior_4_19</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:is-open-distance-1-15_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:is-open-distance-1-15" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.23</span><span class="definition_thmtitle">Metric openness</span></div>
+    <div class="thm_thmcontent"><p>  A set \(U\) in a distance space is open if for every \(x\in U\) there exists \(r{\gt}0\) such that \(B(x,r)\subseteq U\). </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#def:is-open-distance-1-15">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.isOpenDistance_1_15">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:metric-convergence-2-19_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:metric-convergence-2-19" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">3.12</span><span class="definition_thmtitle">Real-sequence convergence and metric convergence data</span></div>
+    <div class="thm_thmcontent"><p>  The repository introduces the classical \(\varepsilon \)–\(N\) notion of convergence for real sequences and a structure packaging the equivalence between topological convergence, metric \(\varepsilon \)-convergence, and convergence of the real distance sequence. </p>
+</div>
+
+    <a class="latex_link" href="sect0005.html#def:metric-convergence-2-19">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.RealSequenceConvergesTo_2_19" class="lean_decl">LeanTopology.NeighborhoodBasis.RealSequenceConvergesTo_2_19</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.TendstoSeqMetricData_2_19" class="lean_decl">LeanTopology.NeighborhoodBasis.TendstoSeqMetricData_2_19</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:metrizable-1-18_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:metrizable-1-18" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.27</span><span class="definition_thmtitle">Metrizable topologies</span></div>
+    <div class="thm_thmcontent"><p>  A topology is metrizable if it is equal to the topology induced by some distance on the same underlying type. Equivalently, </p>
+<div class="displaymath" id="a0000000037">
+  \[  \mathcal{O}\text{ is metrizable } \iff \exists d \text{ on } X \text{ such that } \mathcal{O}= \mathcal{O}_d.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0004.html#def:metrizable-1-18">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsMetrizable_1_18">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:neighborhood-2-1_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:neighborhood-2-1" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">3.1</span><span class="definition_thmtitle">Neighborhoods</span></div>
+    <div class="thm_thmcontent"><p>  The repository distinguishes general neighborhoods, open neighborhoods, and closed neighborhoods of a point. A neighborhood of \(x\) is any set containing an open set around \(x\). </p>
+</div>
+
+    <a class="latex_link" href="sect0005.html#def:neighborhood-2-1">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.IsNeighborhood_2_1" class="lean_decl">LeanTopology.NeighborhoodBasis.IsNeighborhood_2_1</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.IsOpenNeighborhood_2_1" class="lean_decl">LeanTopology.NeighborhoodBasis.IsOpenNeighborhood_2_1</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.IsClosedNeighborhood_2_1" class="lean_decl">LeanTopology.NeighborhoodBasis.IsClosedNeighborhood_2_1</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:neighborhood-basis-2-5_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:neighborhood-basis-2-5" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">3.3</span><span class="definition_thmtitle">Neighborhood bases</span></div>
+    <div class="thm_thmcontent"><p>  A family \(\mathcal{U}\) is a neighborhood basis at \(x\) if every element of \(\mathcal{U}\) is a neighborhood of \(x\) and every neighborhood of \(x\) contains at least one member of \(\mathcal{U}\). Thus the defining conditions are </p>
+<div class="displaymath" id="a0000000041">
+  \[  \forall U\in \mathcal{U},\quad U\in \mathcal N(x), \qquad \forall V\in \mathcal N(x)\  \exists U\in \mathcal{U},\quad U\subseteq V.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0005.html#def:neighborhood-basis-2-5">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.IsNeighborhoodBasis_2_5">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:neighborhood-basis-family-2-10_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:neighborhood-basis-family-2-10" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">3.5</span><span class="definition_thmtitle">Neighborhood-basis families on a whole space</span></div>
+    <div class="thm_thmcontent"><p>  A neighborhood-basis family assigns to each point \(x\) a local basis \(\mathcal{U}(x)\) satisfying the expected pointwise refinement properties. </p>
+</div>
+
+    <a class="latex_link" href="sect0005.html#def:neighborhood-basis-family-2-10">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.IsNeighborhoodBasisFamily_2_10">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:second-countable-3-6_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:second-countable-3-6" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">4.6</span><span class="definition_thmtitle">Second countability</span></div>
+    <div class="thm_thmcontent"><p>  A topology is second countable if it admits a countable basis. In symbols, </p>
+<div class="displaymath" id="a0000000053">
+  \[  \exists \mathcal{B}\subseteq \mathcal{P}(X) \quad \text{such that} \quad \mathcal{B}\text{ is a basis for } \mathcal{O}\quad \text{and} \quad \mathcal{B}\text{ is countable}.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0006.html#def:second-countable-3-6">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SecondCountable_3_6">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:separable-4-13_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:separable-4-13" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">5.12</span><span class="definition_thmtitle">Separable spaces</span></div>
+    <div class="thm_thmcontent"><p>  A topological space is separable if it contains a countable dense subset. Equivalently, </p>
+<div class="displaymath" id="a0000000068">
+  \[  \exists D\subseteq X \quad \text{such that} \quad D \text{ is countable} \quad \text{and} \quad \overline D = X.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0009.html#def:separable-4-13">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.IsSeparable_4_13">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:sorgenfrey-3-12_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:sorgenfrey-3-12" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">4.14</span><span class="definition_thmtitle">The Sorgenfrey basis and topology</span></div>
+    <div class="thm_thmcontent"><p>  The Sorgenfrey line is built from the half-open interval basis </p>
+<div class="displaymath" id="a0000000054">
+  \[  \{ [a,b)\subseteq \mathbb {R}\mid a{\lt}b\} ,  \]
+</div>
+<p> and its generated topology. </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#def:sorgenfrey-3-12">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SorgenfreyBasis_3_12" class="lean_decl">LeanTopology.Basis.SorgenfreyBasis_3_12</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SorgenfreyTopology_3_12" class="lean_decl">LeanTopology.Basis.SorgenfreyTopology_3_12</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:subbasis-3-13_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:subbasis-3-13" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">4.17</span><span class="definition_thmtitle">Finite intersections and topological subbases</span></div>
+    <div class="thm_thmcontent"><p>  Given a family \(\mathcal S\), one forms the family of its nonempty finite intersections. A subbasis is then a family whose finite intersections form a basis. Thus one first considers </p>
+<div class="displaymath" id="a0000000056">
+  \[  \operatorname {FinInt}(\mathcal S) = \left\{ \bigcap _{i=1}^n S_i \mid n\ge 1,\  S_i\in \mathcal S\right\} ,  \]
+</div>
+<p> and then asks that \(\operatorname {FinInt}(\mathcal S)\) be a basis. </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#def:subbasis-3-13">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.finiteIntersections_3_13" class="lean_decl">LeanTopology.Basis.finiteIntersections_3_13</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.IsTopologicalSubbasis_3_13" class="lean_decl">LeanTopology.Basis.IsTopologicalSubbasis_3_13</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:tendsto-seq-2-16_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:tendsto-seq-2-16" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">3.9</span><span class="definition_thmtitle">Sequential convergence</span></div>
+    <div class="thm_thmcontent"><p>  A sequence \((x_n)\) converges to \(x\) if for every neighborhood \(V\) of \(x\) there exists \(N\) such that \(x_n\in V\) whenever \(n\ge N\). That is, </p>
+<div class="displaymath" id="a0000000045">
+  \[  x_n \to x \iff \forall V\in \mathcal N(x)\  \exists N\in \mathbb {N}\  \forall n\ge N, \quad x_n\in V.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0005.html#def:tendsto-seq-2-16">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.TendstoSeq_2_16">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:topological-basis-3-1_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:topological-basis-3-1" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">4.1</span><span class="definition_thmtitle">Topological bases</span></div>
+    <div class="thm_thmcontent"><p>  A family \(\mathcal{B}\) of subsets of \(X\) is a basis for a topology \(\mathcal{O}\) if every basis element is open and every open set is locally refined by some basis element. Equivalently, </p>
+<div class="displaymath" id="a0000000047">
+  \[  \mathcal{B}\subseteq \mathcal{O}, \qquad \forall U\in \mathcal{O}\  \forall x\in U\  \exists B\in \mathcal{B}, \quad x\in B\subseteq U.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0006.html#def:topological-basis-3-1">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.IsTopologicalBasis_3_1">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:topology-from-basis-3-10_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:topology-from-basis-3-10" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">4.12</span><span class="definition_thmtitle">Topology generated by a basis family</span></div>
+    <div class="thm_thmcontent"><p>   Given a family satisfying the abstract basis axioms, the repository defines the generated topology and packages the corresponding existence-and-uniqueness data. </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#def:topology-from-basis-3-10">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologyFromTopologicalBasis_3_10" class="lean_decl">LeanTopology.Basis.topologyFromTopologicalBasis_3_10</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.BasisTopologyData_3_10" class="lean_decl">LeanTopology.Basis.BasisTopologyData_3_10</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="def:topology-open_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="def:topology-open" style="display: none">
+    <div class="thm_thmheading">
+      <span class="definition_thmcaption">
+      Definition
+      </span>
+      <span class="definition_thmlabel">2.8</span><span class="definition_thmtitle">Topology by open sets</span></div>
+    <div class="thm_thmcontent"><p>  Let \(X\) be a type and let \(\mathcal{O}\subseteq \mathcal{P}(X)\). We say that \(\mathcal{O}\) is a topology on \(X\) if </p>
+<div class="displaymath" id="a0000000027">
+  \[  \begin{aligned} & \varnothing \in \mathcal{O}, & & X \in \mathcal{O},\\ & U,V \in \mathcal{O}\implies U\cap V \in \mathcal{O},\\ & \mathcal S\subseteq \mathcal{O}\implies \bigcup \mathcal S \in \mathcal{O}\end{aligned}  \]
+</div>
+<p> for every family \(\mathcal S \subseteq \mathcal{O}\). </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#def:topology-open">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsTopology_1_1">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:balls-open-closed-1-16_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:balls-open-closed-1-16" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.24</span><span class="proposition_thmtitle">Open balls are open and closed balls are closed</span></div>
+    <div class="thm_thmcontent"><p>   In every distance space, open balls are open and closed balls are closed relative to the metric topology. </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#prop:balls-open-closed-1-16">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.openBall_open_1_16" class="lean_decl">LeanTopology.TopologicalSpace.openBall_open_1_16</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.closedBall_closed_1_16" class="lean_decl">LeanTopology.TopologicalSpace.closedBall_closed_1_16</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:basis-generated-topology-3-10-3-11_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:basis-generated-topology-3-10-3-11" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.13</span><span class="proposition_thmtitle">Existence, uniqueness, and minimality of the basis-generated topology</span></div>
+    <div class="thm_thmcontent"><p>   If a family \(\mathcal{B}\) satisfies the basis-family axioms, then there exists a unique topology generated by \(\mathcal{B}\), and this topology is the smallest topology containing \(\mathcal{B}\). </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:basis-generated-topology-3-10-3-11">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topology_from_topologicalBasis_3_10" class="lean_decl">LeanTopology.Basis.topology_from_topologicalBasis_3_10</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologyFromTopologicalBasis_minimal_3_11" class="lean_decl">LeanTopology.Basis.topologyFromTopologicalBasis_minimal_3_11</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:basis-nonempty-3-2a_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:basis-nonempty-3-2a" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.3</span><span class="proposition_thmtitle">Nonemptiness of a basis on a nonempty space</span></div>
+    <div class="thm_thmcontent"><p>   If \(X\neq \varnothing \) and \(\mathcal{B}\) is a basis for a topology \(\mathcal{O}\) on \(X\), then </p>
+<div class="displaymath" id="a0000000049">
+  \[  \mathcal{B}\neq \varnothing .  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:basis-nonempty-3-2a">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalBasis_nonempty">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:basis-properties-3-9_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:basis-properties-3-9" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.11</span><span class="proposition_thmtitle">Every basis satisfies the abstract basis-family axioms</span></div>
+    <div class="thm_thmcontent"><p>   If \(\mathcal{B}\) is a genuine basis for a topology, then \(\mathcal{B}\) satisfies the internal axioms \(\mathrm{OB1}\) and \(\mathrm{OB2}\). </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:basis-properties-3-9">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalBasis_properties_3_9">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:basis-union-3-2_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:basis-union-3-2" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.2</span><span class="proposition_thmtitle">Union description of bases</span></div>
+    <div class="thm_thmcontent"><p>   A family is a basis if and only if every open set is a union of members of that family. </p>
+<div class="proof_wrapper" id="a0000000048">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Assume first that \(\mathcal{B}\) is a basis and let \(U\) be open. For each \(x\in U\), choose a basis element \(B_x\) such that \(x\in B_x\subseteq U\). The union of all these \(B_x\) clearly contains every point of \(U\), and every \(B_x\) lies inside \(U\), so this union is exactly \(U\). </p>
+<p>Conversely, suppose every open set is a union of basis elements from \(\mathcal{B}\), and also \(\mathcal{B}\subseteq \mathcal{O}\). If \(x\in U\) with \(U\) open, then writing \(U\) as such a union shows that \(x\) belongs to one chosen basis element \(B\subseteq U\). This is precisely the local refinement condition. </p>
+
+  </div>
+</div>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:basis-union-3-2">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalBasis_iff_sUnion_3_2">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:boundary-abstract-4-27-4-28_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:boundary-abstract-4-27-4-28" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.22</span><span class="proposition_thmtitle">Abstract theory of the boundary</span></div>
+    <div class="thm_thmcontent"><p>   The boundary is closed, satisfies the identity </p>
+<div class="displaymath" id="a0000000073">
+  \[  \partial A = \overline A \cap \overline{A^c},  \]
+</div>
+<p> and is characterized by the property that every neighborhood of a boundary point meets both \(A\) and \(A^c\). </p>
+</div>
+
+    <a class="latex_link" href="sect0011.html#prop:boundary-abstract-4-27-4-28">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.boundary_isClosed_4_27" class="lean_decl">LeanTopology.ClosureInterior.boundary_isClosed_4_27</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.boundary_eq_closure_inter_closure_compl_4_28" class="lean_decl">LeanTopology.ClosureInterior.boundary_eq_closure_inter_closure_compl_4_28</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_boundary_iff_neighborhood_4_28" class="lean_decl">LeanTopology.ClosureInterior.mem_boundary_iff_neighborhood_4_28</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_boundary_iff_openNeighborhood_4_28" class="lean_decl">LeanTopology.ClosureInterior.mem_boundary_iff_openNeighborhood_4_28</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_boundary_iff_neighborhoodBasis_4_28" class="lean_decl">LeanTopology.ClosureInterior.mem_boundary_iff_neighborhoodBasis_4_28</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_boundary_iff_exists_neighborhoodBasis_4_28" class="lean_decl">LeanTopology.ClosureInterior.mem_boundary_iff_exists_neighborhoodBasis_4_28</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closed-family-helpers_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closed-family-helpers" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.13</span><span class="proposition_thmtitle">Finite unions and indexed intersections for closed families</span></div>
+    <div class="thm_thmcontent"><p>   The abstract closed-set axioms imply closure under finite unions and indexed intersections in the expected forms. </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#prop:closed-family-helpers">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C2_union'" class="lean_decl">LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C2_union'</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C3_iInter" class="lean_decl">LeanTopology.TopologicalSpace.IsClosedFamily_1_3.C3_iInter</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closed-iff-closure-4-3_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closed-iff-closure-4-3" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.4</span><span class="proposition_thmtitle">Characterization of closed sets by closure</span></div>
+    <div class="thm_thmcontent"><p>   A set \(A\) is closed if and only if </p>
+<div class="displaymath" id="a0000000059">
+  \[  A=\overline A.  \]
+</div>
+<p> Equivalently, closedness may be recovered from the relation between \(A\) and its closure. </p>
+</div>
+
+    <a class="latex_link" href="sect0008.html#prop:closed-iff-closure-4-3">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isClosed_iff_eq_closure_4_3" class="lean_decl">LeanTopology.ClosureInterior.isClosed_iff_eq_closure_4_3</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isClosed_of_closure_subset_4_3" class="lean_decl">LeanTopology.ClosureInterior.isClosed_of_closure_subset_4_3</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closed-open-complements_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closed-open-complements" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.11</span><span class="proposition_thmtitle">Complement lemmas for open and closed sets</span></div>
+    <div class="thm_thmcontent"><p>   The complement operation interchanges the open and closed predicates exactly as expected. </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#prop:closed-open-complements">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.isClosed_compl_iff_open" class="lean_decl">LeanTopology.TopologicalSpace.isClosed_compl_iff_open</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.open_of_closed_compl" class="lean_decl">LeanTopology.TopologicalSpace.open_of_closed_compl</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.closed_of_open_compl" class="lean_decl">LeanTopology.TopologicalSpace.closed_of_open_compl</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closed-open-equivalence_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closed-open-equivalence" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.14</span><span class="proposition_thmtitle">Open-set and closed-set axioms are equivalent</span></div>
+    <div class="thm_thmcontent"><p>   A family of open sets is a topology if and only if the family of its complements satisfies the closed-set axioms. </p>
+<div class="proof_wrapper" id="a0000000029">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Assume first that \(\mathcal{O}\) is a topology and define </p>
+<div class="displaymath" id="a0000000030">
+  \[  \mathcal{F}:=\{ F\subseteq X \mid F^c\in \mathcal{O}\} .  \]
+</div>
+<p> Because \(X \in \mathcal{O}\), the set \(\varnothing = X^c\) is closed, so \(\varnothing \in \mathcal{F}\). Similarly \(\varnothing \in \mathcal{O}\) implies \(X = \varnothing ^c \in \mathcal{F}\). </p>
+<p>If \(F,G \in \mathcal{F}\), then \(F^c,G^c \in \mathcal{O}\). Since topologies are closed under finite intersections, </p>
+<div class="displaymath" id="a0000000031">
+  \[  F^c \cap G^c \in \mathcal{O}.  \]
+</div>
+<p> By De Morgan, </p>
+<div class="displaymath" id="a0000000032">
+  \[  (F\cup G)^c = F^c \cap G^c,  \]
+</div>
+<p> so \(F\cup G \in \mathcal{F}\). </p>
+<p>Now let \(\mathcal S \subseteq \mathcal{F}\). For each \(F\in \mathcal S\) we have \(F^c \in \mathcal{O}\). Since topologies are closed under arbitrary unions, </p>
+<div class="displaymath" id="a0000000033">
+  \[  \bigcup _{F\in \mathcal S} F^c \in \mathcal{O}.  \]
+</div>
+<p> Again by De Morgan, </p>
+<div class="displaymath" id="a0000000034">
+  \[  \left(\bigcap _{F\in \mathcal S}F\right)^c = \bigcup _{F\in \mathcal S}F^c,  \]
+</div>
+<p> so \(\bigcap \mathcal S \in \mathcal{F}\). Thus \(\mathcal{F}\) is a closed family. </p>
+<p>Conversely, suppose the complement family satisfies the closed-set axioms. Then \(X \in \mathcal{F}\) and \(\varnothing \in \mathcal{F}\) immediately imply \(\varnothing , X \in \mathcal{O}\). If \(U,V \in \mathcal{O}\), then \(U^c,V^c \in \mathcal{F}\), so \(U^c \cup V^c \in \mathcal{F}\). Hence </p>
+<div class="displaymath" id="a0000000035">
+  \[  (U\cap V)^c = U^c \cup V^c  \]
+</div>
+<p> is closed, meaning \(U\cap V\) is open. </p>
+<p>Likewise, if every member of a family \(\mathcal S\) lies in \(\mathcal{O}\), then every complement lies in \(\mathcal{F}\), hence their intersection belongs to \(\mathcal{F}\). Taking complements gives openness of the union of the original family. Therefore \(\mathcal{O}\) is a topology. </p>
+
+  </div>
+</div>
+</div>
+
+    <a class="latex_link" href="sect0004.html#prop:closed-open-equivalence">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.closedSet_properties_1_3">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closure-closed-minimal-4-1-4-2_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closure-closed-minimal-4-1-4-2" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.3</span><span class="proposition_thmtitle">The closure is closed and minimal</span></div>
+    <div class="thm_thmcontent"><p>   The closure \(\overline A\) is closed, contains \(A\), and satisfies the minimality property </p>
+<div class="displaymath" id="a0000000058">
+  \[  A\subseteq F,\  F\text{ closed } \implies \overline A\subseteq F.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0008.html#prop:closure-closed-minimal-4-1-4-2">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_isClosed_4_1" class="lean_decl">LeanTopology.ClosureInterior.closure_isClosed_4_1</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_minimal_4_2" class="lean_decl">LeanTopology.ClosureInterior.closure_minimal_4_2</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_mem_of_closed_4_2" class="lean_decl">LeanTopology.ClosureInterior.closure_mem_of_closed_4_2</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closure-mono-4-4_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closure-mono-4-4" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.5</span><span class="proposition_thmtitle">Monotonicity of closure</span></div>
+    <div class="thm_thmcontent"><p>   If </p>
+<div class="displaymath" id="a0000000060">
+  \[  A\subseteq B,  \]
+</div>
+<p> then </p>
+<div class="displaymath" id="a0000000061">
+  \[  \overline A\subseteq \overline B.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0008.html#prop:closure-mono-4-4">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_mono_4_4">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closure-neighborhoods-4-5_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closure-neighborhoods-4-5" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.6</span><span class="proposition_thmtitle">Neighborhood characterizations of closure</span></div>
+    <div class="thm_thmcontent"><p>   A point lies in the closure of \(A\) if and only if every neighborhood of that point meets \(A\). The repository proves this criterion in several equivalent forms: using arbitrary neighborhoods, open neighborhoods, a fixed neighborhood basis, or the existence of a suitable basis. </p>
+<div class="proof_wrapper" id="a0000000062">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Suppose first that \(x\in \overline A\) and let \(V\) be a neighborhood of \(x\). If \(A\cap V\) were empty, then \(A\subseteq V^c\). But a neighborhood of \(x\) contains an open set around \(x\), so its complement gives a closed set missing \(x\) yet still containing \(A\). This contradicts the fact that \(x\) belongs to the intersection of all closed supersets of \(A\). Equivalently, one argues by contradiction from the chain </p>
+<div class="displaymath" id="a0000000063">
+  \[  A\cap V = \varnothing \implies A\subseteq V^c \implies \exists F \text{ closed with } A\subseteq F \text{ and } x\notin F,  \]
+</div>
+<p> which is impossible if \(x\in \overline A\). </p>
+<p>Conversely, assume every neighborhood of \(x\) meets \(A\). If \(x\notin \overline A\), then since \(\overline A\) is closed, its complement is an open neighborhood of \(x\). But this complement is disjoint from \(A\), contradicting the hypothesis. Hence \(x\in \overline A\). </p>
+
+  </div>
+</div>
+</div>
+
+    <a class="latex_link" href="sect0008.html#prop:closure-neighborhoods-4-5">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.inter_nonempty_of_subset_right_4_5" class="lean_decl">LeanTopology.ClosureInterior.inter_nonempty_of_subset_right_4_5</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.inter_empty_of_subset_right" class="lean_decl">LeanTopology.ClosureInterior.inter_empty_of_subset_right</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.inter_empty_iff_subset_compl_right" class="lean_decl">LeanTopology.ClosureInterior.inter_empty_iff_subset_compl_right</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5'" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5'</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_neighborhood_4_5</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_openNeighborhood_4_5" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_openNeighborhood_4_5</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_neighborhoodBasis_4_5" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_neighborhoodBasis_4_5</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_exists_neighborhoodBasis_4_5" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_exists_neighborhoodBasis_4_5</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closure-operator-laws-4-17-4-18_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closure-operator-laws-4-17-4-18" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.16</span><span class="proposition_thmtitle">Closure operator laws</span></div>
+    <div class="thm_thmcontent"><p>   The actual closure operator satisfies the standard axioms; conversely, an abstract closure operator determines a topology, and the repository packages the corresponding existence and uniqueness statement. </p>
+</div>
+
+    <a class="latex_link" href="sect0010.html#prop:closure-operator-laws-4-17-4-18">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_empty_4_17" class="lean_decl">LeanTopology.ClosureInterior.closure_empty_4_17</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_extensive_4_17" class="lean_decl">LeanTopology.ClosureInterior.closure_extensive_4_17</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_union_4_17" class="lean_decl">LeanTopology.ClosureInterior.closure_union_4_17</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_idem_4_17" class="lean_decl">LeanTopology.ClosureInterior.closure_idem_4_17</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_isClosureOperator_4_17" class="lean_decl">LeanTopology.ClosureInterior.closure_isClosureOperator_4_17</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.topologyFromClosureOperator_4_18" class="lean_decl">LeanTopology.ClosureInterior.topologyFromClosureOperator_4_18</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.ClosureOperatorTopologyData_4_18" class="lean_decl">LeanTopology.ClosureInterior.ClosureOperatorTopologyData_4_18</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.topology_from_closureOperator_4_18" class="lean_decl">LeanTopology.ClosureInterior.topology_from_closureOperator_4_18</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:closure-sequential-4-7-4-8_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:closure-sequential-4-7-4-8" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.8</span><span class="proposition_thmtitle">Sequential characterization of closure and closedness</span></div>
+    <div class="thm_thmcontent"><p>   The closure of \(A\) can be characterized by the existence of sequences in \(A\) converging to the point, and a set is closed exactly when it contains the limits of all convergent sequences of its points. Schematically, </p>
+<div class="displaymath" id="a0000000065">
+  \[  x\in \overline A \iff \exists (x_n)_{n\in \mathbb {N}}, \quad x_n\in A, \quad x_n\to x,  \]
+</div>
+<p> and </p>
+<div class="displaymath" id="a0000000066">
+  \[  A \text{ closed } \iff \bigl(x_n\in A\  \forall n \text{ and } x_n\to x\bigr) \implies x\in A.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0008.html#prop:closure-sequential-4-7-4-8">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_closure_iff_exists_tendstoSeq_4_7" class="lean_decl">LeanTopology.ClosureInterior.mem_closure_iff_exists_tendstoSeq_4_7</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isClosed_iff_tendstoSeq_mem_4_8" class="lean_decl">LeanTopology.ClosureInterior.isClosed_iff_tendstoSeq_mem_4_8</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:continuous-ball-0-5_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:continuous-ball-0-5" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.5</span><span class="proposition_thmtitle">Continuity via balls</span></div>
+    <div class="thm_thmcontent"><p>  A map between Euclidean spaces is continuous at a point if and only if every target ball around the image contains the image of a sufficiently small source ball around the point. That is, for \(f : \mathbb {R}^n \to \mathbb {R}^m\) and \(a\in \mathbb {R}^n\), </p>
+<div class="displaymath" id="a0000000024">
+  \[  f \text{ is continuous at } a \iff \forall \varepsilon {\gt}0\  \exists \delta {\gt}0\  \forall x, \quad d(x,a){\lt}\delta \implies d\bigl(f(x),f(a)\bigr){\lt}\varepsilon .  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0003.html#prop:continuous-ball-0-5">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.continuousAt_iff_ball_0_5">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:cs-0-1_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:cs-0-1" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.1</span><span class="proposition_thmtitle">Cauchy–Schwarz inequality</span></div>
+    <div class="thm_thmcontent"><p>  The Euclidean dot product on \(\mathbb {R}^n\) satisfies the Cauchy–Schwarz inequality. In particular, </p>
+<div class="displaymath" id="a0000000018">
+  \[  |\langle x,y\rangle | \le \| x\| \, \| y\| .  \]
+</div>
+<p> This is one of the analytic inputs used to organize the later metric structure on Euclidean space. </p>
+</div>
+
+    <a class="latex_link" href="sect0003.html#prop:cs-0-1">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.cauchy_schwarz_0_1">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:density-4-11-4-12_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:density-4-11-4-12" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.11</span><span class="proposition_thmtitle">Characterizations and examples of density</span></div>
+    <div class="thm_thmcontent"><p>   A set is dense exactly when it meets every nonempty open set, and the rational points are dense in Euclidean space. </p>
+</div>
+
+    <a class="latex_link" href="sect0009.html#prop:density-4-11-4-12">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isDense_iff_open_4_11" class="lean_decl">LeanTopology.ClosureInterior.isDense_iff_open_4_11</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.rationalPoints_dense_euclidean_4_12" class="lean_decl">LeanTopology.ClosureInterior.rationalPoints_dense_euclidean_4_12</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:euclidean-open-calculus-0-7-0-9_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:euclidean-open-calculus-0-7-0-9" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.7</span><span class="proposition_thmtitle">Basic Euclidean open-set calculus</span></div>
+    <div class="thm_thmcontent"><p>  The Euclidean development includes the basic open-set rules: balls are open, both \(\varnothing \) and \(\mathbb {R}^n\) are open, finite intersections of open sets are open, arbitrary unions of open sets are open, and continuity can be characterized by openness of preimages. In particular, it establishes </p>
+<div class="displaymath" id="a0000000026">
+  \[  \begin{aligned} & B(x,r) \text{ is open}, & & \varnothing ,\mathbb {R}^n \text{ are open},\\ & U_1,U_2 \text{ open } \implies U_1\cap U_2 \text{ open}, & & \{ U_i\} _{i\in I} \text{ open } \implies \bigcup _{i\in I}U_i \text{ open}. \end{aligned}  \]
+</div>
+<p> along with the preimage formulation of continuity. </p>
+</div>
+
+    <a class="latex_link" href="sect0003.html#prop:euclidean-open-calculus-0-7-0-9">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.isOpen_ball_0_7" class="lean_decl">LeanTopology.EuclideanSpaceTopology.isOpen_ball_0_7</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.isOpen_empty_univ_0_8" class="lean_decl">LeanTopology.EuclideanSpaceTopology.isOpen_empty_univ_0_8</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.isOpen_inter_0_8" class="lean_decl">LeanTopology.EuclideanSpaceTopology.isOpen_inter_0_8</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.isOpen_iUnion_0_8" class="lean_decl">LeanTopology.EuclideanSpaceTopology.isOpen_iUnion_0_8</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.continuous_iff_preimage_open_0_9" class="lean_decl">LeanTopology.EuclideanSpaceTopology.continuous_iff_preimage_open_0_9</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:euclidean-second-countable-3-6_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:euclidean-second-countable-3-6" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.7</span><span class="proposition_thmtitle">Euclidean spaces are second countable</span></div>
+    <div class="thm_thmcontent"><p>   For every \(n\in \mathbb {N}\), the Euclidean topology on \(\mathbb {R}^n\) is second countable. </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:euclidean-second-countable-3-6">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.euclideanSpace_secondCountable_3_6">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:first-countable-results-2-13-2-15_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:first-countable-results-2-13-2-15" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">3.8</span><span class="proposition_thmtitle">Countability results for neighborhood bases</span></div>
+    <div class="thm_thmcontent"><p>   Metric spaces, discrete spaces, and metrizable spaces are shown to be first countable; finite-complement topologies are first countable in the countable case and fail to be first countable in the uncountable case; and one can arrange countable bases into decreasing form. </p>
+</div>
+
+    <a class="latex_link" href="sect0005.html#prop:first-countable-results-2-13-2-15">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.distanceSpace_firstCountable_2_13" class="lean_decl">LeanTopology.NeighborhoodBasis.distanceSpace_firstCountable_2_13</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.discreteSpace_firstCountable_2_13" class="lean_decl">LeanTopology.NeighborhoodBasis.discreteSpace_firstCountable_2_13</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.metrizableSpace_firstCountable_2_13" class="lean_decl">LeanTopology.NeighborhoodBasis.metrizableSpace_firstCountable_2_13</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.countable_finiteComplement_firstCountable_2_14" class="lean_decl">LeanTopology.NeighborhoodBasis.countable_finiteComplement_firstCountable_2_14</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.uncountable_finiteComplement_not_firstCountable_2_14" class="lean_decl">LeanTopology.NeighborhoodBasis.uncountable_finiteComplement_not_firstCountable_2_14</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.decreasing_neighborhoodBasis_2_15" class="lean_decl">LeanTopology.NeighborhoodBasis.decreasing_neighborhoodBasis_2_15</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:induced-topology-is-topology-1-17_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:induced-topology-is-topology-1-17" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.26</span><span class="proposition_thmtitle">The distance-induced family is a topology</span></div>
+    <div class="thm_thmcontent"><p>   The metric-open subsets satisfy the topology axioms. </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#prop:induced-topology-is-topology-1-17">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.inducedTopology_isTopology_1_17">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:interior-basic-4-19-4-21_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:interior-basic-4-19-4-21" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.18</span><span class="proposition_thmtitle">Basic interior properties</span></div>
+    <div class="thm_thmcontent"><p>   The interior is open, contained in the original set, maximal among open subsets of that set, and characterizes openness by the equivalences </p>
+<div class="displaymath" id="a0000000070">
+  \[  U \text{ open } \iff U=\operatorname {int}(U) \iff U\subseteq \operatorname {int}(U).  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0010.html#prop:interior-basic-4-19-4-21">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_isOpen_4_19" class="lean_decl">LeanTopology.ClosureInterior.interior_isOpen_4_19</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_subset_4_19" class="lean_decl">LeanTopology.ClosureInterior.interior_subset_4_19</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_maximal_4_20" class="lean_decl">LeanTopology.ClosureInterior.interior_maximal_4_20</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isOpen_iff_eq_interior_4_21" class="lean_decl">LeanTopology.ClosureInterior.isOpen_iff_eq_interior_4_21</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.isOpen_iff_subset_interior_4_21" class="lean_decl">LeanTopology.ClosureInterior.isOpen_iff_subset_interior_4_21</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:interior-duality-neighborhood-4-22-4-24_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:interior-duality-neighborhood-4-22-4-24" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.19</span><span class="proposition_thmtitle">Dualities and neighborhood characterizations for interior</span></div>
+    <div class="thm_thmcontent"><p>   Interior and closure are related by complement duality, interior is monotone, and membership in the interior is characterized by neighborhood conditions. </p>
+</div>
+
+    <a class="latex_link" href="sect0010.html#prop:interior-duality-neighborhood-4-22-4-24">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.compl_interior_eq_closure_compl_4_22" class="lean_decl">LeanTopology.ClosureInterior.compl_interior_eq_closure_compl_4_22</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.closure_eq_compl_interior_compl_4_22" class="lean_decl">LeanTopology.ClosureInterior.closure_eq_compl_interior_compl_4_22</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_eq_compl_closure_compl_4_22" class="lean_decl">LeanTopology.ClosureInterior.interior_eq_compl_closure_compl_4_22</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_mono_4_23" class="lean_decl">LeanTopology.ClosureInterior.interior_mono_4_23</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_interior_iff_neighborhood_4_24" class="lean_decl">LeanTopology.ClosureInterior.mem_interior_iff_neighborhood_4_24</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_interior_iff_openNeighborhood_4_24" class="lean_decl">LeanTopology.ClosureInterior.mem_interior_iff_openNeighborhood_4_24</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.mem_interior_iff_isNeighborhood_4_24" class="lean_decl">LeanTopology.ClosureInterior.mem_interior_iff_isNeighborhood_4_24</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:interior-operator-4-25-4-26_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:interior-operator-4-25-4-26" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.20</span><span class="proposition_thmtitle">Interior operator laws and generated topologies</span></div>
+    <div class="thm_thmcontent"><p>   The interior operator satisfies the standard identities </p>
+<div class="displaymath" id="a0000000071">
+  \[  \operatorname {int}(X)=X, \qquad \operatorname {int}(A)\subseteq A, \qquad \operatorname {int}(A\cap B)=\operatorname {int}(A)\cap \operatorname {int}(B), \qquad \operatorname {int}(\operatorname {int}(A))=\operatorname {int}(A),  \]
+</div>
+<p> and abstract interior operators generate topologies in a fully packaged existence-and-uniqueness form. </p>
+</div>
+
+    <a class="latex_link" href="sect0010.html#prop:interior-operator-4-25-4-26">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_univ_4_25" class="lean_decl">LeanTopology.ClosureInterior.interior_univ_4_25</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_contractive_4_25" class="lean_decl">LeanTopology.ClosureInterior.interior_contractive_4_25</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_inter_4_25" class="lean_decl">LeanTopology.ClosureInterior.interior_inter_4_25</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_idem_4_25" class="lean_decl">LeanTopology.ClosureInterior.interior_idem_4_25</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.IsInteriorOperator_4_25" class="lean_decl">LeanTopology.ClosureInterior.IsInteriorOperator_4_25</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.interior_isInteriorOperator_4_25" class="lean_decl">LeanTopology.ClosureInterior.interior_isInteriorOperator_4_25</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.topologyFromInteriorOperator_4_26" class="lean_decl">LeanTopology.ClosureInterior.topologyFromInteriorOperator_4_26</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.InteriorOperatorTopologyData_4_26" class="lean_decl">LeanTopology.ClosureInterior.InteriorOperatorTopologyData_4_26</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.topology_from_interiorOperator_4_26" class="lean_decl">LeanTopology.ClosureInterior.topology_from_interiorOperator_4_26</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:metric-convergence-2-19-2-21_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:metric-convergence-2-19-2-21" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">3.13</span><span class="proposition_thmtitle">Equivalent formulations of metric convergence</span></div>
+    <div class="thm_thmcontent"><p>   Metric convergence is equivalent to the usual \(\varepsilon \)–\(N\) formulation; in metric spaces limits are unique; and the Euclidean subspace development specializes the general theory to concrete Euclidean settings. </p>
+</div>
+
+    <a class="latex_link" href="sect0005.html#prop:metric-convergence-2-19-2-21">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.tendstoSeq_metric_2_19" class="lean_decl">LeanTopology.NeighborhoodBasis.tendstoSeq_metric_2_19</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.tendstoSeq_metric_limit_unique_2_20" class="lean_decl">LeanTopology.NeighborhoodBasis.tendstoSeq_metric_limit_unique_2_20</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.tendstoSeq_euclideanSubspace_2_21" class="lean_decl">LeanTopology.NeighborhoodBasis.tendstoSeq_euclideanSubspace_2_21</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:metric-identities-0-3_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:metric-identities-0-3" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.3</span><span class="proposition_thmtitle">Elementary metric identities</span></div>
+    <div class="thm_thmcontent"><p>  The Euclidean distance satisfies the expected identities: </p>
+<div class="displaymath" id="a0000000020">
+  \[  \operatorname {dist}(x,y)=0 \iff x=y, \qquad \operatorname {dist}(x,y)=\operatorname {dist}(y,x),  \]
+</div>
+<p> and </p>
+<div class="displaymath" id="a0000000021">
+  \[  \operatorname {dist}(x,z) \le \operatorname {dist}(x,y)+\operatorname {dist}(y,z).  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0003.html#prop:metric-identities-0-3">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.dist_eq_zero_iff_0_3" class="lean_decl">LeanTopology.EuclideanSpaceTopology.dist_eq_zero_iff_0_3</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.dist_comm_0_3" class="lean_decl">LeanTopology.EuclideanSpaceTopology.dist_comm_0_3</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.dist_triangle_0_3" class="lean_decl">LeanTopology.EuclideanSpaceTopology.dist_triangle_0_3</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:neighborhood-basic-2-1-2-4_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:neighborhood-basic-2-1-2-4" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">3.2</span><span class="proposition_thmtitle">Basic neighborhood calculus</span></div>
+    <div class="thm_thmcontent"><p>   The first neighborhood results show that open sets containing a point are neighborhoods, open neighborhoods admit a pointwise characterization, finite intersections of neighborhoods remain neighborhoods, and openness of a set is equivalent to every one of its points possessing that set as a neighborhood. Concretely, the file proves the pattern </p>
+<div class="displaymath" id="a0000000038">
+  \[  x\in U,\  U\text{ open } \implies U\in \mathcal N(x),  \]
+</div>
+<div class="displaymath" id="a0000000039">
+  \[  V_1,V_2\in \mathcal N(x) \implies V_1\cap V_2\in \mathcal N(x),  \]
+</div>
+<p> and </p>
+<div class="displaymath" id="a0000000040">
+  \[  U\text{ open } \iff \forall x\in U,\  U\in \mathcal N(x).  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0005.html#prop:neighborhood-basic-2-1-2-4">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.neighborhood_of_open_mem" class="lean_decl">LeanTopology.NeighborhoodBasis.neighborhood_of_open_mem</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.openNeighborhood_iff_2_2" class="lean_decl">LeanTopology.NeighborhoodBasis.openNeighborhood_iff_2_2</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.neighborhood_sInter_finset_2_3" class="lean_decl">LeanTopology.NeighborhoodBasis.neighborhood_sInter_finset_2_3</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.neighborhood_inter_2_3" class="lean_decl">LeanTopology.NeighborhoodBasis.neighborhood_inter_2_3</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.isOpen_iff_neighborhood_2_4" class="lean_decl">LeanTopology.NeighborhoodBasis.isOpen_iff_neighborhood_2_4</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:neighborhood-basis-family-generated-topology-2-10-2-11_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:neighborhood-basis-family-generated-topology-2-10-2-11" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">3.6</span><span class="proposition_thmtitle">Abstract basis-family properties and generated topologies</span></div>
+    <div class="thm_thmcontent"><p>   The source develops the global theory of neighborhood-basis families: it isolates the axioms such families must satisfy, constructs from them a topology, and packages the resulting existence and uniqueness statement. </p>
+</div>
+
+    <a class="latex_link" href="sect0005.html#prop:neighborhood-basis-family-generated-topology-2-10-2-11">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.neighborhoodBasis_properties_2_10" class="lean_decl">LeanTopology.NeighborhoodBasis.neighborhoodBasis_properties_2_10</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.topologyFromNeighborhoodBases_2_11" class="lean_decl">LeanTopology.NeighborhoodBasis.topologyFromNeighborhoodBases_2_11</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.NeighborhoodBasisTopologyData_2_11" class="lean_decl">LeanTopology.NeighborhoodBasis.NeighborhoodBasisTopologyData_2_11</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.topology_from_neighborhoodBases_2_11" class="lean_decl">LeanTopology.NeighborhoodBasis.topology_from_neighborhoodBases_2_11</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:norm-triangle-0-2_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:norm-triangle-0-2" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.2</span><span class="proposition_thmtitle">Triangle inequality for the norm</span></div>
+    <div class="thm_thmcontent"><p>   The Euclidean norm on \(\mathbb {R}^n\) satisfies the triangle inequality. That is, </p>
+<div class="displaymath" id="a0000000019">
+  \[  \| x+y\|  \le \| x\| +\| y\| .  \]
+</div>
+<p> Consequently it induces the standard Euclidean metric. </p>
+</div>
+
+    <a class="latex_link" href="sect0003.html#prop:norm-triangle-0-2">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.EuclideanSpaceTopology.norm_triangle_0_2">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:second-implies-first-3-7_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:second-implies-first-3-7" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.8</span><span class="proposition_thmtitle">Second countability implies first countability</span></div>
+    <div class="thm_thmcontent"><p>   If a topology admits a countable basis, then each point admits a countable neighborhood basis. </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:second-implies-first-3-7">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.secondCountable_implies_firstCountable_3_7">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:second-separable-4-14-4-15_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:second-separable-4-14-4-15" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.13</span><span class="proposition_thmtitle">Second countability and separability</span></div>
+    <div class="thm_thmcontent"><p>   Second-countable spaces are separable, and separable metric spaces are second countable. </p>
+</div>
+
+    <a class="latex_link" href="sect0009.html#prop:second-separable-4-14-4-15">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.secondCountable_implies_separable_4_14" class="lean_decl">LeanTopology.ClosureInterior.secondCountable_implies_separable_4_14</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.separable_metric_implies_secondCountable_4_15" class="lean_decl">LeanTopology.ClosureInterior.separable_metric_implies_secondCountable_4_15</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:sorgenfrey-basis-3-12_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:sorgenfrey-basis-3-12" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.15</span><span class="proposition_thmtitle">Structural properties of the Sorgenfrey basis</span></div>
+    <div class="thm_thmcontent"><p>  The half-open interval family satisfies the abstract basis axioms, and for each \(x\in \mathbb {R}\) the intervals </p>
+<div class="displaymath" id="a0000000055">
+  \[  \left[x, x+\frac{1}{n}\right) \qquad (n\in \mathbb {N}_{{\gt}0})  \]
+</div>
+<p> form a neighborhood basis at \(x\). </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:sorgenfrey-basis-3-12">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SorgenfreyBasis_properties_3_12" class="lean_decl">LeanTopology.Basis.SorgenfreyBasis_properties_3_12</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.Sorgenfrey_intervalNeighborhoodBasis_3_12" class="lean_decl">LeanTopology.Basis.Sorgenfrey_intervalNeighborhoodBasis_3_12</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:ssup-sinf-closure-4-6_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:ssup-sinf-closure-4-6" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.7</span><span class="proposition_thmtitle">Suprema and infima lie in the closure</span></div>
+    <div class="thm_thmcontent"><p>   For appropriate real subsets \(A\), the least upper bound and greatest lower bound satisfy </p>
+<div class="displaymath" id="a0000000064">
+  \[  \sup A \in \overline A, \qquad \inf A \in \overline A,  \]
+</div>
+<p> and if \(A\) is closed then these extremal points belong to \(A\) itself. </p>
+</div>
+
+    <a class="latex_link" href="sect0008.html#prop:ssup-sinf-closure-4-6">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.sSup_mem_closure_4_6" class="lean_decl">LeanTopology.ClosureInterior.sSup_mem_closure_4_6</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.sInf_mem_closure_4_6" class="lean_decl">LeanTopology.ClosureInterior.sInf_mem_closure_4_6</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.sSup_mem_of_isClosed_4_6" class="lean_decl">LeanTopology.ClosureInterior.sSup_mem_of_isClosed_4_6</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.sInf_mem_of_isClosed_4_6" class="lean_decl">LeanTopology.ClosureInterior.sInf_mem_of_isClosed_4_6</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:subbasis-basic-3-13-3-15_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:subbasis-basic-3-13-3-15" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.18</span><span class="proposition_thmtitle">Basic subbasis lemmas</span></div>
+    <div class="thm_thmcontent"><p>   The development proves that every member of a family appears as a singleton finite intersection, every subbasis consists of open sets, every basis is automatically a subbasis, open rays form a subbasis of the usual topology on \(\mathbb {R}\), and the corresponding abstract subbasis-family axioms admit the expected pointwise reformulation. </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:subbasis-basic-3-13-3-15">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.subset_finiteIntersections_3_13" class="lean_decl">LeanTopology.Basis.subset_finiteIntersections_3_13</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalSubbasis_subset_3_13" class="lean_decl">LeanTopology.Basis.topologicalSubbasis_subset_3_13</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalBasis_isTopologicalSubbasis_3_13" class="lean_decl">LeanTopology.Basis.topologicalBasis_isTopologicalSubbasis_3_13</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.realRaySubbasis_3_14" class="lean_decl">LeanTopology.Basis.realRaySubbasis_3_14</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.realRaySubbasis_subset_open_3_14" class="lean_decl">LeanTopology.Basis.realRaySubbasis_subset_open_3_14</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.real_openInterval_mem_finiteIntersections_realRay_3_14" class="lean_decl">LeanTopology.Basis.real_openInterval_mem_finiteIntersections_realRay_3_14</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.realRay_isTopologicalSubbasis_3_14" class="lean_decl">LeanTopology.Basis.realRay_isTopologicalSubbasis_3_14</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.IsTopologicalSubbasisFamily_3_15" class="lean_decl">LeanTopology.Basis.IsTopologicalSubbasisFamily_3_15</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.isTopologicalSubbasisFamily_iff_pointwise_3_15" class="lean_decl">LeanTopology.Basis.isTopologicalSubbasisFamily_iff_pointwise_3_15</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologicalSubbasis_property_3_15" class="lean_decl">LeanTopology.Basis.topologicalSubbasis_property_3_15</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:subbasis-generated-topology-3-16-3-17_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:subbasis-generated-topology-3-16-3-17" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">4.19</span><span class="proposition_thmtitle">Generated topologies from subbasis families</span></div>
+    <div class="thm_thmcontent"><p>   Finite intersections of a suitable subbasis family satisfy the basis-family axioms. Hence one obtains a generated topology, together with a packaged existence-and-uniqueness statement and a minimality result analogous to the basis case. </p>
+</div>
+
+    <a class="latex_link" href="sect0006.html#prop:subbasis-generated-topology-3-16-3-17">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologyFromTopologicalSubbasis_3_16" class="lean_decl">LeanTopology.Basis.topologyFromTopologicalSubbasis_3_16</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.finiteIntersections_topologicalBasisFamily_3_16" class="lean_decl">LeanTopology.Basis.finiteIntersections_topologicalBasisFamily_3_16</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.SubbasisTopologyData_3_16" class="lean_decl">LeanTopology.Basis.SubbasisTopologyData_3_16</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topology_from_topologicalSubbasis_3_16" class="lean_decl">LeanTopology.Basis.topology_from_topologicalSubbasis_3_16</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.Basis.topologyFromTopologicalSubbasis_minimal_3_17" class="lean_decl">LeanTopology.Basis.topologyFromTopologicalSubbasis_minimal_3_17</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:subset-closure-4-1_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:subset-closure-4-1" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">5.2</span><span class="proposition_thmtitle">The closure contains the original set</span></div>
+    <div class="thm_thmcontent"><p>   For every \(A\subseteq X\) one has </p>
+<div class="displaymath" id="a0000000057">
+  \[  A\subseteq \overline A.  \]
+</div>
+</div>
+
+    <a class="latex_link" href="sect0008.html#prop:subset-closure-4-1">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.ClosureInterior.subset_closure_4_1">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:tendsto-basis-2-18_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:tendsto-basis-2-18" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">3.11</span><span class="proposition_thmtitle">Testing convergence on a basis</span></div>
+    <div class="thm_thmcontent"><p>   A sequence converges to \(x\) if and only if it is eventually contained in every member of a chosen neighborhood basis at \(x\). </p>
+<div class="proof_wrapper" id="a0000000046">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>If a sequence converges in the ordinary neighborhood sense, then every basis element is in particular a neighborhood, so the eventual-containment property follows immediately. </p>
+<p>Conversely, suppose the eventual-containment property holds for a basis \(\mathcal{U}\) at \(x\). Let \(V\) be any neighborhood of \(x\). Since \(\mathcal{U}\) is a basis, there exists some \(U\in \mathcal{U}\) with \(U\subseteq V\). By hypothesis, the sequence is eventually in \(U\), hence eventually in \(V\). Therefore the original definition of convergence holds. </p>
+
+  </div>
+</div>
+</div>
+
+    <a class="latex_link" href="sect0005.html#prop:tendsto-basis-2-18">LaTeX</a>
+    
+    
+  <a class="lean_link lean_decl" href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.NeighborhoodBasis.tendstoSeq_iff_neighborhoodBasis_2_18">Lean</a>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+
+
+    
+    <div class="dep-modal-container" id="prop:topology-helpers-1-1_modal">
+      <div class="dep-modal-content">
+          <button class="dep-closebtn">
+<svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        
+  <div class="thm" id="prop:topology-helpers-1-1" style="display: none">
+    <div class="thm_thmheading">
+      <span class="proposition_thmcaption">
+      Proposition
+      </span>
+      <span class="proposition_thmlabel">2.9</span><span class="proposition_thmtitle">Finite intersections and indexed unions</span></div>
+    <div class="thm_thmcontent"><p>   From the axioms of a topology one derives closure under finite intersections and indexed unions. These are the standard finitary and indexed forms of the basic axioms. </p>
+</div>
+
+    <a class="latex_link" href="sect0004.html#prop:topology-helpers-1-1">LaTeX</a>
+    
+    
+  <div class="tooltip">
+      <span class="lean_link">Lean</span>
+      <ul class="tooltip_list">
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsTopology_1_1.O2_inter'" class="lean_decl">LeanTopology.TopologicalSpace.IsTopology_1_1.O2_inter'</a></li>
+        
+           <li><a href="https://Neuron-Group.github.io/LeanTopology/docs/find/#doc/LeanTopology.TopologicalSpace.IsTopology_1_1.O3_iUnion" class="lean_decl">LeanTopology.TopologicalSpace.IsTopology_1_1.O3_iUnion</a></li>
+        
+      </ul>
+  </div>
+    
+    
+  
+    
+  </div>
+    
+      </div>
+    </div>
+</div>
+</div> <!-- content -->
+</div> <!-- wrapper -->
+<script src="js/jquery.min.js" type="text/javascript"></script>
+
+<script src="js/d3.min.js"></script>
+<script src="js/hpcc.min.js"></script>
+<script src="js/d3-graphviz.js"></script>
+
+<script type="text/javascript">
+const graphContainer = d3.select("#graph");
+const width = graphContainer.node().clientWidth;
+const height = graphContainer.node().clientHeight;
+
+
+graphContainer.graphviz({useWorker: true})
+    .width(width)
+    .height(height)
+    .fit(true)
+    .renderDot(`strict digraph "" {	graph [bgcolor=transparent];	node [label="\N",		penwidth=1.8	];	edge [arrowhead=vee];	"def:topology-open"	[color=green,		fillcolor="#B0ECA3",		label="topology-open",		shape=box,		style=filled];	"def:closed-set"	[color=green,		fillcolor="#B0ECA3",		label="closed-set",		shape=box,		style=filled];	"def:topology-open" -> "def:closed-set"	[style=dashed];	"prop:topology-helpers-1-1"	[color=green,		label="topology-helpers-1-1",		shape=ellipse];	"def:topology-open" -> "prop:topology-helpers-1-1"	[style=dashed];	"prop:closed-open-equivalence"	[color=green,		label="closed-open-equivalence",		shape=ellipse];	"def:closed-set" -> "prop:closed-open-equivalence"	[style=dashed];	"prop:balls-open-closed-1-16"	[color=green,		label="balls-open-closed-1-16",		shape=ellipse];	"def:closed-set" -> "prop:balls-open-closed-1-16"	[style=dashed];	"prop:closed-open-complements"	[color=green,		label="closed-open-complements",		shape=ellipse];	"def:closed-set" -> "prop:closed-open-complements"	[style=dashed];	"def:neighborhood-basis-family-2-10"	[color=green,		fillcolor="#B0ECA3",		label="neighborhood-basis-family-2-10",		shape=box,		style=filled];	"prop:neighborhood-basis-family-generated-topology-2-10-2-11"	[color=green,		label="neighborhood-basis-family-generated-topology-2-10-2-11",		shape=ellipse];	"def:neighborhood-basis-family-2-10" -> "prop:neighborhood-basis-family-generated-topology-2-10-2-11"	[style=dashed];	"def:tendsto-seq-2-16"	[color=green,		fillcolor="#B0ECA3",		label="tendsto-seq-2-16",		shape=box,		style=filled];	"prop:closure-sequential-4-7-4-8"	[color=green,		label="closure-sequential-4-7-4-8",		shape=ellipse];	"def:tendsto-seq-2-16" -> "prop:closure-sequential-4-7-4-8"	[style=dashed];	"prop:tendsto-basis-2-18"	[color=green,		label="tendsto-basis-2-18",		shape=ellipse];	"def:tendsto-seq-2-16" -> "prop:tendsto-basis-2-18"	[style=dashed];	"def:closure-operator-4-17"	[color=green,		fillcolor="#B0ECA3",		label="closure-operator-4-17",		shape=box,		style=filled];	"prop:closure-operator-laws-4-17-4-18"	[color=green,		label="closure-operator-laws-4-17-4-18",		shape=ellipse];	"def:closure-operator-4-17" -> "prop:closure-operator-laws-4-17-4-18"	[style=dashed];	"prop:sorgenfrey-basis-3-12"	[color=green,		label="sorgenfrey-basis-3-12",		shape=ellipse];	"prop:interior-duality-neighborhood-4-22-4-24"	[color=green,		label="interior-duality-neighborhood-4-22-4-24",		shape=ellipse];	"def:coarser-finer-1-10"	[color=green,		fillcolor="#B0ECA3",		label="coarser-finer-1-10",		shape=box,		style=filled];	"def:first-countable-2-12"	[color=green,		fillcolor="#B0ECA3",		label="first-countable-2-12",		shape=box,		style=filled];	"prop:second-implies-first-3-7"	[color=green,		label="second-implies-first-3-7",		shape=ellipse];	"def:first-countable-2-12" -> "prop:second-implies-first-3-7"	[style=dashed];	"prop:first-countable-results-2-13-2-15"	[color=green,		label="first-countable-results-2-13-2-15",		shape=ellipse];	"def:first-countable-2-12" -> "prop:first-countable-results-2-13-2-15"	[style=dashed];	"def:sorgenfrey-3-12"	[color=green,		fillcolor="#B0ECA3",		label="sorgenfrey-3-12",		shape=box,		style=filled];	"prop:cs-0-1"	[color=green,		label="cs-0-1",		shape=ellipse];	"prop:norm-triangle-0-2"	[color=green,		label="norm-triangle-0-2",		shape=ellipse];	"prop:cs-0-1" -> "prop:norm-triangle-0-2"	[style=dashed];	"prop:subbasis-basic-3-13-3-15"	[color=green,		label="subbasis-basic-3-13-3-15",		shape=ellipse];	"prop:closure-closed-minimal-4-1-4-2"	[color=green,		label="closure-closed-minimal-4-1-4-2",		shape=ellipse];	"prop:closure-mono-4-4"	[color=green,		label="closure-mono-4-4",		shape=ellipse];	"prop:induced-topology-is-topology-1-17"	[color=green,		label="induced-topology-is-topology-1-17",		shape=ellipse];	"def:separable-4-13"	[color=green,		fillcolor="#B0ECA3",		label="separable-4-13",		shape=box,		style=filled];	"prop:second-separable-4-14-4-15"	[color=green,		label="second-separable-4-14-4-15",		shape=ellipse];	"def:separable-4-13" -> "prop:second-separable-4-14-4-15"	[style=dashed];	"prop:basis-nonempty-3-2a"	[color=green,		label="basis-nonempty-3-2a",		shape=ellipse];	"def:euclidean-ball-0-4"	[color=green,		fillcolor="#B0ECA3",		label="euclidean-ball-0-4",		shape=box,		style=filled];	"def:dense-4-10"	[color=green,		fillcolor="#B0ECA3",		label="dense-4-10",		shape=box,		style=filled];	"prop:density-4-11-4-12"	[color=green,		label="density-4-11-4-12",		shape=ellipse];	"def:dense-4-10" -> "prop:density-4-11-4-12"	[style=dashed];	"def:boundary-4-27"	[color=green,		fillcolor="#B0ECA3",		label="boundary-4-27",		shape=box,		style=filled];	"prop:boundary-abstract-4-27-4-28"	[color=green,		label="boundary-abstract-4-27-4-28",		shape=ellipse];	"def:boundary-4-27" -> "prop:boundary-abstract-4-27-4-28"	[style=dashed];	"prop:subset-closure-4-1"	[color=green,		label="subset-closure-4-1",		shape=ellipse];	"prop:euclidean-second-countable-3-6"	[color=green,		label="euclidean-second-countable-3-6",		shape=ellipse];	"def:neighborhood-basis-2-5"	[color=green,		fillcolor="#B0ECA3",		label="neighborhood-basis-2-5",		shape=box,		style=filled];	"def:neighborhood-basis-2-5" -> "prop:tendsto-basis-2-18"	[style=dashed];	"def:neighborhood-basis-2-5" -> "prop:boundary-abstract-4-27-4-28"	[style=dashed];	"prop:closure-neighborhoods-4-5"	[color=green,		label="closure-neighborhoods-4-5",		shape=ellipse];	"def:neighborhood-basis-2-5" -> "prop:closure-neighborhoods-4-5"	[style=dashed];	"def:subbasis-3-13"	[color=green,		fillcolor="#B0ECA3",		label="subbasis-3-13",		shape=box,		style=filled];	"def:subbasis-3-13" -> "prop:subbasis-basic-3-13-3-15"	[style=dashed];	"prop:subbasis-generated-topology-3-16-3-17"	[color=green,		label="subbasis-generated-topology-3-16-3-17",		shape=ellipse];	"def:subbasis-3-13" -> "prop:subbasis-generated-topology-3-16-3-17"	[style=dashed];	"prop:metric-identities-0-3"	[color=green,		label="metric-identities-0-3",		shape=ellipse];	"prop:continuous-ball-0-5"	[color=green,		label="continuous-ball-0-5",		shape=ellipse];	"prop:closed-family-helpers"	[color=green,		label="closed-family-helpers",		shape=ellipse];	"prop:metric-convergence-2-19-2-21"	[color=green,		label="metric-convergence-2-19-2-21",		shape=ellipse];	"prop:basis-union-3-2"	[color=green,		label="basis-union-3-2",		shape=ellipse];	"prop:basis-properties-3-9"	[color=green,		label="basis-properties-3-9",		shape=ellipse];	"prop:basis-generated-topology-3-10-3-11"	[color=green,		label="basis-generated-topology-3-10-3-11",		shape=ellipse];	"def:second-countable-3-6"	[color=green,		fillcolor="#B0ECA3",		label="second-countable-3-6",		shape=box,		style=filled];	"def:second-countable-3-6" -> "prop:second-implies-first-3-7"	[style=dashed];	"def:second-countable-3-6" -> "prop:second-separable-4-14-4-15"	[style=dashed];	"def:second-countable-3-6" -> "prop:euclidean-second-countable-3-6"	[style=dashed];	"def:euclidean-open-0-6"	[color=green,		fillcolor="#B0ECA3",		label="euclidean-open-0-6",		shape=box,		style=filled];	"def:closed-family"	[color=green,		fillcolor="#B0ECA3",		label="closed-family",		shape=box,		style=filled];	"def:closed-family" -> "prop:closed-open-equivalence"	[style=dashed];	"def:closed-family" -> "prop:closed-family-helpers"	[style=dashed];	"def:distance-balls-1-12-1-14"	[color=green,		fillcolor="#B0ECA3",		label="distance-balls-1-12-1-14",		shape=box,		style=filled];	"def:induced-topology-1-17"	[color=green,		fillcolor="#B0ECA3",		label="induced-topology-1-17",		shape=box,		style=filled];	"def:induced-topology-1-17" -> "prop:induced-topology-is-topology-1-17"	[style=dashed];	"def:metrizable-1-18"	[color=green,		fillcolor="#B0ECA3",		label="metrizable-1-18",		shape=box,		style=filled];	"def:interior-4-19"	[color=green,		fillcolor="#B0ECA3",		label="interior-4-19",		shape=box,		style=filled];	"def:interior-4-19" -> "prop:interior-duality-neighborhood-4-22-4-24"	[style=dashed];	"prop:interior-operator-4-25-4-26"	[color=green,		label="interior-operator-4-25-4-26",		shape=ellipse];	"def:interior-4-19" -> "prop:interior-operator-4-25-4-26"	[style=dashed];	"prop:interior-basic-4-19-4-21"	[color=green,		label="interior-basic-4-19-4-21",		shape=ellipse];	"def:interior-4-19" -> "prop:interior-basic-4-19-4-21"	[style=dashed];	"prop:euclidean-open-calculus-0-7-0-9"	[color=green,		label="euclidean-open-calculus-0-7-0-9",		shape=ellipse];	"def:is-open-distance-1-15"	[color=green,		fillcolor="#B0ECA3",		label="is-open-distance-1-15",		shape=box,		style=filled];	"def:is-open-distance-1-15" -> "prop:balls-open-closed-1-16"	[style=dashed];	"def:is-open-distance-1-15" -> "def:induced-topology-1-17"	[style=dashed];	"def:closure-4-1"	[color=green,		fillcolor="#B0ECA3",		label="closure-4-1",		shape=box,		style=filled];	"def:closure-4-1" -> "prop:closure-sequential-4-7-4-8"	[style=dashed];	"def:closure-4-1" -> "prop:closure-closed-minimal-4-1-4-2"	[style=dashed];	"def:closure-4-1" -> "prop:closure-mono-4-4"	[style=dashed];	"def:closure-4-1" -> "prop:subset-closure-4-1"	[style=dashed];	"def:closure-4-1" -> "prop:closure-neighborhoods-4-5"	[style=dashed];	"prop:ssup-sinf-closure-4-6"	[color=green,		label="ssup-sinf-closure-4-6",		shape=ellipse];	"def:closure-4-1" -> "prop:ssup-sinf-closure-4-6"	[style=dashed];	"prop:closed-iff-closure-4-3"	[color=green,		label="closed-iff-closure-4-3",		shape=ellipse];	"def:closure-4-1" -> "prop:closed-iff-closure-4-3"	[style=dashed];	"prop:neighborhood-basic-2-1-2-4"	[color=green,		label="neighborhood-basic-2-1-2-4",		shape=ellipse];	"def:topological-basis-3-1"	[color=green,		fillcolor="#B0ECA3",		label="topological-basis-3-1",		shape=box,		style=filled];	"def:topological-basis-3-1" -> "prop:basis-nonempty-3-2a"	[style=dashed];	"def:topological-basis-3-1" -> "prop:basis-union-3-2"	[style=dashed];	"def:topological-basis-3-1" -> "prop:basis-properties-3-9"	[style=dashed];	"def:basis-family-3-9"	[color=green,		fillcolor="#B0ECA3",		label="basis-family-3-9",		shape=box,		style=filled];	"def:basis-family-3-9" -> "prop:basis-properties-3-9"	[style=dashed];	"def:topology-from-basis-3-10"	[color=green,		fillcolor="#B0ECA3",		label="topology-from-basis-3-10",		shape=box,		style=filled];	"def:basis-family-3-9" -> "def:topology-from-basis-3-10"	[style=dashed];	"def:topology-from-basis-3-10" -> "prop:basis-generated-topology-3-10-3-11"	[style=dashed];	"def:neighborhood-2-1"	[color=green,		fillcolor="#B0ECA3",		label="neighborhood-2-1",		shape=box,		style=filled];	"def:neighborhood-2-1" -> "prop:interior-duality-neighborhood-4-22-4-24"	[style=dashed];	"def:neighborhood-2-1" -> "prop:closure-neighborhoods-4-5"	[style=dashed];	"def:neighborhood-2-1" -> "prop:neighborhood-basic-2-1-2-4"	[style=dashed];	"def:metric-convergence-2-19"	[color=green,		fillcolor="#B0ECA3",		label="metric-convergence-2-19",		shape=box,		style=filled];	"def:metric-convergence-2-19" -> "prop:metric-convergence-2-19-2-21"	[style=dashed];}`)
+    .on("end", interactive);
+
+latexLabelEscaper = function(label) {
+  return label.replace(/\./g, '\\.').replace(/:/g, '\\:')
+}
+
+clickNode = function() {
+  $("#statements div").hide()
+  var node_id = $('text', this).text();
+  $('.thm').hide();
+  $('#'+latexLabelEscaper(node_id)).show().children().show();
+}
+function interactive() {
+    $("span#legend_title").on("click", function () {
+           $(this).siblings('dl').toggle();
+        })
+
+    d3.selectAll('.node')
+        .attr('pointer-events', 'fill')
+        .on('click', function () {
+           var title = d3.select(this).selectAll('title').text().trim();
+           $('#statements > div').hide()
+           $('.thm').hide();
+           $('#'+latexLabelEscaper(title)+'_modal').show().children().show().children().show();
+           $('#statements').show()
+        });
+
+    d3.selectAll('.dep-closebtn').on('click', function() {
+        var modal =
+            d3.select(this).node().parentNode.parentNode.parentNode ;
+        d3.select(modal).style('display', 'none');
+    });
+}
+
+</script>
+
+</body>
+</html>
