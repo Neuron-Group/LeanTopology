@@ -20,50 +20,132 @@ open Lean Meta Elab Tactic
 namespace LeanTopology
 namespace FinChoose
 
+/-- Constructive choice on a finite set, built by induction on the `Finset`. -/
+theorem chooseOnFinset {α : Type u} [DecidableEq α] (s : Finset α)
+    {β : α → Sort v} {p : ∀ a, β a → Prop}
+    (h : ∀ a ∈ s, ∃ b, p a b) :
+    ∃ f : ∀ a : {x // x ∈ s}, β a.1, ∀ a : {x // x ∈ s}, p a.1 (f a) := by
+  induction s using Finset.induction_on with
+  | empty =>
+      simp
+  | @insert a s ha ih =>
+      have ha' : ∃ b, p a b := h a (by simp)
+      have hs : ∀ x ∈ s, ∃ b, p x b := by
+        intro x hx
+        exact h x (by simp [hx])
+      rcases ha' with ⟨b, hb⟩
+      rcases ih hs with ⟨f, hf⟩
+      let g : ∀ z : {x // x ∈ insert a s}, β z.1 := by
+        rintro ⟨x, hx⟩
+        by_cases hxa : x = a
+        · subst hxa
+          exact b
+        · exact f ⟨x, by simpa [Finset.mem_insert, hxa] using hx⟩
+      refine ⟨g, ?_⟩
+      rintro ⟨x, hx⟩
+      dsimp [g]
+      by_cases hxa : x = a
+      · subst hxa
+        simpa using hb
+      · simpa [hxa] using hf ⟨x, by simpa [Finset.mem_insert, hxa] using hx⟩
+
+/-- Constructive choice on a finite type, obtained from `Fintype.elems`. -/
+theorem chooseOnFintype {α : Type u} [Fintype α]
+    {β : α → Sort v} {p : ∀ a, β a → Prop}
+    (h : ∀ a, ∃ b, p a b) :
+    ∃ f : ∀ a, β a, ∀ a, p a (f a) := by
+  let e : α ≃ Fin (Fintype.card α) := Fintype.equivFin α
+  let finDecEq : DecidableEq (Fin (Fintype.card α)) := inferInstance
+  let _ : DecidableEq α := fun a b =>
+    match finDecEq (e a) (e b) with
+    | isTrue hab => isTrue (e.injective hab)
+    | isFalse hab => isFalse (fun hab' => hab (by simpa [hab']))
+  let s : Finset α := Finset.univ
+  have hs : ∀ a ∈ s, ∃ b, p a b := by
+    intro a _
+    exact h a
+  rcases chooseOnFinset s hs with ⟨f, hf⟩
+  refine ⟨fun a => f ⟨a, by simp [s]⟩, ?_⟩
+  intro a
+  simpa [s] using hf ⟨a, by simp [s]⟩
+
 /-- Parsed data for `fin_choose`. -/
 private structure FinChooseData where
+  isFintype : Bool
+  domainTy : Expr
   subtypeTy : Expr
   binderName : Name
   witnessPred : Expr
 
-/-- Extract the subtype domain from a term of the form `∀ x, p x → ∃ y, q x y`. -/
+/-- Parse a term of the form `∀ x, p x → ∃ y, q x y` or `∀ x, ∃ y, q x y`. -/
 private def mkFinChooseData (stx : Syntax) (type : Expr) : MetaM FinChooseData := do
+  let type ← whnf type
   forallTelescopeReducing type fun xs body => do
-    unless xs.size = 2 do
-      throwErrorAt stx
-        "`fin_choose` expects a term of the form `∀ x, p x → ∃ y, q x y`"
     let x := xs[0]!
-    let hx := xs[1]!
-    let predTy ← inferType hx
-    unless ← isProp predTy do
+    let α ← inferType x
+    let xDecl ← x.fvarId!.getDecl
+    let xName := xDecl.userName
+    let binderName := if xName == `_ then `z else xName
+    let .sort u ← whnf (← inferType α)
+      | throwErrorAt stx "`fin_choose` could not infer the universe of the index type"
+    if xs.size = 2 then
+      let hx := xs[1]!
+      let predTy ← inferType hx
+      unless ← isProp predTy do
+        throwErrorAt stx
+          "`fin_choose` expects the second binder to be a proposition, such as `x ∈ s`"
+      let body ← whnf body
+      body.withApp fun fn args => do
+        match fn, args with
+        | .const ``Exists _, #[_, p] =>
+            let pred := ← mkLambdaFVars #[x] predTy
+            let witnessPred := ← mkLambdaFVars #[x, hx] p
+            pure {
+              isFintype := false
+              domainTy := α
+              subtypeTy := mkApp2 (mkConst ``Subtype [u]) α pred
+              binderName := binderName
+              witnessPred := witnessPred
+            }
+        | _, _ =>
+            throwErrorAt stx
+              "`fin_choose` expects a term of the form `∀ x, p x → ∃ y, q x y` or `∀ x, ∃ y, q x y`"
+    else if xs.size = 1 then
+      pure {
+        isFintype := true
+        domainTy := α
+        subtypeTy := α
+        binderName := binderName
+        witnessPred := mkConst ``True
+      }
+    else
       throwErrorAt stx
-        "`fin_choose` expects the second binder to be a proposition, such as `x ∈ s`"
-    let body ← whnf body
-    body.withApp fun fn args => do
-      match fn, args with
-      | .const ``Exists _, #[_, p] =>
-          let α ← inferType x
-          let pred := ← mkLambdaFVars #[x] predTy
-          let witnessPred := ← mkLambdaFVars #[x, hx] p
-          let xDecl ← x.fvarId!.getDecl
-          let xName := xDecl.userName
-          let binderName := if xName == `_ then `z else xName
-          let .sort u ← whnf (← inferType α)
-            | throwErrorAt stx "`fin_choose` could not infer the universe of the index type"
-          pure {
-            subtypeTy := mkApp2 (mkConst ``Subtype [u]) α pred
-            binderName := binderName
-            witnessPred := witnessPred
-          }
-      | _, _ =>
-          throwErrorAt stx
-            "`fin_choose` expects a term of the form `∀ x, p x → ∃ y, q x y`"
+        "`fin_choose` expects a term of the form `∀ x, p x → ∃ y, q x y` or `∀ x, ∃ y, q x y`"
 
 /-- Add the constructive witness function and its specification to the local context. -/
 private def elabFinChoose (goal : MVarId) (fName hfName : Syntax) (h : Expr) :
     TermElabM MVarId := goal.withContext do
   let hType ← inferType h
   let data ← mkFinChooseData fName hType
+
+  if data.isFintype then
+    let fintypeConst ← mkConstWithFreshMVarLevels ``Fintype
+    let fintypeInst? ← synthInstance? (mkApp fintypeConst data.domainTy)
+    unless fintypeInst?.isSome do
+      throwErrorAt fName
+          "`fin_choose` can handle `∀ x, ∃ y, q x y` only when the type of `x` has a `Fintype` instance"
+    let choiceProof ← mkAppM ``LeanTopology.FinChoose.chooseOnFintype #[h]
+    let (choiceFVarId, goal) ← (← goal.assert .anonymous (← inferType choiceProof) choiceProof).intro1P
+    let #[subgoal] ← goal.cases choiceFVarId
+      | throwErrorAt fName "`fin_choose` failed to destruct the constructive choice witness"
+    let #[Expr.fvar fFVarId, Expr.fvar hfFVarId] ← pure subgoal.fields
+      | throwErrorAt fName "`fin_choose` failed to extract the witness function and proof"
+    let goal ← subgoal.mvarId.rename fFVarId fName.getId
+    let goal ← goal.rename hfFVarId hfName.getId
+    goal.withContext do
+      Term.addLocalVarInfo fName (mkFVar fFVarId)
+      Term.addLocalVarInfo hfName (mkFVar hfFVarId)
+    return goal
 
   let (fFVarId, goal) ← goal.withContext do
     withLocalDeclD data.binderName data.subtypeTy fun z => do
@@ -134,6 +216,12 @@ example {X : Type} {𝒪 : Set (Set X)} (x : X) (𝒱 : Finset (Set X))
   fin_choose f hf using _hyp
   guard_hyp f : ↥𝒱 → Set X
   guard_hyp hf : ∀ V : ↥𝒱, f V ∈ 𝒪 ∧ x ∈ f V ∧ f V ⊆ V.1
+  trivial
+
+example {n : ℕ} (_h : ∀ i : Fin n, ∃ y : ℚ, True) : True := by
+  fin_choose f hf using _h
+  guard_hyp f : Fin n → ℚ
+  guard_hyp hf : ∀ i : Fin n, True
   trivial
 
 end

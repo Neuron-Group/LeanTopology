@@ -1057,7 +1057,7 @@ instance of the distance-space structure, and then restrict it to a subset.
 -/
 
 /-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : Euclidean space carries our distance-space structure. -/
-abbrev euclideanDistanceSpace_cert_2_21 (n : ℕ) :
+instance euclideanDistanceSpace_1_12 (n : ℕ) :
     DistanceSpace_1_12 (EuclideanSpaceTopology.E n) := by
   refine
     { dist := dist
@@ -1078,7 +1078,7 @@ abbrev euclideanDistanceSpace_cert_2_21 (n : ℕ) :
 restricted distance. -/
 abbrev euclideanSubspaceTopology_2_21 (n : ℕ)
     (A : Set (EuclideanSpaceTopology.E n)) : Set (Set A) :=
-  @inducedTopology_1_17 A (restrictDistance_1_13 (D := euclideanDistanceSpace_cert_2_21 n) A)
+  @inducedTopology_1_17 A (restrictDistance_1_13 (D := euclideanDistanceSpace_1_12 n) A)
 
 /-!
 Proposition 2.21 characterizes convergence in Euclidean subspaces coordinate by
@@ -1093,7 +1093,7 @@ theorem tendstoSeq_euclideanSubspace_2_21 {n : ℕ}
       <-> ∀ k : Fin n,
         RealSequenceConvergesTo_2_19 (λ i : ℕ ↦ (xᵢ i).1 k) (x.1 k) := by
   letI : DistanceSpace_1_12 (EuclideanSpaceTopology.E n) :=
-    euclideanDistanceSpace_cert_2_21 n
+    euclideanDistanceSpace_1_12 n
   letI : DistanceSpace_1_12 A :=
     restrictDistance_1_13 (D := inferInstance) A
   let hMetric := tendstoSeq_metric_2_19 xᵢ x
@@ -1105,7 +1105,7 @@ theorem tendstoSeq_euclideanSubspace_2_21 {n : ℕ}
     refine ⟨N, ?_⟩
     intro i hi
     have hi' : dist (xᵢ i).1 x.1 < ε := by
-      simpa [restrictDistance_1_13, euclideanDistanceSpace_cert_2_21] using hN i hi
+      simpa [restrictDistance_1_13, euclideanDistanceSpace_1_12] using hN i hi
     have hcoord : dist ((xᵢ i).1 k) (x.1 k) ≤ dist (xᵢ i).1 x.1 := by
       rw [EuclideanSpace.dist_eq]
       refine (sq_le_sq₀ dist_nonneg (Real.sqrt_nonneg _)).mp ?_

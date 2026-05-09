@@ -19,8 +19,10 @@ namespace ClosureInterior
 
 universe u
 
+open LeanTopology.EuclideanSpaceTopology
 open LeanTopology.TopologicalSpace
 open LeanTopology.NeighborhoodBasis
+open LeanTopology.Basis
 
 section TopologyPart
 
@@ -103,8 +105,8 @@ theorem isClosed_iff_eq_closure_4_3 (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) 
   · rw [← hyp]
     exact closure_isClosed_4_1 h𝒪 A
 
-theorem isClosed_of_closure_subset_4_3 (h𝒪 : IsTopology_1_1 X 𝒪)
-  (A : Set X) :
+theorem isClosed_of_closure_subset_4_3
+  (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) :
     closure_4_1 𝒪 A ⊆ A -> IsClosed_1_2 𝒪 A := by
   intro hyp
   have hEq : closure_4_1 𝒪 A = A := Subset.antisymm hyp (subset_closure_4_1 A)
@@ -158,7 +160,8 @@ Proposition 4.5 characterizes points of the closure by neighborhoods.
 theorem mem_closure_iff_neighborhood_4_5'
   (A : Set X) (x : X) :
     x ∈ closure_4_1 𝒪 A
-      <-> ∀ V : Set X, IsNeighborhood_2_1 𝒪 x V -> (A ∩ V).Nonempty := by
+      <-> ∀ V : Set X, IsNeighborhood_2_1 𝒪 x V
+        -> (A ∩ V).Nonempty := by
   constructor <;> intro hyp
   · intro V hV
     by_contra ct
@@ -456,13 +459,24 @@ theorem isClosed_iff_tendstoSeq_mem_4_8 (A : Set X) :
     <-> ∀ xₙ : Sequence_2_16 X, (∀ n : ℕ, xₙ n ∈ A)
       -> ∀ x : X, TendstoSeq_2_16 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) xₙ x
         -> x ∈ A := by
+  have h𝒪 : IsTopology_1_1
+    X (inducedTopology_1_17 (X := X)) := by
+      exact inducedTopology_isTopology_1_17
   constructor
   <;> intro hyp
   · intro xₙ hxₙ x xₙcvg
-    have : A = closure_4_1 {U | isOpenDistance_1_15 U} A := by
-      sorry
-    sorry
-  · sorry
+    have : A = closure_4_1
+      (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›)
+        A := by
+      exact (isClosed_iff_eq_closure_4_3 h𝒪 A).mp hyp |>.symm
+    rw [this]
+    exact mem_closure_iff_exists_tendstoSeq_4_7 A x
+      |>.mpr ⟨xₙ, hxₙ, xₙcvg⟩
+  · apply isClosed_of_closure_subset_4_3 h𝒪 A
+    intro x hx
+    rcases mem_closure_iff_exists_tendstoSeq_4_7 A x
+      |>.mp hx with ⟨xₙ, hxₙ, xₙcvg⟩
+    exact hyp xₙ hxₙ x xₙcvg
 
 end MetricPart
 
@@ -489,14 +503,54 @@ theorem closure_eq_univ_of_nonempty_indiscrete_4_9_2
   /- There is only two close set in 𝒪 : ∅ and univ
     which is clearly that
       closure_4_1 will be one of them. -/
-  sorry
+  ext x
+  constructor
+  · intro _
+    simp
+  · intro _
+    simp only [closure_4_1, ClosedSupersets_4_1, mem_sInter, mem_setOf_eq]
+    intro F hF
+    rcases hF with ⟨hFclosed, hAF⟩
+    rw [IsClosed_1_2, 𝒪df, indiscreteTopology_1_7,
+      mem_insert_iff, mem_singleton_iff] at hFclosed
+    rcases hFclosed with hFcempty | hFcuniv
+    · have hFuniv : F = univ := by
+        ext y
+        constructor
+        · intro _
+          simp
+        · intro hy
+          by_cases hyF : y ∈ F
+          · exact hyF
+          · exfalso
+            have hyc : y ∈ Fᶜ := by simpa [Set.mem_compl_iff] using hyF
+            simp [hFcempty] at hyc
+      simp [hFuniv]
+    · exfalso
+      rcases hA with ⟨a, haA⟩
+      have haF : a ∈ F := hAF haA
+      have hFempty : F = ∅ := by
+        ext y
+        constructor
+        · intro hy
+          have hyc : y ∈ Fᶜ := by simpa [hFcuniv]
+            using (show y ∈ (univ : Set X) from by simp)
+          have hy_not : y ∉ Fᶜ := by simpa [Set.mem_compl_iff] using hy
+          exact hy_not hyc
+        · intro hy
+          exact False.elim (by simpa using hy)
+      simp [hFempty] at haF
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.9 (2): in the indiscrete space, the empty set has empty closure. -/
 theorem closure_empty_indiscrete_4_9_2
   (h𝒪 : 𝒪 = indiscreteTopology_1_7 X) :
     closure_4_1 𝒪 (∅ : Set X) = ∅ := by
   /- Nothing interesting here. -/
-  sorry
+  have hTop : IsTopology_1_1 X 𝒪 :=
+    h𝒪 ▸ indiscreteTopology_isTopology_1_7 X
+  have hEmptyClosed : IsClosed_1_2 𝒪 (∅ : Set X) := by
+    simp [IsClosed_1_2, h𝒪, indiscreteTopology_1_7]
+  exact (isClosed_iff_eq_closure_4_3 hTop (∅ : Set X)).mp hEmptyClosed
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.9 (3): in the finite-complement topology, every finite set equals its closure. -/
 theorem closure_eq_self_finiteComplement_finite_4_9_3
@@ -529,27 +583,275 @@ theorem closure_eq_univ_finiteComplement_infinite_4_9_3
     rcases hF' with hFuniv | hFfin
     · simpa only [hFuniv]
     · exfalso
-      sorry
+      exact hA.not_finite (hFfin.subset hAF)
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.9 (4): in `ℝ`, the closure of `(-1, 1)` is `[-1, 1]`. -/
 theorem closure_Ioo_neg_one_one_4_9_4 :
   closure_4_1 (@inducedTopology_1_17 ℝ inferInstance) (Set.Ioo (-1 : ℝ) 1)
     = Set.Icc (-1 : ℝ) 1 := by
-  sorry
+  set 𝒪 := @inducedTopology_1_17 ℝ inferInstance
+  have h𝒪 : IsTopology_1_1 ℝ 𝒪 := by
+    exact inducedTopology_isTopology_1_17
+  set A := Ioo (-1 : ℝ) 1
+  set A' := closure_4_1 inducedTopology_1_17 A
+  set B := Icc (-1 : ℝ) 1
+  
+  have c1 : ∀ x > 1, x ∉ A' := by
+    intro x hx
+    set U := {x | x > (1 : ℝ)}
+    have Uop : U ∈ 𝒪 := by
+      simp [𝒪]
+      intro y hy
+      refine ⟨y - 1, sub_pos.mpr hy, ?_⟩
+      intro z hz
+      simp [U, openBall_1_14, Real.dist_eq] at hz ⊢
+      have hz' := abs_lt.mp hz
+      linarith
+    have hxU : IsNeighborhood_2_1 𝒪 x U
+      := neighborhood_of_open_mem Uop hx
+    have hAU : A ∩ U = ∅ := by
+      ext y
+      constructor <;> intro hy
+      · rcases hy with ⟨hyA, hyU⟩
+        simp [A, U] at hyA hyU
+        exact False.elim (by linarith)
+      · exact False.elim hy
+    intro hyp
+    have := mem_closure_iff_neighborhood_4_5' A x
+      |>.mp hyp U hxU
+    rw [hAU] at this
+    rcases this with ⟨y, hy⟩
+    exact hy
+  
+  have c2 : ∀ x < -1, x ∉ A' := by
+    /- simular with c1 -/
+    intro x hx
+    set U := {x | x < (-1 : ℝ)}
+    have Uop : U ∈ 𝒪 := by
+      simp [𝒪]
+      intro y hy
+      refine ⟨-1 - y, sub_pos.mpr hy, ?_⟩
+      intro z hz
+      simp [U, openBall_1_14, Real.dist_eq] at hz ⊢
+      have hz' := abs_lt.mp hz
+      linarith
+    have hxU : IsNeighborhood_2_1 𝒪 x U
+      := neighborhood_of_open_mem Uop hx
+    have hAU : A ∩ U = ∅ := by
+      ext y
+      constructor <;> intro hy
+      · rcases hy with ⟨hyA, hyU⟩
+        simp [A, U] at hyA hyU
+        exact False.elim (by linarith)
+      · exact False.elim hy
+    intro hyp
+    have := mem_closure_iff_neighborhood_4_5' A x
+      |>.mp hyp U hxU
+    rw [hAU] at this
+    rcases this with ⟨y, hy⟩
+    exact hy
+  
+  have c3 : 1 ∈ A' := by
+    set xₙ : Sequence_2_16 ℝ := λ n ↦ 1 - 1 / (↑n + 1)
+    have xₙcvg: TendstoSeq_2_16 𝒪 xₙ 1 := by
+      refine (tendstoSeq_metric_2_19 xₙ 1).topo_iff_eps.mpr ?_
+      intro ε εpos
+      obtain ⟨N, hN⟩ := exists_nat_gt (1 / ε)
+      use N
+      intro n hn
+      have hN' : (1 / ε) < (n : ℝ) + 1 := by
+        have hle : (N : ℝ) ≤ (n : ℝ) + 1 := by
+          have hle' : (N : ℝ) ≤ n := by exact_mod_cast hn
+          linarith
+        linarith
+      have hmul : 1 < ε * ((n : ℝ) + 1) := by
+        have hm := mul_lt_mul_of_pos_right hN' εpos
+        simpa [one_div, εpos.ne', mul_comm, mul_left_comm, mul_assoc] using hm
+      have hdist : 1 / ((n : ℝ) + 1) < ε := by
+        have hpos : 0 < (n : ℝ) + 1 := by positivity
+        field_simp [hpos.ne', εpos.ne'] at hN' ⊢
+        linarith
+      have hEq : DistanceSpace_1_12.dist (xₙ n) 1 = 1 / ((n : ℝ) + 1) := by
+        change dist (xₙ n) 1 = 1 / ((n : ℝ) + 1)
+        rw [Real.dist_eq]
+        have hnonpos : xₙ n - 1 ≤ 0 := by
+          dsimp [xₙ]
+          have hnonneg : 0 ≤ 1 / ((n : ℝ) + 1) := by positivity
+          linarith
+        rw [abs_of_nonpos hnonpos]
+        dsimp [xₙ]
+        ring
+      rw [hEq]
+      exact hdist
+    apply mem_closure_iff_exists_tendstoSeq_4_7 A 1 |>.mpr
+    use xₙ; constructor
+    · intro n
+      simp [A]
+      constructor
+      · have hle : 1 / ((n : ℝ) + 1) ≤ 1 := by
+          have h1 : (1 : ℝ) ≤ (n : ℝ) + 1 := by
+            nlinarith [show (0 : ℝ) ≤ n by positivity]
+          have h0 : (0 : ℝ) < 1 := by norm_num
+          simpa using one_div_le_one_div_of_le h0 h1
+        dsimp [xₙ]
+        linarith
+      · dsimp [xₙ]
+        have hpos : 0 < 1 / ((n : ℝ) + 1) := by positivity
+        linarith
+    · exact xₙcvg
+  
+  have c4 : -1 ∈ A' := by
+    /- simular with c3 -/
+    set xₙ : Sequence_2_16 ℝ := λ n ↦ -1 + 1 / (↑n + 1)
+    have xₙcvg: TendstoSeq_2_16 𝒪 xₙ (-1) := by
+      refine (tendstoSeq_metric_2_19 xₙ (-1)).topo_iff_eps.mpr ?_
+      intro ε εpos
+      obtain ⟨N, hN⟩ := exists_nat_gt (1 / ε)
+      use N
+      intro n hn
+      have hN' : (1 / ε) < (n : ℝ) + 1 := by
+        have hle : (N : ℝ) ≤ (n : ℝ) + 1 := by
+          have hle' : (N : ℝ) ≤ n := by exact_mod_cast hn
+          linarith
+        linarith
+      have hmul : 1 < ε * ((n : ℝ) + 1) := by
+        have hm := mul_lt_mul_of_pos_right hN' εpos
+        simpa [one_div, εpos.ne', mul_comm, mul_left_comm, mul_assoc] using hm
+      have hdist : 1 / ((n : ℝ) + 1) < ε := by
+        have hpos : 0 < (n : ℝ) + 1 := by positivity
+        field_simp [hpos.ne', εpos.ne'] at hN' ⊢
+        linarith
+      have hEq : DistanceSpace_1_12.dist (xₙ n) (-1) = 1 / ((n : ℝ) + 1) := by
+        change dist (xₙ n) (-1) = 1 / ((n : ℝ) + 1)
+        rw [Real.dist_eq]
+        have hnonneg : 0 ≤ xₙ n - (-1) := by
+          have : 0 ≤ 1 / ((n : ℝ) + 1) := by positivity
+          simpa [xₙ]
+        rw [abs_of_nonneg hnonneg]
+        dsimp [xₙ]
+        ring
+      rw [hEq]
+      exact hdist
+    apply mem_closure_iff_exists_tendstoSeq_4_7 A (-1) |>.mpr
+    use xₙ; constructor
+    · intro n
+      simp [A]
+      constructor
+      · dsimp [xₙ]
+        have hpos : 0 < 1 / ((n : ℝ) + 1) := by positivity
+        linarith
+      · have hle : 1 / ((n : ℝ) + 1) ≤ 1 := by
+          have h1 : (1 : ℝ) ≤ (n : ℝ) + 1 := by
+            nlinarith [show (0 : ℝ) ≤ n by positivity]
+          have h0 : (0 : ℝ) < 1 := by norm_num
+          simpa using one_div_le_one_div_of_le h0 h1
+        dsimp [xₙ]
+        linarith
+    · exact xₙcvg
+  
+  ext x
+  constructor
+  · intro hx
+    simp [B]
+    constructor
+    · by_contra hxlt
+      exact (c2 x (lt_of_not_ge hxlt)) hx
+    · by_contra hxgt
+      exact (c1 x (lt_of_not_ge hxgt)) hx
+  · intro hx
+    simp [B] at hx
+    rcases hx with ⟨hxL, hxR⟩
+    by_cases hx1 : x = 1
+    · simpa [A', hx1] using c3
+    · by_cases hxneg1 : x = -1
+      · simpa [A', hxneg1] using c4
+      · have hxA : x ∈ A := by
+          simp [A]
+          constructor
+          · have hxLt : -1 < x := lt_of_le_of_ne hxL (Ne.symm hxneg1)
+            exact hxLt
+          · have hxGt : x < 1 := lt_of_le_of_ne hxR hx1
+            exact hxGt
+        simpa [A'] using
+          (subset_closure_4_1
+            (𝒪 := inducedTopology_1_17) A hxA)
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.9 (5): in Euclidean space, the rational-coordinate points are dense. -/
 theorem closure_eq_univ_rationalPoints_euclidean_4_9_5 (n : ℕ) :
-  letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E n) :=
-    euclideanDistanceSpace_cert_2_21 n
-  closure_4_1
-    (@inducedTopology_1_17 (LeanTopology.EuclideanSpaceTopology.E n) ‹_›)
-      {x : LeanTopology.EuclideanSpaceTopology.E n |
-        ∀ i : Fin n, ∃ q : ℚ, x i = (q : ℝ)}
-          = univ := by
+  letI : DistanceSpace_1_12 (E n) :=
+    euclideanDistanceSpace_1_12 n
+  closure_4_1 (@inducedTopology_1_17 (E n) ‹_›)
+    {x : E n | ∀ i : Fin n, ∃ q : ℚ, x i = (q : ℝ)}
+      = univ := by
+  set 𝒪 := @inducedTopology_1_17 (E n) _
+  have h𝒪 : IsTopology_1_1 (E n) 𝒪 := by
+    rw [show 𝒪 = @inducedTopology_1_17 (E n) _ by rfl]
+    exact inducedTopology_isTopology_1_17
+  set A := {x : E n | ∀ i : Fin n, ∃ q : ℚ, x i = (q : ℝ)}
   ext x
   constructor<;> intro hyp
   · exact mem_univ x
-  · sorry
+  · have h𝒰 := distance_openBall_isNeighborhoodBasis_2_8 x
+    set 𝒰 := {U | ∃ r > 0, U = openBall_1_14 x r}
+    apply mem_closure_iff_neighborhoodBasis_4_5 h𝒪 A x 𝒰 h𝒰 |>.mpr
+    intro B hB
+    dsimp [𝒰] at hB
+    rcases hB with ⟨ε, εpos, hB⟩
+    have hsqrtpos : 0 < Real.sqrt ((n : ℝ) + 1) := by
+      apply Real.sqrt_pos.2
+      positivity
+    have : ∀ i : Fin n, ∃ yₙ : ℚ,
+      dist (x i) yₙ < ε / Real.sqrt ((n : ℝ) + 1) := by
+      intro i
+      obtain ⟨q, hqL, hqR⟩ := exists_rat_btwn (show
+        x i - ε / Real.sqrt ((n : ℝ) + 1) < x i + ε / Real.sqrt ((n : ℝ) + 1) by
+          have : 0 < ε / Real.sqrt ((n : ℝ) + 1) := by positivity
+          linarith)
+      refine ⟨q, ?_⟩
+      rw [Real.dist_eq, abs_lt]
+      constructor <;> linarith
+    fin_choose f hf using this
+    set y : E n := by
+      exact WithLp.toLp 2 (λ i ↦ (f i : ℝ))
+    have hyA : y ∈ A := by
+      dsimp [A]
+      intro i
+      refine ⟨f i, ?_⟩
+      simp [y]
+    have hsq_le : ∀ k ∈ Finset.univ,
+        ((y - x) k) ^ 2 ≤ (ε / Real.sqrt ((n : ℝ) + 1)) ^ 2 := by
+      intro k hk
+      have hk' : dist (x k) (f k) < ε / Real.sqrt ((n : ℝ) + 1) := hf k
+      rw [Real.dist_eq] at hk'
+      have hcoord : |(y - x) k| < ε / Real.sqrt ((n : ℝ) + 1) := by
+        simpa [y, abs_sub_comm] using hk'
+      nlinarith [abs_lt.mp hcoord |>.1, abs_lt.mp hcoord |>.2]
+    have : dist y x < ε := by
+      have hdistsq : dist y x ^ 2 < ε ^ 2 := by
+        calc
+          dist y x ^ 2 = ∑ k : Fin n, ((y - x) k) ^ 2 := by
+            rw [dist_eq_norm]
+            simpa using EuclideanSpace.real_norm_sq_eq (y - x)
+          _ ≤ (n : ℝ) * (ε / Real.sqrt ((n : ℝ) + 1)) ^ 2 := by
+            simpa using
+              Finset.sum_le_card_nsmul
+                Finset.univ
+                (fun k : Fin n ↦ ((y - x) k) ^ 2)
+                ((ε / Real.sqrt ((n : ℝ) + 1)) ^ 2)
+                hsq_le
+          _ < ((n : ℝ) + 1) * (ε / Real.sqrt ((n : ℝ) + 1)) ^ 2 := by
+            have hεsq_pos : 0 < (ε / Real.sqrt ((n : ℝ) + 1)) ^ 2 := by positivity
+            nlinarith
+          _ = ε ^ 2 := by
+            field_simp [hsqrtpos.ne']
+            rw [Real.sq_sqrt]
+            positivity
+      have hdist_nonneg : 0 ≤ dist y x := by
+        exact DistanceSpace_1_12.nonneg y x
+      nlinarith [hdist_nonneg, εpos, hdistsq]
+    have hyB : y ∈ B := by
+      simpa [hB, openBall_1_14, dist_comm] using this
+    exact ⟨y, mem_inter hyA hyB⟩
 
 /-!
 Definition 4.10 introduces dense subsets, and Definition 4.13 introduces
@@ -584,10 +886,13 @@ Example 4.12 and Propositions 4.14–4.15 discuss the relation between density,
 separability, and countability axioms.
 -/
 
-/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.12: a designated family `A` is a dense example once one shows its closure is all of `X`. -/
-theorem dense_example_4_12 (A : Set X) :
-    IsDense_4_10 𝒪 A <-> closure_4_1 𝒪 A = univ := by
-  sorry
+/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.12: the rational-coordinate points are dense in Euclidean space. -/
+theorem rationalPoints_dense_euclidean_4_12 (n : ℕ) :
+    letI : DistanceSpace_1_12 (E n) :=
+      euclideanDistanceSpace_1_12 n
+    IsDense_4_10 (@inducedTopology_1_17 (E n) ‹_›)
+      {x : E n | ∀ i : Fin n, ∃ q : ℚ, x i = (q : ℝ)} := by
+  simpa [IsDense_4_10] using closure_eq_univ_rationalPoints_euclidean_4_9_5 n
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 4.13: a topology is separable if it has a countable dense subset. -/
 def IsSeparable_4_13 (𝒪 : Set (Set X)) : Prop :=
@@ -595,9 +900,49 @@ def IsSeparable_4_13 (𝒪 : Set (Set X)) : Prop :=
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.14: every second-countable space is separable. -/
 theorem secondCountable_implies_separable_4_14
-    {X : Type u} {𝒪 : Set (Set X)} :
-    Basis.SecondCountable_3_6 𝒪 -> IsSeparable_4_13 𝒪 := by
-  sorry
+  {X : Type u} {𝒪 : Set (Set X)} :
+    SecondCountable_3_6 𝒪 -> IsSeparable_4_13 𝒪
+      := open Classical in by
+  intro hyp
+  rcases hyp with ⟨ℬ, ⟨ℬsub𝒪, hℬ⟩ , ℬ_ctb⟩
+  set ℬ' : Set (Set X) := { B ∈ ℬ | B.Nonempty }
+  have : ∀ B ∈ ℬ', ∃ x, x ∈ B := by
+    intro B hB
+    exact hB.2
+  choose f hf using this
+  set A := {x | ∃ B, ∃ (h : B ∈ ℬ'), x = f B h}
+  use A; constructor
+  · have hAsub : A ⊆ Set.range fun p : {B // B ∈ ℬ'} => f p.1 p.2 := by
+      intro x hx
+      rcases hx with ⟨B, hB, rfl⟩
+      exact ⟨⟨B, hB⟩, rfl⟩
+    have hℬ'_ctb : ℬ'.Countable := ℬ_ctb.mono (by
+      intro B hB
+      exact hB.1)
+    haveI : Countable {B // B ∈ ℬ'} := hℬ'_ctb.to_subtype
+    exact Set.Countable.mono hAsub (Set.countable_range fun p : {B // B ∈ ℬ'} => f p.1 p.2)
+  · ext x
+    constructor
+    · intro _
+      exact mem_univ x
+    · intro hyp
+      simp only [closure_4_1,
+        ClosedSupersets_4_1,
+        mem_sInter, mem_setOf_eq, and_imp]
+      intro F Fcl AsubF
+      by_contra ct
+      have hxFc : x ∈ Fᶜ := (mem_compl_iff F x).mpr ct
+      have opFc : Fᶜ ∈ 𝒪 := open_of_closed_compl Fcl
+      have : ∃ B ∈ ℬ', x ∈ B ∧ B ⊆ Fᶜ := by
+        rcases hℬ (Fᶜ) opFc x hxFc with ⟨B, hBℬ, hxB, hBFc⟩
+        exact ⟨B, ⟨hBℬ, ⟨x, hxB⟩⟩, hxB, hBFc⟩
+      rcases this with ⟨B, Binℬ', xinB, BsubFc⟩
+      specialize hf B Binℬ'
+      have c2 : f B Binℬ' ∈ A := by
+        exact ⟨B, Binℬ', rfl⟩
+      have hFmem : f B Binℬ' ∈ F := AsubF c2
+      have hFcmem : f B Binℬ' ∈ Fᶜ := BsubFc hf
+      exact hFcmem hFmem
 
 section MetricCountabilityPart
 
@@ -933,7 +1278,7 @@ section BoundaryExamplesPart
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.29 (1): the closed unit disk in `ℝ²` has interior the open unit disk. -/
 theorem interior_closedUnitDisk_R2_4_29_1 :
   letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 2) :=
-    euclideanDistanceSpace_cert_2_21 2
+    euclideanDistanceSpace_1_12 2
   interior_4_19
       (@inducedTopology_1_17 (LeanTopology.EuclideanSpaceTopology.E 2) ‹_›)
       {x : LeanTopology.EuclideanSpaceTopology.E 2 | ‖x‖ ≤ (1 : ℝ)}
@@ -943,7 +1288,7 @@ theorem interior_closedUnitDisk_R2_4_29_1 :
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.29 (1): the boundary of the closed unit disk in `ℝ²` is the unit circle. -/
 theorem boundary_closedUnitDisk_R2_4_29_1 :
   letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 2) :=
-    euclideanDistanceSpace_cert_2_21 2
+    euclideanDistanceSpace_1_12 2
   boundary_4_27
       (@inducedTopology_1_17 (LeanTopology.EuclideanSpaceTopology.E 2) ‹_›)
       {x : LeanTopology.EuclideanSpaceTopology.E 2 | ‖x‖ ≤ (1 : ℝ)}
@@ -953,7 +1298,7 @@ theorem boundary_closedUnitDisk_R2_4_29_1 :
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.29 (2): the closed unit disk in the plane `x₃ = 0` has empty interior in `ℝ³`. -/
 theorem interior_closedUnitDisk_plane_R3_4_29_2 :
   letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 3) :=
-    euclideanDistanceSpace_cert_2_21 3
+    euclideanDistanceSpace_1_12 3
   interior_4_19
       (@inducedTopology_1_17 (LeanTopology.EuclideanSpaceTopology.E 3) ‹_›)
       {x : LeanTopology.EuclideanSpaceTopology.E 3 |
@@ -964,7 +1309,7 @@ theorem interior_closedUnitDisk_plane_R3_4_29_2 :
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.29 (2): the boundary of that planar closed unit disk is the whole set. -/
 theorem boundary_closedUnitDisk_plane_R3_4_29_2 :
   letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 3) :=
-    euclideanDistanceSpace_cert_2_21 3
+    euclideanDistanceSpace_1_12 3
   boundary_4_27
       (@inducedTopology_1_17 (LeanTopology.EuclideanSpaceTopology.E 3) ‹_›)
       {x : LeanTopology.EuclideanSpaceTopology.E 3 |
