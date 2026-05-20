@@ -58,6 +58,23 @@ theorem IsTopology_1_1.O3_iUnion {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTo
     exact hU i
   simpa [S, Set.sUnion_range] using h𝒪.O3_sUnion S hS
 
+theorem IsTopology_1_1.O2_union {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTopology_1_1 X 𝒪)
+    {U V : Set X} :
+    U ∈ 𝒪 → V ∈ 𝒪 → U ∪ V ∈ 𝒪 := by
+  intro hU hV
+  simpa [Set.sUnion_pair] using h𝒪.O3_sUnion ({U, V} : Set (Set X)) (by
+    intro W hW
+    simp at hW
+    rcases hW with rfl | rfl
+    · exact hU
+    · exact hV)
+
+theorem IsTopology_1_1.O2_union' {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTopology_1_1 X 𝒪)
+    (𝒮 : Finset (Set X)) :
+    (∀ U ∈ 𝒮, U ∈ 𝒪) → ⋃₀ (↑𝒮 : Set (Set X)) ∈ 𝒪 := by
+  intro hS
+  exact h𝒪.O3_sUnion (↑𝒮 : Set (Set X)) hS
+
 /-!
 Definition 1.2 introduces closed sets as complements of open sets.
 -/
@@ -201,6 +218,22 @@ theorem closedSet_properties_1_3 {X : Type u} {𝒪 : Set (Set X)} :
             exact this h𝒮',
         ⟩
       ⟩
+
+theorem IsTopology_1_1.C3_inter' {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTopology_1_1 X 𝒪)
+    (𝒮 : Finset (Set X)) :
+    (∀ F ∈ 𝒮, IsClosed_1_2 𝒪 F) → IsClosed_1_2 𝒪 (⋂₀ (↑𝒮 : Set (Set X))) := by
+  exact (closedSet_properties_1_3.mp h𝒪).C3_sInter (↑𝒮 : Set (Set X))
+
+theorem IsTopology_1_1.C3_inter {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTopology_1_1 X 𝒪)
+    {F G : Set X} :
+    IsClosed_1_2 𝒪 F → IsClosed_1_2 𝒪 G → IsClosed_1_2 𝒪 (F ∩ G) := by
+  intro hF hG
+  simpa [Set.sInter_pair] using h𝒪.C3_inter' ({F, G} : Finset (Set X)) (by
+    intro H hH
+    simp at hH
+    rcases hH with rfl | rfl
+    · exact hF
+    · exact hG)
 
 /-!
 Remark 1.4 explains how to interpret the intersection of zero sets inside a
@@ -456,6 +489,16 @@ section
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 1.14: the open ball for a distance space. -/
 def openBall_1_14 {X : Type u} [DistanceSpace_1_12 X] (x : X) (r : ℝ) : Set X :=
   {y : X | dist x y < r}
+
+/-- If the distance between the centers plus the smaller radius is at most the
+larger radius, then the smaller open ball is contained in the larger one. -/
+theorem openBall_subset_openBall_1_14 {X : Type u} [DistanceSpace_1_12 X]
+  {x y : X} {r R : ℝ} (h : dist x y + r ≤ R) :
+  openBall_1_14 y r ⊆ openBall_1_14 x R := by
+    simp only [openBall_1_14, setOf_subset_setOf]
+    intro z hz
+    have htriangle := DistanceSpace_1_12.D3 x y z
+    linarith
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 1.14: the closed ball for a distance space. -/
 def closedBall_1_14 {X : Type u} [DistanceSpace_1_12 X] (x : X) (r : ℝ) : Set X :=

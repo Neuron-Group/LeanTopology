@@ -1,5 +1,20 @@
 {
     "cSpell.words": [
-        "linarith"
-    ]
+        "𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃",
+        "ℰ𝓍𝒶𝓂𝓅𝓁ℯ",
+        "infimum",
+        "linarith",
+        "𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃",
+        "rcases",
+        "Supersets",
+        "supremum"
+    ],
+    "lean.input.customTranslations": {
+        "ocirc": "ᵒ",
+        "obar": "̄"
+    },
+    "editor.unicodeHighlight.allowedCharacters": {
+        "ᵒ": true,
+        "̄": true
+    }
 }
