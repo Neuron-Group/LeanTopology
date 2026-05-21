@@ -4,10 +4,6 @@ import Mathlib.Topology.Closure
 
 /-!
 # 拓扑学入门4: 闭包和内部
-
-This file follows the article's development of closure, dense sets, interior,
-and boundary. At this stage we mainly set up the definitions and the formal
-statement skeletons, while leaving the longer proofs as `sorry`.
 -/
 
 noncomputable section

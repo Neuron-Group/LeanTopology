@@ -5,3 +5,4 @@ import LeanTopology.TopologicalSpace
 import LeanTopology.NeighborhoodBasis
 import LeanTopology.Basis
 import LeanTopology.ClosureInterior
+import LeanTopology.ContinuousMap
