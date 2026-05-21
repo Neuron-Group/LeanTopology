@@ -1357,7 +1357,7 @@ theorem interior_maximal_4_20 (A U : Set X)
         (λ ⦃_⦄ ↦ id) this
   exact ⟨hUopen, hUA⟩
 
-/-- 𝒩ℴ𝓉ℯ 4.21: a set is open iff it equals its interior. -/
+/-- ℛℯ𝓂𝒶𝓇𝓀 4.21: a set is open iff it equals its interior. -/
 theorem isOpen_iff_eq_interior_4_21 (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) :
     A ∈ 𝒪 <-> Aᵒ[𝒪] = A := by
   constructor<;>intro hyp
@@ -2084,8 +2084,7 @@ end CertifyMathlib
 end ClosureInterior
 end LeanTopology
 
-/- 電≠鯨 -/
-/-!
+/-! 電≠鯨
 ぐるぐる夜に、
 二人の口ずさむ
 歌も掴まれ消えたので
