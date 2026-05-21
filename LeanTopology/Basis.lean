@@ -97,7 +97,7 @@ nonempty family.
 -/
 
 /-- A topological basis on a nonempty space contains at least one basis element. -/
-theorem topologicalBasis_nonempty {X : Type u} [Nonempty X] {𝒪 ℬ : Set (Set X)}
+theorem topologicalBasis_nonempty_3_2 {X : Type u} [Nonempty X] {𝒪 ℬ : Set (Set X)}
     (h𝒪 : IsTopology_1_1 X 𝒪) (hℬ : IsTopologicalBasis_3_1 𝒪 ℬ) :
     ℬ.Nonempty := by
   rcases ‹Nonempty X› with ⟨x⟩

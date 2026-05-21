@@ -123,7 +123,7 @@ theorem inter_nonempty_of_subset_right_4_5 {A U V : Set X} :
     rcases hAU with ⟨x, hxA, hxU⟩
     use x; use hxA; exact mem_of_subset_of_mem hUV hxU
 
-theorem inter_empty_of_subset_right {A U V : Set X} :
+theorem inter_empty_of_subset_right_4_5 {A U V : Set X} :
   A ∩ V = ∅ -> U ⊆ V -> A ∩ U = ∅ := by
     intro hAV hUV
     ext x
@@ -135,7 +135,7 @@ theorem inter_empty_of_subset_right {A U V : Set X} :
       exact hAV ▸ this
     · exact not_notMem.mp λ _ ↦ hyp
 
-theorem inter_empty_iff_subset_compl_right {A U : Set X} :
+theorem inter_empty_iff_subset_compl_right_4_5 {A U : Set X} :
   A ∩ U = ∅ <-> A ⊆ Uᶜ := by
     constructor
     · intro hAU x hxA hxU
@@ -165,13 +165,13 @@ theorem mem_closure_iff_neighborhood_4_5'
       := not_nonempty_iff_eq_empty.mp ct
     rcases hV with ⟨U, Uop, xinU, UsubV⟩
     have hAU : A ∩ U = ∅
-      := inter_empty_of_subset_right hAV UsubV
+      := inter_empty_of_subset_right_4_5 hAV UsubV
     set F := Uᶜ with Fdf
     have Fcl : IsClosed_1_2 𝒪 F
       := (isClosed_compl_iff_open U).mpr Uop
     have AsubF : A ⊆ F := by
       rw [Fdf]
-      exact (inter_empty_iff_subset_compl_right).mp hAU
+      exact (inter_empty_iff_subset_compl_right_4_5).mp hAU
     simp only [closure_4_1, ClosedSupersets_4_1,
       mem_sInter, mem_setOf_eq, and_imp] at hyp
     specialize hyp F Fcl AsubF
@@ -195,7 +195,7 @@ theorem mem_closure_iff_neighborhood_4_5'
         rw [← hFF]
         exact hF
       rw [← Vdf] at hA
-      exact inter_empty_iff_subset_compl_right
+      exact inter_empty_iff_subset_compl_right_4_5
         |>.mpr hA
     rw [hAV] at hyp
     rcases hyp with ⟨y, hy⟩
@@ -854,7 +854,7 @@ def IsDense_4_10 (𝒪 : Set (Set X)) (A : Set X) : Prop :=
   Ā[𝒪] = univ
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.11: `A` is dense iff every nonempty open set meets `A`. -/
-theorem isDense_iff_open_4_11 (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) :
+theorem isDense_iff_open_4_11 (A : Set X) :
   IsDense_4_10 𝒪 A
     <-> ∀ U : Set X, U ∈ 𝒪 → U.Nonempty → (A ∩ U).Nonempty := by
   constructor
@@ -870,7 +870,7 @@ theorem isDense_iff_open_4_11 (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) :
     intro x
     exact (mem_closure_iff_openNeighborhood_4_5 A x).mpr <| by
       intro V hV
-      exact hU V hV.2 ⟨x, (openNeighborhood_iff_2_2 h𝒪 x V).mp hV |>.2⟩
+      exact hU V hV.2 ⟨x, (openNeighborhood_iff_2_2 x V).mp hV |>.2⟩
 
 /-!
 Example 4.12 and Propositions 4.14–4.15 discuss the relation between density,
@@ -1666,7 +1666,7 @@ theorem mem_boundary_iff_neighborhood_4_28'
         (mem_interior_iff_neighborhood_4_24' (𝒪 := 𝒪) A x).2
           ⟨V, hV, by
             simpa using compl_subset_comm.mp <|
-              (inter_empty_iff_subset_compl_right).mp
+              (inter_empty_iff_subset_compl_right_4_5).mp
                 (not_nonempty_iff_eq_empty.mp hEmpty)⟩
   · intro hyp
     constructor
@@ -1743,7 +1743,7 @@ theorem mem_boundary_iff_exists_neighborhoodBasis_4_28
 
 section BoundaryExamplesPart
 
-private theorem closedUnitDisk_plane_R3_isClosed :
+private theorem closedUnitDisk_plane_R3_isClosed_4_29_2 :
     letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 3) :=
       euclideanDistanceSpace_1_12 3
     IsClosed_1_2
@@ -1816,7 +1816,7 @@ private theorem closedUnitDisk_plane_R3_isClosed :
   have : IsClosed_1_2 (@inducedTopology_1_17 _ ‹_›) A := hAeq.symm ▸ hAclosed'
   simpa [A] using this
 
-private theorem closure_closedUnitDisk_plane_R3 :
+private theorem closure_closedUnitDisk_plane_R3_4_29_2 :
     letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 3) :=
       euclideanDistanceSpace_1_12 3
     closure_4_1
@@ -1828,9 +1828,9 @@ private theorem closure_closedUnitDisk_plane_R3 :
   letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 3) :=
     euclideanDistanceSpace_1_12 3
   exact (isClosed_iff_eq_closure_4_3 inducedTopology_isTopology_1_17 _).mp
-    closedUnitDisk_plane_R3_isClosed
+    closedUnitDisk_plane_R3_isClosed_4_29_2
 
-private theorem interior_closedUnitDisk_R2_subset :
+private theorem interior_closedUnitDisk_R2_subset_4_29_1 :
     letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 2) :=
       euclideanDistanceSpace_1_12 2
     {x : LeanTopology.EuclideanSpaceTopology.E 2 | ‖x‖ ≤ (1 : ℝ)}ᵒ[
@@ -1884,7 +1884,7 @@ private theorem interior_closedUnitDisk_R2_subset :
       linarith
     exact False.elim (hynotA hyA)
 
-private theorem openUnitDisk_R2_subset_interior :
+private theorem openUnitDisk_R2_subset_interior_4_29_1 :
     letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 2) :=
       euclideanDistanceSpace_1_12 2
     {x : LeanTopology.EuclideanSpaceTopology.E 2 | ‖x‖ < (1 : ℝ)}
@@ -1926,7 +1926,9 @@ theorem interior_closedUnitDisk_R2_4_29_1 :
     = {x : LeanTopology.EuclideanSpaceTopology.E 2 | ‖x‖ < (1 : ℝ)} := by
   letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 2) :=
     euclideanDistanceSpace_1_12 2
-  exact Subset.antisymm interior_closedUnitDisk_R2_subset openUnitDisk_R2_subset_interior
+  exact Subset.antisymm
+    interior_closedUnitDisk_R2_subset_4_29_1
+    openUnitDisk_R2_subset_interior_4_29_1
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 4.29 (1): the boundary of the closed unit disk in `ℝ²` is the unit circle. -/
 theorem boundary_closedUnitDisk_R2_4_29_1 :
@@ -2008,7 +2010,8 @@ theorem boundary_closedUnitDisk_plane_R3_4_29_2 :
         x 0 ^ 2 + x 1 ^ 2 ≤ (1 : ℝ) ∧ x 2 = 0} := by
   letI : DistanceSpace_1_12 (LeanTopology.EuclideanSpaceTopology.E 3) :=
     euclideanDistanceSpace_1_12 3
-  rw [boundary_4_27, closure_closedUnitDisk_plane_R3, interior_closedUnitDisk_plane_R3_4_29_2]
+  rw [boundary_4_27, closure_closedUnitDisk_plane_R3_4_29_2,
+    interior_closedUnitDisk_plane_R3_4_29_2]
   ext x
   simp
 
@@ -2043,7 +2046,7 @@ theorem closure_eq_mathlibClosure_cert (A : Set X) :
     refine (mem_closure_iff_openNeighborhood_4_5 A x).mpr ?_
     intro U hU
     rw [mem_closure_iff] at hx
-    simpa [Set.inter_comm] using hx U hU.2 ((openNeighborhood_iff_2_2 h𝒪 x U).mp hU).2
+    simpa [Set.inter_comm] using hx U hU.2 ((openNeighborhood_iff_2_2 x U).mp hU).2
 
 /-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our interior agrees with mathlib's `interior`. -/
 theorem interior_eq_mathlibInterior_cert (A : Set X) :

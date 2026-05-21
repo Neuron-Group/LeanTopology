@@ -49,7 +49,7 @@ point.
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 2.2: an open neighborhood is exactly an open set containing the point. -/
 theorem openNeighborhood_iff_2_2 {X : Type u} {𝒪 : Set (Set X)}
-    (_𝒪 : IsTopology_1_1 X 𝒪) (x : X) (V : Set X) :
+    (x : X) (V : Set X) :
     IsOpenNeighborhood_2_1 𝒪 x V <-> V ∈ 𝒪 ∧ x ∈ V := by
   constructor
   · rintro ⟨hV, Vop⟩
@@ -172,7 +172,7 @@ neighborhood basis.
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 2.7: the family of all open neighborhoods of `x` is a neighborhood basis. -/
 theorem allOpenNeighborhoods_isNeighborhoodBasis_2_7 {X : Type u} {𝒪 : Set (Set X)}
-    (_𝒪 : IsTopology_1_1 X 𝒪) (x : X) :
+    (x : X) :
     IsNeighborhoodBasis_2_5 𝒪 x {V : Set X | IsOpenNeighborhood_2_1 𝒪 x V} := by
   refine ⟨?_, ?_⟩
   · intro V hV
@@ -381,7 +381,7 @@ theorem neighborhoodBasis_properties_2_10 {X : Type u} {𝒪 : Set (Set X)}
   · intro x U hU
     obtain ⟨U₀, U₀op, xinU₀, U₀subU⟩ := (h𝒰 x).isNeighborhood U hU
     have U₀_is_open_neighborhood_of_x
-      := (openNeighborhood_iff_2_2 h𝒪 x U₀).mpr ⟨U₀op, xinU₀⟩
+      := (openNeighborhood_iff_2_2 x U₀).mpr ⟨U₀op, xinU₀⟩
     obtain ⟨V, hV, VsubU₀⟩
       := (h𝒰 x).hasRefinement _ U₀_is_open_neighborhood_of_x.left
     use V; use hV; intro y hy;
@@ -516,7 +516,7 @@ theorem topology_from_neighborhoodBases_2_11 {X : Type u} [Nonempty X] {𝒰 : X
         · intro hU x xinU
           specialize hyp x
           have U_is_neighborhood_of_x :=
-            (openNeighborhood_iff_2_2 h𝒪 x U).mpr ⟨hU, xinU⟩
+            (openNeighborhood_iff_2_2 x U).mpr ⟨hU, xinU⟩
           exact hyp.hasRefinement U U_is_neighborhood_of_x.left
         · intro hU
           apply (isOpen_iff_neighborhood_2_4 h𝒪 U).mpr
