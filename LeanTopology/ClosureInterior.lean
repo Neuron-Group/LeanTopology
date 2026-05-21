@@ -202,33 +202,31 @@ theorem mem_closure_iff_neighborhood_4_5'
     exact hy
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.5: closure points are exactly those meeting every neighborhood. -/
-theorem mem_closure_iff_neighborhood_4_5 (_h𝒪 : IsTopology_1_1 X 𝒪)
-  (A : Set X) (x : X) :
+theorem mem_closure_iff_neighborhood_4_5 (A : Set X) (x : X) :
     x ∈ Ā[𝒪]
       <-> ∀ V : Set X, IsNeighborhood_2_1 𝒪 x V -> (A ∩ V).Nonempty := by
   simpa using mem_closure_iff_neighborhood_4_5' (𝒪 := 𝒪) A x
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.5: it is enough to test only open neighborhoods. -/
-theorem mem_closure_iff_openNeighborhood_4_5 (h𝒪 : IsTopology_1_1 X 𝒪)
-  (A : Set X) (x : X) :
+theorem mem_closure_iff_openNeighborhood_4_5 (A : Set X) (x : X) :
     x ∈ Ā[𝒪] <->
       ∀ V : Set X, IsOpenNeighborhood_2_1 𝒪 x V
         -> (A ∩ V).Nonempty := by
   constructor
   · intro hx V Vop
-    exact mem_closure_iff_neighborhood_4_5 h𝒪 A x
+    exact mem_closure_iff_neighborhood_4_5 A x
       |>.mp hx V Vop.left
   · intro hyp
     /- Same with the precede,
       Since neighborhood in precede is exactly open. -/
-    refine (mem_closure_iff_neighborhood_4_5 h𝒪 A x).2 ?_
+    refine (mem_closure_iff_neighborhood_4_5 A x).2 ?_
     intro V hV
     rcases hV with ⟨U, Uop, xinU, UsubV⟩
     exact inter_nonempty_of_subset_right_4_5
       (hyp U ⟨neighborhood_of_open_mem Uop xinU, Uop⟩) UsubV
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.5: it is enough to test one neighborhood basis. -/
-theorem mem_closure_iff_neighborhoodBasis_4_5 (h𝒪 : IsTopology_1_1 X 𝒪)
+theorem mem_closure_iff_neighborhoodBasis_4_5
   (A : Set X) (x : X) (𝒰 : Set (Set X))
     (h𝒰 : IsNeighborhoodBasis_2_5 𝒪 x 𝒰) :
       x ∈ Ā[𝒪]
@@ -236,7 +234,7 @@ theorem mem_closure_iff_neighborhoodBasis_4_5 (h𝒪 : IsTopology_1_1 X 𝒪)
   constructor
   · intro hx V hV
     have := h𝒰.isNeighborhood V hV
-    exact mem_closure_iff_neighborhood_4_5 h𝒪 A x
+    exact mem_closure_iff_neighborhood_4_5 A x
       |>.mp hx V this
   · intro hyp
     /-
@@ -245,7 +243,7 @@ theorem mem_closure_iff_neighborhoodBasis_4_5 (h𝒪 : IsTopology_1_1 X 𝒪)
         satisfied x ∈ V ∈ 𝒰
           and V is a subset of previous openneighborhood.
     -/
-    refine (mem_closure_iff_neighborhood_4_5 h𝒪 A x).2 ?_
+    refine (mem_closure_iff_neighborhood_4_5 A x).2 ?_
     intro V hV
     rcases h𝒰.hasRefinement V hV with ⟨U, hU𝒰, hUV⟩
     exact inter_nonempty_of_subset_right_4_5 (hyp U hU𝒰) hUV
@@ -392,7 +390,7 @@ theorem mem_closure_iff_exists_tendstoSeq_4_7 (A : Set X) (x : X) :
     set 𝒰 := {U | ∃ n : ℕ+, U = openBall_1_14 x (1 / ↑↑n) }
       with 𝒰df
     have := mem_closure_iff_neighborhoodBasis_4_5
-      h𝒪 A x 𝒰 h𝒰 |>.mp hyp
+      A x 𝒰 h𝒰 |>.mp hyp
     have : ∀ n : ℕ+, (A ∩ openBall_1_14  x (1 / ↑↑n)).Nonempty := by
       intro n
       simp only [
@@ -600,7 +598,8 @@ theorem closure_Ioo_neg_one_one_4_9_4 :
       intro y hy
       refine ⟨y - 1, sub_pos.mpr hy, ?_⟩
       intro z hz
-      simp [U, openBall_1_14] at hz ⊢
+      simp only [openBall_1_14, mem_setOf_eq,
+        gt_iff_lt, U] at hz ⊢
       have hz' := abs_lt.mp hz
       linarith
     have hxU : IsNeighborhood_2_1 𝒪 x U
@@ -620,15 +619,15 @@ theorem closure_Ioo_neg_one_one_4_9_4 :
     exact hy
 
   have c2 : ∀ x < -1, x ∉ A' := by
-    /- simular with c1 -/
+    /- similar with c1 -/
     intro x hx
     set U := {x | x < (-1 : ℝ)}
     have Uop : U ∈ 𝒪 := by
-      simp [𝒪]
       intro y hy
       refine ⟨-1 - y, sub_pos.mpr hy, ?_⟩
       intro z hz
-      simp [U, openBall_1_14] at hz ⊢
+      simp only [openBall_1_14,
+        mem_setOf_eq, U] at hz ⊢
       have hz' := abs_lt.mp hz
       linarith
     have hxU : IsNeighborhood_2_1 𝒪 x U
@@ -760,7 +759,6 @@ theorem closure_Ioo_neg_one_one_4_9_4 :
     · by_cases hxneg1 : x = -1
       · simpa [A', hxneg1] using c4
       · have hxA : x ∈ A := by
-          simp [A]
           constructor
           · have hxLt : -1 < x := lt_of_le_of_ne hxL (Ne.symm hxneg1)
             exact hxLt
@@ -786,7 +784,7 @@ theorem closure_eq_univ_rationalPoints_euclidean_4_9_5 (n : ℕ) :
   · exact mem_univ x
   · have h𝒰 := distance_openBall_isNeighborhoodBasis_2_8 x
     set 𝒰 := {U | ∃ r > 0, U = openBall_1_14 x r}
-    apply mem_closure_iff_neighborhoodBasis_4_5 h𝒪 A x 𝒰 h𝒰 |>.mpr
+    apply mem_closure_iff_neighborhoodBasis_4_5 A x 𝒰 h𝒰 |>.mpr
     intro B hB
     dsimp [𝒰] at hB
     rcases hB with ⟨ε, εpos, hB⟩
@@ -865,12 +863,12 @@ theorem isDense_iff_open_4_11 (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) :
     have hxCl : x ∈ Ā[𝒪] := by
       rw [hA]
       simp
-    exact (mem_closure_iff_openNeighborhood_4_5 h𝒪 A x).mp hxCl U
+    exact (mem_closure_iff_openNeighborhood_4_5 A x).mp hxCl U
       ⟨neighborhood_of_open_mem hU hxU, hU⟩
   · intro hU
     apply Set.eq_univ_iff_forall.mpr
     intro x
-    exact (mem_closure_iff_openNeighborhood_4_5 h𝒪 A x).mpr <| by
+    exact (mem_closure_iff_openNeighborhood_4_5 A x).mpr <| by
       intro V hV
       exact hU V hV.2 ⟨x, (openNeighborhood_iff_2_2 h𝒪 x V).mp hV |>.2⟩
 
@@ -997,7 +995,7 @@ theorem separable_metric_implies_secondCountable_4_15 :
         have hB₁nhd : IsOpenNeighborhood_2_1 𝒪 x B₁ := by
           exact ⟨neighborhood_of_open_mem hB₁open hxB₁, hB₁open⟩
         have hAB₁ : (A ∩ B₁).Nonempty :=
-          (mem_closure_iff_openNeighborhood_4_5 h𝒪 A x).mp hxCl B₁ hB₁nhd
+          (mem_closure_iff_openNeighborhood_4_5 A x).mp hxCl B₁ hB₁nhd
         simpa [inter_comm] using hAB₁
       rcases this with ⟨a, haB₁, haA⟩
       set B := openBall_1_14 a s
@@ -1440,14 +1438,12 @@ theorem mem_interior_iff_neighborhood_4_24'
     exact interior_maximal_4_20 A U hUopen (hUV.trans hVA) hxU
 
 /-- 𝒫𝓇ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.24: interior points are exactly those admitting a neighborhood inside `A`. -/
-theorem mem_interior_iff_neighborhood_4_24 (_h𝒪 : IsTopology_1_1 X 𝒪)
-    (A : Set X) (x : X) :
+theorem mem_interior_iff_neighborhood_4_24 (A : Set X) (x : X) :
     x ∈ Aᵒ[𝒪] <-> ∃ V : Set X, IsNeighborhood_2_1 𝒪 x V ∧ V ⊆ A := by
   simpa using mem_interior_iff_neighborhood_4_24' (𝒪 := 𝒪) A x
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.24: equivalently, one may use an open neighborhood contained in `A`. -/
-theorem mem_interior_iff_openNeighborhood_4_24 (_h𝒪 : IsTopology_1_1 X 𝒪)
-    (A : Set X) (x : X) :
+theorem mem_interior_iff_openNeighborhood_4_24 (A : Set X) (x : X) :
     x ∈ Aᵒ[𝒪] ↔ ∃ V : Set X, IsOpenNeighborhood_2_1 𝒪 x V ∧ V ⊆ A := by
   constructor
   · intro hx
@@ -1457,8 +1453,7 @@ theorem mem_interior_iff_openNeighborhood_4_24 (_h𝒪 : IsTopology_1_1 X 𝒪)
     exact (mem_interior_iff_neighborhood_4_24' (𝒪 := 𝒪) A x).2 ⟨V, hV.1, hVA⟩
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.24: equivalently, `A` itself is a neighborhood of `x`. -/
-theorem mem_interior_iff_isNeighborhood_4_24 (_h𝒪 : IsTopology_1_1 X 𝒪)
-    (A : Set X) (x : X) :
+theorem mem_interior_iff_isNeighborhood_4_24 (A : Set X) (x : X) :
     x ∈ Aᵒ[𝒪] ↔ IsNeighborhood_2_1 𝒪 x A := by
   constructor
   · intro hx
@@ -1684,24 +1679,22 @@ theorem mem_boundary_iff_neighborhood_4_28'
       exact hyAcompl (hVA hyV)
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.28: boundary points meet both a set and its complement in every neighborhood. -/
-theorem mem_boundary_iff_neighborhood_4_28 (_h𝒪 : IsTopology_1_1 X 𝒪)
-  (A : Set X) (x : X) :
+theorem mem_boundary_iff_neighborhood_4_28 (A : Set X) (x : X) :
     x ∈ (∂[𝒪] A) <->
       ∀ V : Set X, IsNeighborhood_2_1 𝒪 x V ->
         (A ∩ V).Nonempty ∧ (Aᶜ ∩ V).Nonempty := by
   simpa using mem_boundary_iff_neighborhood_4_28' (𝒪 := 𝒪) A x
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.28: it is enough to test only open neighborhoods for boundary points. -/
-theorem mem_boundary_iff_openNeighborhood_4_28 (h𝒪 : IsTopology_1_1 X 𝒪)
-  (A : Set X) (x : X) :
+theorem mem_boundary_iff_openNeighborhood_4_28 (A : Set X) (x : X) :
     x ∈ (∂[𝒪] A) <->
       ∀ V : Set X, IsOpenNeighborhood_2_1 𝒪 x V ->
         (A ∩ V).Nonempty ∧ (Aᶜ ∩ V).Nonempty := by
   constructor
   · intro hx V hV
-    exact (mem_boundary_iff_neighborhood_4_28 h𝒪 A x).mp hx V hV.left
+    exact (mem_boundary_iff_neighborhood_4_28 A x).mp hx V hV.left
   · intro hyp
-    refine (mem_boundary_iff_neighborhood_4_28 h𝒪 A x).2 ?_
+    refine (mem_boundary_iff_neighborhood_4_28 A x).2 ?_
     intro V hV
     rcases hV with ⟨U, Uop, xinU, UsubV⟩
     rcases hyp U ⟨neighborhood_of_open_mem Uop xinU, Uop⟩ with ⟨hAU, hAcU⟩
@@ -1710,16 +1703,16 @@ theorem mem_boundary_iff_openNeighborhood_4_28 (h𝒪 : IsTopology_1_1 X 𝒪)
     · exact inter_nonempty_of_subset_right_4_5 hAcU UsubV
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 4.28: it is enough to test one neighborhood basis for boundary points. -/
-theorem mem_boundary_iff_neighborhoodBasis_4_28 (h𝒪 : IsTopology_1_1 X 𝒪)
+theorem mem_boundary_iff_neighborhoodBasis_4_28
   (A : Set X) (x : X) (𝒰 : Set (Set X))
-    (h𝒰 : IsNeighborhoodBasis_2_5 𝒪 x 𝒰) :
+  (h𝒰 : IsNeighborhoodBasis_2_5 𝒪 x 𝒰) :
       x ∈ (∂[𝒪] A) <->
         ∀ V ∈ 𝒰, (A ∩ V).Nonempty ∧ (Aᶜ ∩ V).Nonempty := by
   constructor
   · intro hx V hV
-    exact (mem_boundary_iff_neighborhood_4_28 h𝒪 A x).mp hx V (h𝒰.isNeighborhood V hV)
+    exact (mem_boundary_iff_neighborhood_4_28 A x).mp hx V (h𝒰.isNeighborhood V hV)
   · intro hyp
-    refine (mem_boundary_iff_neighborhood_4_28 h𝒪 A x).2 ?_
+    refine (mem_boundary_iff_neighborhood_4_28 A x).2 ?_
     intro V hV
     rcases h𝒰.hasRefinement V hV with ⟨U, hU𝒰, hUV⟩
     rcases hyp U hU𝒰 with ⟨hAU, hAcU⟩
@@ -1852,7 +1845,7 @@ private theorem interior_closedUnitDisk_R2_subset :
   · have hxA : x ∈ A := interior_contractive_4_25 (𝒪 := @inducedTopology_1_17 _ ‹_›) A hx
     have hxle : ‖x‖ ≤ (1 : ℝ) := by simpa [A] using hxA
     have hxeq : ‖x‖ = (1 : ℝ) := le_antisymm hxle (le_of_not_gt hlt)
-    rcases (mem_interior_iff_openNeighborhood_4_24 inducedTopology_isTopology_1_17 A x).mp hx
+    rcases (mem_interior_iff_openNeighborhood_4_24 A x).mp hx
       with ⟨V, hV, hVA⟩
     rcases hV with ⟨hVn, hVopen⟩
     obtain ⟨W, hW, hWV⟩ := (distance_openBall_isNeighborhoodBasis_2_8 x).hasRefinement V hVn
@@ -2044,10 +2037,10 @@ theorem closure_eq_mathlibClosure_cert (A : Set X) :
     rw [mem_closure_iff]
     intro U hxU hU
     simpa [Set.inter_comm] using
-      (mem_closure_iff_openNeighborhood_4_5 h𝒪 A x).mp hx U
+      (mem_closure_iff_openNeighborhood_4_5 A x).mp hx U
         ⟨⟨U, hxU, hU, Subset.rfl⟩, hxU⟩
   · intro x hx
-    refine (mem_closure_iff_openNeighborhood_4_5 h𝒪 A x).mpr ?_
+    refine (mem_closure_iff_openNeighborhood_4_5 A x).mpr ?_
     intro U hU
     rw [mem_closure_iff] at hx
     simpa [Set.inter_comm] using hx U hU.2 ((openNeighborhood_iff_2_2 h𝒪 x U).mp hU).2
@@ -2059,11 +2052,11 @@ theorem interior_eq_mathlibInterior_cert (A : Set X) :
     fromMathlibTopologicalSpace_cert T
   refine Subset.antisymm ?_ ?_
   · intro x hx
-    rcases (mem_interior_iff_openNeighborhood_4_24 h𝒪 A x).mp hx with ⟨V, hV, hVA⟩
+    rcases (mem_interior_iff_openNeighborhood_4_24 A x).mp hx with ⟨V, hV, hVA⟩
     exact mem_interior_iff_mem_nhds.2 <|
       Filter.mem_of_superset ((isNeighborhood_iff_mem_nhds_cert T x V).mp hV.1) hVA
   · intro x hx
-    exact (mem_interior_iff_isNeighborhood_4_24 h𝒪 A x).2 <|
+    exact (mem_interior_iff_isNeighborhood_4_24 A x).2 <|
       (isNeighborhood_iff_mem_nhds_cert T x A).2 (mem_interior_iff_mem_nhds.1 hx)
 
 /-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our dense subsets agree with mathlib's `Dense`. -/
