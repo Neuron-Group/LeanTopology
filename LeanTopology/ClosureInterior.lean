@@ -85,7 +85,7 @@ theorem closure_mem_of_closed_4_2 {A F : Set X} {x : X}
   specialize hx hFclosed hAF
   exact hx
 
-/-- 𝒩ℴ𝓉ℯ 4.3: a set is closed iff it equals its closure. -/
+/-- ℛℯ𝓂𝒶𝓇𝓀 4.3: a set is closed iff it equals its closure. -/
 theorem isClosed_iff_eq_closure_4_3 (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) :
   IsClosed_1_2 𝒪 A
     <-> Ā[𝒪] = A := by
@@ -596,7 +596,7 @@ theorem closure_Ioo_neg_one_one_4_9_4 :
     intro x hx
     set U := {x | x > (1 : ℝ)}
     have Uop : U ∈ 𝒪 := by
-      simp [𝒪]
+      simp only [𝒪]
       intro y hy
       refine ⟨y - 1, sub_pos.mpr hy, ?_⟩
       intro z hz
@@ -1369,7 +1369,7 @@ theorem isOpen_iff_eq_interior_4_21 (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) 
   · rw [← hyp]
     exact interior_isOpen_4_19 h𝒪 A
 
-/-- 𝒩ℴ𝓉ℯ 4.21: equivalently, a set is open iff it is contained in its interior. -/
+/-- ℛℯ𝓂𝒶𝓇𝓀 4.21: equivalently, a set is open iff it is contained in its interior. -/
 theorem isOpen_iff_subset_interior_4_21 (h𝒪 : IsTopology_1_1 X 𝒪) (A : Set X) :
     A ∈ 𝒪 <-> A ⊆ Aᵒ[𝒪] := by
   rw [isOpen_iff_eq_interior_4_21 h𝒪 A]
