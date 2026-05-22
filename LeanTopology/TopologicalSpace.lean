@@ -302,6 +302,11 @@ Example 1.6 introduces the discrete topology: every subset is open.
 def discreteTopology_1_6 (X : Type u) : Set (Set X) :=
   univ
 
+/-- Every subset is open in the discrete topology. -/
+theorem mem_discreteTopology_1_6 {X : Type u} (U : Set X) :
+    U ∈ discreteTopology_1_6 X := by
+  simp [discreteTopology_1_6]
+
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.6: the discrete topology satisfies the open-set axioms. -/
 theorem discreteTopology_isTopology_1_6 (X : Type u) :
     IsTopology_1_1 X (discreteTopology_1_6 X) := by

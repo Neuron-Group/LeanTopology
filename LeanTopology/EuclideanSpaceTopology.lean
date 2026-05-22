@@ -57,6 +57,12 @@ theorem dist_triangle_0_3 {n : ℕ} (x y z : E n) :
     dist x z ≤ dist x y + dist y z := by
   exact dist_triangle x y z
 
+/-- Euclidean distance is the square root of the sum of squared coordinate distances. -/
+theorem dist_eq_sqrt_sum_coordDist_sq_0_3 {n : ℕ} (x y : E n) :
+    dist x y =
+      √(∑ i : Fin n, (dist (x i) (y i)) ^ 2) := by
+  simpa using (EuclideanSpace.dist_eq x y)
+
 /-!
 Definition 0.4 introduces open balls directly from the Euclidean distance:
 `B(x, r)` is the set of points whose distance from `x` is less than `r`.
