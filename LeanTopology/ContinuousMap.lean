@@ -1,4 +1,5 @@
 import LeanTopology.ClosureInterior
+import LeanTopology.Tactic.TopologyIntro
 import Mathlib.Algebra.Polynomial.Eval.Defs
 
 /-!
@@ -52,7 +53,7 @@ theorem continuous_comp_5_2 {f : X → Y} {g : Y → Z}
   intro V Vop
   rw [preimage_comp]
   specialize hg V Vop
-  exact hf (g ⁻¹' V) hg 
+  exact hf (g ⁻¹' V) hg
 
 /-- A map is constant when all its values coincide with one fixed point. -/
 def IsConstantMap_5_3 (f : X → Y) : Prop :=
@@ -175,7 +176,7 @@ theorem continuousAt_iff_neighborhoodBasis_5_8
     exact hUU₀.trans U₀sub
   · intro V hV
     rcases h𝒱 with ⟨-, h𝒱⟩
-    rcases h𝒰 with ⟨h𝒰, -⟩ 
+    rcases h𝒰 with ⟨h𝒰, -⟩
     specialize h𝒱 V hV
     rcases h𝒱 with ⟨V', hV', V'subV⟩
     specialize hyp V' hV'
@@ -205,14 +206,8 @@ theorem continuous_iff_ball_5_9 (f : X → Y) :
         <->
           ∀ x₀ : X, ∀ ε > 0, ∃ δ > 0,
             f '' openBall_1_14 x₀ δ ⊆ openBall_1_14 (f x₀) ε := by
-  set 𝒪₁ := @inducedTopology_1_17 X ‹DistanceSpace_1_12 X›
-  set 𝒪₂ := @inducedTopology_1_17 Y ‹DistanceSpace_1_12 Y›
-  have h𝒪₁ : IsTopology_1_1 X 𝒪₁ := by
-    simp only [𝒪₁]
-    exact inducedTopology_isTopology_1_17
-  have h𝒪₂ : IsTopology_1_1 Y 𝒪₂ := by
-    simp only [𝒪₂]
-    exact inducedTopology_isTopology_1_17
+  topo_auto 𝒪₁ h𝒪₁ for X := @inducedTopology_1_17 X ‹DistanceSpace_1_12 X›
+  topo_auto 𝒪₂ h𝒪₂ for Y := @inducedTopology_1_17 Y ‹DistanceSpace_1_12 Y›
   constructor<;>intro hyp
   · intro x₀ ε εpos
     have h𝒰 := x₀   |> distance_openBall_isNeighborhoodBasis_2_8
@@ -244,7 +239,7 @@ theorem continuous_iff_ball_5_9 (f : X → Y) :
     apply continuousAt_iff_neighborhoodBasis_5_8 h𝒰 h𝒱 |>.mpr
     intro V hV
     simp only [gt_iff_lt, mem_setOf_eq, 𝒱] at hV
-    rcases hV with ⟨ε, εpos, Veq⟩ 
+    rcases hV with ⟨ε, εpos, Veq⟩
     specialize hyp x₀ ε εpos
     rcases hyp with ⟨δ, δpos, sub⟩
     use openBall_1_14 x₀ δ
@@ -297,18 +292,9 @@ theorem continuous_into_euclidean_5_10 {n : ℕ} (f : X → E n) :
         ∀ i : Fin n,
           IsContinuous_5_1 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›)
             (@inducedTopology_1_17 ℝ inferInstance) (λ x : X ↦ f x i) := by
-  set 𝒪₁ := @inducedTopology_1_17 X ‹DistanceSpace_1_12 X›
-  set 𝒪₂ := @inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n)
-  have h𝒪₁ : IsTopology_1_1 X 𝒪₁ := by
-    dsimp only [𝒪₁]
-    exact inducedTopology_isTopology_1_17
-  have h𝒪₂ : IsTopology_1_1 (E n) 𝒪₂ := by
-    dsimp only [𝒪₂]
-    exact inducedTopology_isTopology_1_17
-  set 𝒪' := @inducedTopology_1_17 ℝ _
-  have h𝒪' : IsTopology_1_1 ℝ 𝒪' := by
-    dsimp only [𝒪']
-    exact inducedTopology_isTopology_1_17
+  topo_auto 𝒪₁ h𝒪₁ for X := @inducedTopology_1_17 X ‹DistanceSpace_1_12 X›
+  topo_auto 𝒪₂ h𝒪₂ for (E n) := @inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n)
+  topo_auto 𝒪' h𝒪' for ℝ := @inducedTopology_1_17 ℝ inferInstance
   set f' := λ i ↦ λ x ↦ (f x).ofLp i
   constructor<;>intro hyp
   · intro i
@@ -633,9 +619,7 @@ variable {𝒪₁ : Set (Set X)} {𝒪₂ : Set (Set Y)}
 theorem continuous_real_zeroSet_5_13 (f : X → ℝ)
   (hf : IsContinuous_5_1 𝒪₁ (@inducedTopology_1_17 ℝ inferInstance) f) :
     IsClosed_1_2 𝒪₁ {x : X | f x = 0} := by
-  set 𝒪₂ := @inducedTopology_1_17 ℝ _
-  have h𝒪₂ : IsTopology_1_1 ℝ 𝒪₂
-    := inducedTopology_isTopology_1_17
+  topo_auto 𝒪₂ h𝒪₂ for ℝ := @inducedTopology_1_17 ℝ inferInstance
   suffices IsClosed_1_2 𝒪₁ (f ⁻¹' {0})
     from by
       simpa only [Set.preimage, Set.mem_setOf_eq] using this
@@ -660,9 +644,7 @@ theorem continuous_real_zeroSet_5_13 (f : X → ℝ)
 theorem continuous_real_nonnegSet_5_13 (f : X → ℝ)
   (hf : IsContinuous_5_1 𝒪₁ (@inducedTopology_1_17 ℝ inferInstance) f) :
     IsClosed_1_2 𝒪₁ {x : X | 0 ≤ f x} := by
-  set 𝒪₂ := @inducedTopology_1_17 ℝ _
-  have h𝒪₂ : IsTopology_1_1 ℝ 𝒪₂
-    := inducedTopology_isTopology_1_17
+  topo_auto 𝒪₂ h𝒪₂ for ℝ := @inducedTopology_1_17 ℝ inferInstance
   suffices f ⁻¹' {y | 0 ≤ y} |> IsClosed_1_2 𝒪₁
     from by
       simpa only [Set.preimage, Set.mem_setOf_eq] using this
@@ -693,9 +675,7 @@ theorem continuous_real_nonnegSet_5_13 (f : X → ℝ)
 theorem continuous_real_openSet_5_13 (f : X → ℝ)
   (hf : IsContinuous_5_1 𝒪₁ (@inducedTopology_1_17 ℝ inferInstance) f) :
     {x : X | 0 < f x} ∈ 𝒪₁ := by
-  set 𝒪₂ := @inducedTopology_1_17 ℝ _
-  have h𝒪₂ : IsTopology_1_1 ℝ 𝒪₂
-    := inducedTopology_isTopology_1_17
+  topo_auto 𝒪₂ h𝒪₂ for ℝ := @inducedTopology_1_17 ℝ inferInstance
   suffices f ⁻¹' {y | 0 < y} ∈ 𝒪₁
     from by
       simpa only [Set.preimage, Set.mem_setOf_eq] using this
@@ -717,17 +697,26 @@ theorem continuous_real_openSet_5_13 (f : X → ℝ)
     exact hgt
   exact mem_preimage.mp (hf {y | 0 < y} this)
 
-/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.14: finite conjunctions of closed polynomial inequalities define closed sets,
-  and finite conjunctions of strict polynomial inequalities define open sets in Euclidean space. -/
-theorem euclidean_semialgebraic_basic_5_14 {n : ℕ}
+/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.14(1): finite conjunctions of closed polynomial inequalities and equations
+  define closed sets in Euclidean space. -/
+theorem euclidean_semialgebraic_basic_closed_5_14 {n : ℕ}
   (I J : Finset ℕ) (f : ℕ → E n → ℝ)
   (hf : ∀ k : ℕ,
     IsContinuous_5_1 (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n))
       (@inducedTopology_1_17 ℝ inferInstance) (f k)) :
     IsClosed_1_2 (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n))
-      {x : E n | (∀ i ∈ I, 0 ≤ f i x) ∧ (∀ j ∈ J, f j x = 0)} ∧
-      {x : E n | ∀ i ∈ I, 0 < f i x} ∈
-        (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n)) := by
+      {x : E n | (∀ i ∈ I, 0 ≤ f i x) ∧ (∀ j ∈ J, f j x = 0)} := by
+  sorry
+
+/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.14(2): finite conjunctions of strict polynomial inequalities
+  define open sets in Euclidean space. -/
+theorem euclidean_semialgebraic_basic_open_5_14 {n : ℕ}
+  (I : Finset ℕ) (f : ℕ → E n → ℝ)
+  (hf : ∀ k : ℕ,
+    IsContinuous_5_1 (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n))
+      (@inducedTopology_1_17 ℝ inferInstance) (f k)) :
+    {x : E n | ∀ i ∈ I, 0 < f i x} ∈
+      (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n)) := by
   sorry
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.15: continuity may be tested on a subbasis of the codomain. -/

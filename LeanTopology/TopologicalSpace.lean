@@ -1,4 +1,5 @@
 import LeanTopology.EuclideanSpaceTopology
+import LeanTopology.Tactic.TopologyAttr
 import Mathlib.Topology.MetricSpace.Basic
 
 /-!
@@ -401,7 +402,7 @@ def euclideanTopology_1_9 (n : ℕ) :
   {U | isOpenEuclidean_0_6 U}
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.9: the Euclidean topology satisfies the open-set axioms. -/
-theorem euclideanTopology_isTopology_1_9 (n : ℕ) :
+@[topology] theorem euclideanTopology_isTopology_1_9 (n : ℕ) :
     IsTopology_1_1 (E n) (euclideanTopology_1_9 n) := by
   refine ⟨?_, ?_, ?_, ?_⟩
   · simpa [euclideanTopology_1_9] using isOpen_empty_univ_0_8.left
@@ -574,7 +575,7 @@ def inducedTopology_1_17 {X : Type u} [DistanceSpace_1_12 X] : Set (Set X) :=
 def 𝒪𝒹 {X : Type u} [DistanceSpace_1_12 X] : Set (Set X) := inducedTopology_1_17
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 1.17: the distance-induced open sets satisfy the topology axioms. -/
-theorem inducedTopology_isTopology_1_17 {X : Type u} [DistanceSpace_1_12 X] :
+@[topology] theorem inducedTopology_isTopology_1_17 {X : Type u} [DistanceSpace_1_12 X] :
     IsTopology_1_1 X 𝒪𝒹 := {
       O1_empty  := λ x hx ↦ not_disjoint_iff.mp λ a ↦ hx
       O1_univ   := λ x hx ↦ ⟨

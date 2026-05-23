@@ -1,5 +1,6 @@
 
 import LeanTopology.Import
+import LeanTopology.Tactic
 import LeanTopology.EuclideanSpaceTopology
 import LeanTopology.TopologicalSpace
 import LeanTopology.NeighborhoodBasis
