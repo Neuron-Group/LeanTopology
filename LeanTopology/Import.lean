@@ -1,5 +1,6 @@
 
 import LeanTopology.Basic
+import PrettyPrinter
 import LeanTopology.Tactic.FinChoose
 
 import Mathlib.Tactic

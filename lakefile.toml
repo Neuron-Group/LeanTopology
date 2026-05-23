@@ -34,3 +34,6 @@ rev = "main"
 
 [[lean_lib]]
 name = "LeanTopology"
+
+[[lean_lib]]
+name = "PrettyPrinter"
