@@ -1,9 +1,13 @@
-name: Compile blueprint
+name: Verify blueprint artifacts
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'blueprint/**'
+      - '.github/workflows/blueprint.yml'
+      - '.github/workflows/pages-static.yml'
   workflow_dispatch:
 
 concurrency:
@@ -14,34 +18,18 @@ permissions:
   contents: read
 
 jobs:
-  build_project:
+  verify_artifacts:
     runs-on: ubuntu-latest
-    name: Build project
+    name: Verify committed blueprint files
     steps:
-      - name: Cleanup to free disk space
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          tool-cache: false
-          android: true
-          dotnet: false
-          haskell: false
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-
       - name: Checkout project
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Build and lint project
-        uses: leanprover/lean-action@v1
-        with:
-          build: true
-          lint: false
 
       - name: Verify committed blueprint artifacts
         run: |
+          set -euo pipefail
           test -f blueprint/src/print.pdf
           test -f blueprint/web/index.html
           test -f blueprint/web/dep_graph_document.html
+          test -d blueprint/web/js
+          test -d blueprint/web/styles

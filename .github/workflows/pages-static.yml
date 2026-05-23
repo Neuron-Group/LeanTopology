@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'blueprint/**'
+      - '.github/workflows/pages-static.yml'
+      - '.github/workflows/blueprint.yml'
   workflow_dispatch:
 
 permissions:
