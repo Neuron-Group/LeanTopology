@@ -2,7 +2,15 @@ name: Lean Action CI
 
 on:
   push:
+    paths-ignore:
+      - 'blueprint/**'
+      - '.github/workflows/blueprint.yml'
+      - '.github/workflows/pages-static.yml'
   pull_request:
+    paths-ignore:
+      - 'blueprint/**'
+      - '.github/workflows/blueprint.yml'
+      - '.github/workflows/pages-static.yml'
   workflow_dispatch:
 
 permissions:
