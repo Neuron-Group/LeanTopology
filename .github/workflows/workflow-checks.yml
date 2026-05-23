@@ -1,0 +1,32 @@
+name: Workflow Checks
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-workflow-layout:
+    runs-on: ubuntu-latest
+    name: Validate workflow files
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify expected workflow files exist
+        run: |
+          set -euo pipefail
+          test -f .github/workflows/lean_action_ci.yml
+          test -f .github/workflows/blueprint.yml
+          test -f .github/workflows/pages-static.yml
+          test -f .github/workflows/create-release.yml
+          test -f .github/workflows/update.yml
