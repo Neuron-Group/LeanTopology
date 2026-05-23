@@ -2,15 +2,21 @@ name: Lean Action CI
 
 on:
   push:
-    paths-ignore:
-      - 'blueprint/**'
-      - '.github/workflows/blueprint.yml'
-      - '.github/workflows/pages-static.yml'
+    paths:
+      - 'LeanTopology/**'
+      - '*.lean'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'lean-toolchain'
+      - '.github/workflows/lean_action_ci.yml'
   pull_request:
-    paths-ignore:
-      - 'blueprint/**'
-      - '.github/workflows/blueprint.yml'
-      - '.github/workflows/pages-static.yml'
+    paths:
+      - 'LeanTopology/**'
+      - '*.lean'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'lean-toolchain'
+      - '.github/workflows/lean_action_ci.yml'
   workflow_dispatch:
 
 permissions:
