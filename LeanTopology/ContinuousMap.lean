@@ -424,7 +424,8 @@ theorem continuous_into_euclideanSubspace_5_10 {n : ℕ}
         (euclideanSubspaceTopology_2_21 n A) f
           <->
             IsContinuous_5_1 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›)
-              (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n)) (λ x : X ↦ (f x).1) := by
+              (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n))
+                (λ x : X ↦ (f x).1) := by
     rw [continuous_iff_eps_5_9, continuous_iff_eps_5_9]
     constructor
     · intro hf x₀ ε εpos
@@ -583,7 +584,7 @@ theorem continuous_pow_real_5_12 (f : X → ℝ) (n : ℕ)
   induction n with
   | zero =>
       simpa using constantMap_continuous_5_3
-        (h𝒪₁ := inducedTopology_isTopology_1_17) (f := fun _ : X ↦ (1 : ℝ)) ⟨1, fun _ ↦ rfl⟩
+        (h𝒪₁ := inducedTopology_isTopology_1_17) (f := λ _ : X ↦ (1 : ℝ)) ⟨1, λ _ ↦ rfl⟩
   | succ n ih =>
       simpa [pow_succ', mul_comm] using continuous_mul_real_5_12 _ _ hf ih
 
@@ -600,7 +601,7 @@ theorem continuous_polynomial_real_5_12 (f : X → ℝ) (p : Polynomial ℝ)
     intro a
     exact constantMap_continuous_5_3
       (h𝒪₁ := inducedTopology_isTopology_1_17)
-      (f := fun _ : X ↦ a) ⟨a, fun _ ↦ rfl⟩
+      (f := λ _ : X ↦ a) ⟨a, λ _ ↦ rfl⟩
   induction p using Polynomial.induction_on' with
   | add p q hp hq =>
       simpa [Polynomial.eval_add] using continuous_add_real_5_12 _ _ hp hq
@@ -671,7 +672,8 @@ theorem continuous_real_nonnegSet_5_13 (f : X → ℝ)
   exact continuous_iff_preimage_closed_5_4 f
     |>.mp hf {y | 0 ≤ y} this
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.13(2): strict positive superlevel sets of a continuous real-valued map are open. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.13(2):
+  strict positive superlevel sets of a continuous real-valued map are open. -/
 theorem continuous_real_openSet_5_13 (f : X → ℝ)
   (hf : IsContinuous_5_1 𝒪₁ (@inducedTopology_1_17 ℝ inferInstance) f) :
     {x : X | 0 < f x} ∈ 𝒪₁ := by
@@ -706,7 +708,41 @@ theorem euclidean_semialgebraic_basic_closed_5_14 {n : ℕ}
       (@inducedTopology_1_17 ℝ inferInstance) (f k)) :
     IsClosed_1_2 (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n))
       {x : E n | (∀ i ∈ I, 0 ≤ f i x) ∧ (∀ j ∈ J, f j x = 0)} := by
-  sorry
+  topo_auto 𝒪₁ h𝒪₁ for E n := @inducedTopology_1_17 (E n) _
+  topo_auto 𝒪₂ h𝒪₂ for ℝ := @inducedTopology_1_17 ℝ _
+  change ∀ k, IsContinuous_5_1 𝒪₁ 𝒪₂ (f k) at hf
+  have hnonneg : ∀ K : Finset ℕ, IsClosed_1_2 𝒪₁ {x : E n | ∀ i ∈ K, 0 ≤ f i x} := by
+    intro K
+    induction K using Finset.induction_on with
+    | empty =>
+        simpa [IsClosed_1_2] using h𝒪₁.O1_empty
+    | @insert a s ha ih =>
+        have ha' : IsClosed_1_2 𝒪₁ {x : E n | 0 ≤ f a x} :=
+          continuous_real_nonnegSet_5_13 (f := f a) (hf := hf a)
+        have hs' : IsClosed_1_2 𝒪₁ {x : E n | ∀ i ∈ s, 0 ≤ f i x} := ih
+        have hinter : IsClosed_1_2 𝒪₁
+            ({x : E n | 0 ≤ f a x} ∩ {x : E n | ∀ i ∈ s, 0 ≤ f i x}) :=
+          h𝒪₁.C3_inter ha' hs'
+        simpa [Finset.mem_insert, ha, and_assoc] using hinter
+  have hzero : ∀ K : Finset ℕ, IsClosed_1_2 𝒪₁ {x : E n | ∀ j ∈ K, f j x = 0} := by
+    intro K
+    induction K using Finset.induction_on with
+    | empty =>
+        simpa [IsClosed_1_2] using h𝒪₁.O1_empty
+    | @insert a s ha ih =>
+        have ha' : IsClosed_1_2 𝒪₁ {x : E n | f a x = 0} :=
+          continuous_real_zeroSet_5_13 (f := f a) (hf := hf a)
+        have hs' : IsClosed_1_2 𝒪₁ {x : E n | ∀ j ∈ s, f j x = 0} := ih
+        have hinter : IsClosed_1_2 𝒪₁
+            ({x : E n | f a x = 0} ∩ {x : E n | ∀ j ∈ s, f j x = 0}) :=
+          h𝒪₁.C3_inter ha' hs'
+        simpa [Finset.mem_insert, ha, and_assoc] using hinter
+  have hI : IsClosed_1_2 𝒪₁ {x : E n | ∀ i ∈ I, 0 ≤ f i x} := hnonneg I
+  have hJ : IsClosed_1_2 𝒪₁ {x : E n | ∀ j ∈ J, f j x = 0} := hzero J
+  have hinter : IsClosed_1_2 𝒪₁
+      ({x : E n | ∀ i ∈ I, 0 ≤ f i x} ∩ {x : E n | ∀ j ∈ J, f j x = 0}) :=
+    h𝒪₁.C3_inter hI hJ
+  simpa [and_assoc] using hinter
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.14(2): finite conjunctions of strict polynomial inequalities
   define open sets in Euclidean space. -/

@@ -1,4 +1,5 @@
 import LeanTopology.TopologicalSpace
+import LeanTopology.Tactic.TopologyIntro
 import Mathlib.Data.PNat.Basic
 import Mathlib.Topology.Filter
 
@@ -596,7 +597,7 @@ theorem countable_finiteComplement_firstCountable_2_14 {X : Type u}
     FirstCountable_2_12 (finiteComplementTopology_1_8 X) := by
   intro x
   set 𝒰 := {U : Set X | ∃ O, Set.Finite Oᶜ ∧ U = O ∪ {x}} with 𝒰df
-  set 𝒪 := finiteComplementTopology_1_8 X with 𝒪df
+  topo_auto 𝒪 h𝒪 for X := finiteComplementTopology_1_8 X
   have : IsNeighborhoodBasis_2_5 𝒪 x 𝒰 := by
     refine ⟨?_, ?_⟩
     · intro U hU
@@ -861,9 +862,7 @@ theorem indiscrete_nonunique_limit_2_17 :
   intro X 𝒪 xₙ
   have 𝒪df : 𝒪 = indiscreteTopology_1_7 X := by
     rfl
-  set h𝒪 : IsTopology_1_1 X 𝒪
-    := indiscreteTopology_isTopology_1_7 X
-      with h𝒪_df
+  topo_auto 𝒪 h𝒪 for X := 𝒪
   unfold indiscreteTopology_1_7 at 𝒪df
   constructor
   <;> intro U hU

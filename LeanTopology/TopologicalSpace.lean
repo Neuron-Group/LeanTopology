@@ -65,7 +65,7 @@ theorem IsTopology_1_1.O2_union {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTop
   intro hU hV
   simpa [Set.sUnion_pair] using h𝒪.O3_sUnion ({U, V} : Set (Set X)) (by
     intro W hW
-    simp at hW
+    simp only [mem_insert_iff, mem_singleton_iff] at hW
     rcases hW with rfl | rfl
     · exact hU
     · exact hV)
@@ -231,7 +231,7 @@ theorem IsTopology_1_1.C3_inter {X : Type u} {𝒪 : Set (Set X)} (h𝒪 : IsTop
   intro hF hG
   simpa [Set.sInter_pair] using h𝒪.C3_inter' ({F, G} : Finset (Set X)) (by
     intro H hH
-    simp at hH
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hH
     rcases hH with rfl | rfl
     · exact hF
     · exact hG)
@@ -328,7 +328,7 @@ def indiscreteTopology_1_7 (X : Type u) : Set (Set X) :=
   {(∅ : Set X), univ}
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.7: the indiscrete topology satisfies the open-set axioms. -/
-theorem indiscreteTopology_isTopology_1_7 (X : Type u) :
+@[topology] theorem indiscreteTopology_isTopology_1_7 (X : Type u) :
     IsTopology_1_1 X (indiscreteTopology_1_7 X) := by
   unfold indiscreteTopology_1_7
   exact ⟨
@@ -360,7 +360,7 @@ def finiteComplementTopology_1_8 (X : Type u) : Set (Set X) :=
   {U : Set X | U = ∅ ∨ Uᶜ.Finite}
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 1.8: the finite-complement construction gives a topology. -/
-theorem finiteComplementTopology_isTopology_1_8 (X : Type u) :
+@[topology] theorem finiteComplementTopology_isTopology_1_8 (X : Type u) :
     IsTopology_1_1 X (finiteComplementTopology_1_8 X) := by
   unfold finiteComplementTopology_1_8
   exact ⟨
