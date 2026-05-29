@@ -650,25 +650,7 @@ theorem continuous_real_nonnegSet_5_13 (f : X → ℝ)
     from by
       simpa only [Set.preimage, Set.mem_setOf_eq] using this
   have : IsClosed_1_2 𝒪₂ {y | 0 ≤ y} := by
-    change IsClosed_1_2 (@inducedTopology_1_17 ℝ inferInstance) {y | 0 ≤ y}
-    rw [IsClosed_1_2, inducedTopology_1_17]
-    have hcompl : ({y : ℝ | 0 ≤ y}ᶜ) = {y : ℝ | y < 0} := by
-      ext y
-      simp
-    rw [hcompl]
-    intro y hy
-    have hr : 0 < -y / 2 := by
-      have hy' : y < 0 := hy
-      have : 0 < -y := by linarith
-      nlinarith
-    refine ⟨-y / 2, hr, ?_⟩
-    intro z hz
-    have hz' : |y - z| < -y / 2 := by
-      simpa [openBall_1_14, Real.dist_eq] using hz
-    have habs := abs_lt.mp hz'
-    have hlt : z < 0 := by
-      linarith
-    exact hlt
+    simpa [Set.Ici] using (real_Ici_closed_1_17 0)
   exact continuous_iff_preimage_closed_5_4 f
     |>.mp hf {y | 0 ≤ y} this
 
@@ -682,21 +664,7 @@ theorem continuous_real_openSet_5_13 (f : X → ℝ)
     from by
       simpa only [Set.preimage, Set.mem_setOf_eq] using this
   have : {y | 0 < y} ∈ 𝒪₂ := by
-    change {y | 0 < y} ∈ @inducedTopology_1_17 ℝ inferInstance
-    rw [inducedTopology_1_17]
-    change isOpenDistance_1_15 (Set.Ioi 0)
-    intro y hy
-    have hr : 0 < y / 2 := by
-      have hy' : 0 < y := hy
-      nlinarith
-    refine ⟨y / 2, hr, ?_⟩
-    intro z hz
-    have : |y - z| < y / 2 := by
-      simpa [openBall_1_14, Real.dist_eq] using hz
-    have hz' := abs_lt.mp this
-    have hgt : 0 < z := by
-      linarith
-    exact hgt
+    simpa [Set.Ioi] using (real_Ioi_open_1_17 0)
   exact mem_preimage.mp (hf {y | 0 < y} this)
 
 /-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.14(1): finite conjunctions of closed polynomial inequalities and equations
@@ -753,41 +721,279 @@ theorem euclidean_semialgebraic_basic_open_5_14 {n : ℕ}
       (@inducedTopology_1_17 ℝ inferInstance) (f k)) :
     {x : E n | ∀ i ∈ I, 0 < f i x} ∈
       (@inducedTopology_1_17 (E n) (euclideanDistanceSpace_1_12 n)) := by
-  sorry
+  topo_auto 𝒪₁ h𝒪₁ for E n  := @inducedTopology_1_17 (E n)  _
+  topo_auto 𝒪₂ h𝒪₂ for ℝ    := @inducedTopology_1_17 ℝ      _
+  change ∀ k, IsContinuous_5_1 𝒪₁ 𝒪₂ (f k) at hf
+  change {x | ∀ i ∈ I, 0 < f i x} ∈ 𝒪₁
+  have : {x | ∀ i ∈ I, 0 < f i x} = ⋂₀ {U | ∃ i ∈ I, U = {x | 0 < f i x}} := by
+    ext x
+    simp only [mem_setOf_eq, mem_sInter,
+      forall_exists_index, and_imp]
+    constructor<;>intro hyp
+    · intro U i hi hU
+      specialize hyp i hi
+      rw [hU]
+      exact mem_setOf.mpr hyp
+    · intro i hi
+      specialize hyp
+        {x | 0 < f i x}
+        i hi rfl
+      simpa only
+  rw [this]
+  suffices ∀ i ∈ I, {x | 0 < f i x} ∈ 𝒪₁
+    from by
+      let 𝒮 : Finset (Set (E n)) := I.image (fun i => {x : E n | 0 < f i x})
+      have h𝒮 : ∀ U ∈ 𝒮, U ∈ 𝒪₁ := by
+        intro U hU
+        rcases Finset.mem_image.mp hU with ⟨i, hi, rfl⟩
+        exact this i hi
+      have hsInter : ⋂₀ ((↑𝒮 : Set (Set (E n)))) ∈ 𝒪₁ := h𝒪₁.O2_inter' 𝒮 h𝒮
+      have hEq : ({U | ∃ i ∈ I, U = {x : E n | 0 < f i x}} : Set (Set (E n))) = ↑𝒮 := by
+        ext U
+        constructor
+        · intro hU
+          rcases hU with ⟨i, hi, hUi⟩
+          rw [hUi]
+          exact Finset.mem_image.mpr ⟨i, hi, rfl⟩
+        · intro hU
+          rcases Finset.mem_image.mp hU with ⟨i, hi, hUi⟩
+          exact ⟨i, hi, hUi.symm⟩
+      rw [hEq]
+      exact hsInter
+  intro i hi
+  set V : Set ℝ := {y | 0 < y}
+  have : {x | 0 < f i x} = f i ⁻¹' V := by
+    exact Eq.symm preimage_setOf_eq
+  rw [this]
+  have Vop : V ∈ 𝒪₂ := by
+    simpa [V, Set.Ioi] using (real_Ioi_open_1_17 0)
+  exact mem_preimage.mp (hf i V Vop)
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.15: continuity may be tested on a subbasis of the codomain. -/
 theorem continuous_iff_subbasis_5_15
-  (h𝒪₂ : IsTopology_1_1 Y 𝒪₂) {𝒮 : Set (Set Y)}
+  (h𝒪₁ : IsTopology_1_1 X 𝒪₁) (h𝒪₂ : IsTopology_1_1 Y 𝒪₂) {𝒮 : Set (Set Y)}
     (h𝒮 : IsTopologicalSubbasis_3_13 𝒪₂ 𝒮) (f : X → Y) :
       IsContinuous_5_1 𝒪₁ 𝒪₂ f
         <-> ∀ S : Set Y, S ∈ 𝒮 -> f ⁻¹' S ∈ 𝒪₁ := by
-  sorry
+  have 𝒮sub𝒪₂ : 𝒮 ⊆ 𝒪₂
+    := topologicalSubbasis_subset_3_13 h𝒮
+  constructor<;>intro hyp
+  · intro S hS
+    exact mem_preimage.mp (hyp S (𝒮sub𝒪₂ hS))
+  · intro V Vop
+    unfold IsTopologicalSubbasis_3_13 at h𝒮
+    set ℬ := finiteIntersections_3_13 𝒮
+    have : ∃ ℬ' ⊆ ℬ, ⋃₀ ℬ' = V := by
+      rcases (topologicalBasis_iff_sUnion_3_2.mp h𝒮).2 V Vop with ⟨ℬ', hsub, hEq⟩
+      exact ⟨ℬ', hsub, hEq.symm⟩
+    rcases this with ⟨ℬ', ℬ'subℬ, ℬ'eq⟩
+    rw [← ℬ'eq]
+    have : f ⁻¹' ⋃₀ ℬ' = ⋃₀ {U | ∃ B ∈ ℬ', U = f ⁻¹' B} := by
+      ext x
+      constructor
+      · intro hx
+        rw [mem_preimage, mem_sUnion] at hx
+        rw [mem_sUnion]
+        rcases hx with ⟨B, hB, hxB⟩
+        refine ⟨f ⁻¹' B, ?_, hxB⟩
+        exact ⟨B, hB, rfl⟩
+      · intro hx
+        rw [mem_preimage, mem_sUnion]
+        rw [mem_sUnion] at hx
+        rcases hx with ⟨U, hU, hxU⟩
+        rcases hU with ⟨B, hB, rfl⟩
+        exact ⟨B, hB, hxU⟩
+    rw [this]
+    suffices ∀ B ∈ ℬ', f ⁻¹' B ∈ 𝒪₁
+      from by
+        exact h𝒪₁.O3_sUnion {U | ∃ B ∈ ℬ', U = f ⁻¹' B} (by
+          intro U hU
+          rcases hU with ⟨B, hB, rfl⟩
+          exact this B hB)
+    intro B hB
+    have := hB |> ℬ'subℬ
+    simp only [ℬ] at this
+    unfold finiteIntersections_3_13 at this
+    rcases this with ⟨𝒜, 𝒜_nonempt, 𝒜sub𝒮, Beq⟩
+    rw [Beq]
+    have : f ⁻¹' ⋂₀ ↑𝒜 = ⋂₀ {U | ∃ A ∈ 𝒜, U = f ⁻¹' A} := by
+      ext x
+      constructor
+      · intro hx
+        rw [mem_preimage, mem_sInter] at hx
+        rw [mem_sInter]
+        intro U hU
+        rcases hU with ⟨A, hA, rfl⟩
+        exact hx A hA
+      · intro hx
+        rw [mem_preimage, mem_sInter]
+        intro A hA
+        exact hx (f ⁻¹' A) ⟨A, hA, rfl⟩
+    rw [this]
+    let 𝒜' : Finset (Set X) := 𝒜.image (fun A => f ⁻¹' A)
+    have h𝒜' : ∀ U ∈ 𝒜', U ∈ 𝒪₁ := by
+      intro U hU
+      rcases Finset.mem_image.mp hU with ⟨A, hA, rfl⟩
+      exact hyp A (𝒜sub𝒮 hA)
+    have hEq : ({U : Set X | ∃ A ∈ 𝒜, U = f ⁻¹' A} : Set (Set X)) = ↑𝒜' := by
+      ext U
+      constructor
+      · intro hU
+        rcases hU with ⟨A, hA, hAU⟩
+        rw [hAU]
+        exact Finset.mem_image.mpr ⟨A, hA, rfl⟩
+      · intro hU
+        rcases Finset.mem_image.mp hU with ⟨A, hA, hAU⟩
+        exact ⟨A, hA, hAU.symm⟩
+    rw [hEq]
+    exact h𝒪₁.O2_inter' 𝒜' h𝒜'
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.16: continuity is equivalent to the closure-image and closure-preimage criteria. -/
-theorem continuous_iff_closure_5_16
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.16(1): continuity is equivalent to the closure-image criterion. -/
+theorem continuous_iff_closure_image_5_16
   (h𝒪₁ : IsTopology_1_1 X 𝒪₁) (h𝒪₂ : IsTopology_1_1 Y 𝒪₂) (f : X → Y) :
     IsContinuous_5_1 𝒪₁ 𝒪₂ f
       <->
-        (∀ A : Set X, f '' (closure_4_1 𝒪₁ A) ⊆ closure_4_1 𝒪₂ (f '' A)) ∧
-          (∀ B : Set Y, closure_4_1 𝒪₁ (f ⁻¹' B) ⊆ f ⁻¹' closure_4_1 𝒪₂ B) := by
-  sorry
+        ∀ A : Set X, f '' (closure_4_1 𝒪₁ A) ⊆ closure_4_1 𝒪₂ (f '' A) := by
+  constructor<;>intro hyp
+  · intro A
+    have c1 : f '' A ⊆ (f '' A)̄[𝒪₂]
+      := closure_extensive_4_17 (f '' A)
+    have c2 : f ⁻¹' (f '' A) ⊆ f ⁻¹' (f '' A)̄[𝒪₂]
+      := preimage_mono c1
+    simp only [image_subset_iff, preimage_range,
+      subset_univ, preimage_subset_preimage_iff] at c2
+    have c3 : f ⁻¹' (f '' A)̄[𝒪₂] |> IsClosed_1_2 𝒪₁ := by
+      have : (f '' A)̄[𝒪₂] |> IsClosed_1_2 𝒪₂
+        := closure_isClosed_4_1 h𝒪₂ (f '' A)
+      apply continuous_iff_preimage_closed_5_4 f |>.mp hyp
+      exact this
+    have : Ā[𝒪₁] ⊆ f ⁻¹' (f '' A)̄[𝒪₂]
+      := closure_minimal_4_2 A (f ⁻¹' (f '' A)̄[𝒪₂]) c3 c2
+    exact image_subset_iff.mpr this 
+  · apply continuous_iff_preimage_closed_5_4 f |>.mpr
+    intro F Fcl
+    suffices (f ⁻¹' F)̄[𝒪₁] ⊆ f ⁻¹' F
+      from isClosed_of_closure_subset_4_3
+        h𝒪₁ (f ⁻¹' F) this
+    have F_eq_clF : F̄[𝒪₂] = F
+      := isClosed_iff_eq_closure_4_3 h𝒪₂ F |>.mp Fcl
+    set A := f ⁻¹' F
+    have : f '' A ⊆ F
+      := image_preimage_subset f F
+    have : (f '' A)̄[𝒪₂] ⊆ F̄[𝒪₂]
+      := closure_mono_4_4 this
+    specialize hyp A
+    have : f '' Ā[𝒪₁] ⊆ F̄[𝒪₂] := hyp.trans this
+    have : Ā[𝒪₁] ⊆ f ⁻¹' F̄[𝒪₂]
+      := image_subset_iff.mp this
+    rw [F_eq_clF] at this
+    exact this
+
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.16(2): continuity is equivalent to the closure-preimage criterion. -/
+theorem continuous_iff_closure_preimage_5_16
+  (h𝒪₁ : IsTopology_1_1 X 𝒪₁) (h𝒪₂ : IsTopology_1_1 Y 𝒪₂) (f : X → Y) :
+    IsContinuous_5_1 𝒪₁ 𝒪₂ f
+      <->
+        ∀ B : Set Y, closure_4_1 𝒪₁ (f ⁻¹' B) ⊆ f ⁻¹' closure_4_1 𝒪₂ B := by
+  constructor<;>intro hyp
+  · intro B
+    set F := B̄[𝒪₂]
+    have : IsClosed_1_2 𝒪₂ F
+      := closure_isClosed_4_1 h𝒪₂ B
+    have hyp := continuous_iff_preimage_closed_5_4 f
+      |>.mp hyp F this
+    have : f ⁻¹' B ⊆ f ⁻¹' B̄[𝒪₂] := by
+      have : B ⊆ B̄[𝒪₂]
+        := closure_extensive_4_17 B
+      exact preimage_mono this
+    exact closure_minimal_4_2
+      (f ⁻¹' B) (f ⁻¹' F) hyp this
+  · apply continuous_iff_preimage_closed_5_4 f |>.mpr
+    intro F Fcl
+    suffices (f ⁻¹' F)̄[𝒪₁] ⊆ f ⁻¹' F
+      from isClosed_of_closure_subset_4_3
+        h𝒪₁ (f ⁻¹' F) this
+    have : F̄[𝒪₂] = F
+      := isClosed_iff_eq_closure_4_3 h𝒪₂ F |>.mp Fcl
+    nth_rw 2 [← this]
+    exact hyp F
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.17: continuity at a point preserves sequential convergence. -/
 theorem tendstoSeq_image_of_continuousAt_5_17
   {f : X → Y} {xₙ : Sequence_2_16 X} {x : X}
   (hxₙ : TendstoSeq_2_16 𝒪₁ xₙ x)
   (hf : IsContinuousAt_5_6 𝒪₁ 𝒪₂ f x) :
-    TendstoSeq_2_16 𝒪₂ (fun n : ℕ ↦ f (xₙ n)) (f x) := by
-  sorry
+    TendstoSeq_2_16 𝒪₂ (λ n : ℕ ↦ f (xₙ n)) (f x) := by
+  intro V hV
+  specialize hf V hV
+  rcases hf with ⟨U, hU, Usub⟩
+  have fUsub : f '' U ⊆ V
+    := image_subset_iff.mpr Usub
+  specialize hxₙ U hU
+  rcases hxₙ with ⟨N, hN⟩
+  use N; intro n hn
+  specialize hN n hn
+  apply fUsub
+  exact mem_image_of_mem f hN
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.18: on a first-countable domain, continuity at a point is equivalent to sequential continuity. -/
 theorem continuousAt_iff_tendstoSeq_5_18
-  (hFirst : FirstCountable_2_12 𝒪₁) {f : X → Y} {x : X} :
+  (h𝒪₁ : IsTopology_1_1 X 𝒪₁) (hFirst : FirstCountable_2_12 𝒪₁) {f : X → Y} {x : X} :
     IsContinuousAt_5_6 𝒪₁ 𝒪₂ f x
       <->
         ∀ xₙ : Sequence_2_16 X, TendstoSeq_2_16 𝒪₁ xₙ x ->
           TendstoSeq_2_16 𝒪₂ (fun n : ℕ ↦ f (xₙ n)) (f x) := by
-  sorry
+  constructor<;>intro hyp
+  · intro xₙ hxₙ
+    exact tendstoSeq_image_of_continuousAt_5_17 hxₙ hyp
+  · have := decreasing_neighborhoodBasis_2_15
+      h𝒪₁ hFirst x
+    rcases this with ⟨U, h𝒰, decreasing⟩
+    set 𝒰 := range U
+    set 𝒱 := {V | IsNeighborhood_2_1 𝒪₂ (f x) V}
+    have h𝒱 : IsNeighborhoodBasis_2_5 𝒪₂ (f x) 𝒱
+      := allNeighborhoods_isNeighborhoodBasis_2_6 (f x)
+    apply continuousAt_iff_neighborhoodBasis_5_8 h𝒰 h𝒱 |>.mpr
+    by_contra ct_hyp
+    push Not at ct_hyp
+    rcases ct_hyp with ⟨V, Vin𝒰, hV⟩
+    have : ∀ U ∈ 𝒰, ∃ x ∈ U, x ∉ f ⁻¹' V := by
+      intro U hU
+      specialize hV U hU
+      exact not_subset.mp hV
+    have : ∀ n : ℕ, ∃ x ∈ U n, x ∉ f ⁻¹' V := by
+      intro n
+      exact this (U n) (mem_range_self n)
+    choose xₙ hxₙ using this
+    have xₙcvg : TendstoSeq_2_16 𝒪₁ xₙ x := by
+      apply tendstoSeq_iff_neighborhoodBasis_2_18 xₙ x h𝒰 |>.mpr
+      intro U' hU'
+      simp only [mem_range, 𝒰] at hU'
+      rcases hU' with ⟨N, hN⟩
+      use N; intro n hn
+      specialize hxₙ n
+      rcases hxₙ with ⟨hxₙ, -⟩
+      rw [← hN]
+      suffices U n ⊆ U N
+        from this hxₙ
+      rcases Nat.exists_eq_add_of_le hn with ⟨k, rfl⟩
+      have hdec : ∀ k : ℕ, U (N + k) ⊆ U N := by
+        intro k
+        induction k with
+        | zero => simp
+        | succ k ih =>
+            exact (decreasing (N + k)).trans ih
+      exact hdec k
+    specialize hyp xₙ xₙcvg V
+      <| h𝒱.isNeighborhood V Vin𝒰
+    rcases hyp with ⟨N, hN⟩
+    specialize hxₙ N
+    rcases hxₙ with ⟨-, hxₙ⟩
+    have : f (xₙ N) ∉ V
+      := mem_compl_iff V (f (xₙ N)) |>.mp hxₙ
+    specialize hN N (Nat.le_refl N)
+    dsimp at hN
+    contradiction
 
 end TopologyPart
 
@@ -796,7 +1002,8 @@ section MetricSequentialPart
 variable {X : Type u} {Y : Type v}
 variable [DistanceSpace_1_12 X] [DistanceSpace_1_12 Y]
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.19: for maps between distance spaces, continuity at a point is equivalent to sequential continuity. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.19: for maps between distance spaces,
+  continuity at a point is equivalent to sequential continuity. -/
 theorem continuousAt_iff_tendstoSeq_metric_5_19
   {f : X → Y} {x : X} :
     IsContinuousAt_5_6 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›)
@@ -805,8 +1012,12 @@ theorem continuousAt_iff_tendstoSeq_metric_5_19
           ∀ xₙ : Sequence_2_16 X,
             TendstoSeq_2_16 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›) xₙ x ->
               TendstoSeq_2_16 (@inducedTopology_1_17 Y ‹DistanceSpace_1_12 Y›)
-                (λ n : ℕ ↦ f (xₙ n)) (f x) := by
-  sorry
+                (λ n : ℕ ↦ f (xₙ n)) (f x) :=
+  @continuousAt_iff_tendstoSeq_5_18 X Y
+    (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›)
+    (@inducedTopology_1_17 Y ‹DistanceSpace_1_12 Y›)
+    inducedTopology_isTopology_1_17
+    distanceSpace_firstCountable_2_13 f x
 
 end MetricSequentialPart
 

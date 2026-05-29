@@ -620,6 +620,80 @@ def 𝒪𝒹 {X : Type u} [DistanceSpace_1_12 X] : Set (Set X) := inducedTopolog
 end
 
 /-!
+The Euclidean topology on `ℝ` has the expected interval and ray open/closed sets.
+-/
+
+/-- In the Euclidean topology on `ℝ`, the open ray `(a, ∞)` is open. -/
+theorem real_Ioi_open_1_17 (a : ℝ) :
+    Set.Ioi a ∈ @inducedTopology_1_17 ℝ inferInstance := by
+  rw [inducedTopology_1_17]
+  change isOpenDistance_1_15 (Set.Ioi a)
+  intro y hy
+  have hr : 0 < (y - a) / 2 := by
+    have hy' : a < y := hy
+    nlinarith
+  refine ⟨(y - a) / 2, hr, ?_⟩
+  intro z hz
+  have : |y - z| < (y - a) / 2 := by
+    simpa [openBall_1_14, Real.dist_eq] using hz
+  have hz' := abs_lt.mp this
+  have hgt : a < z := by
+    linarith
+  exact hgt
+
+/-- In the Euclidean topology on `ℝ`, the open ray `(-∞, a)` is open. -/
+theorem real_Iio_open_1_17 (a : ℝ) :
+    Set.Iio a ∈ @inducedTopology_1_17 ℝ inferInstance := by
+  rw [inducedTopology_1_17]
+  change isOpenDistance_1_15 (Set.Iio a)
+  intro y hy
+  have hr : 0 < (a - y) / 2 := by
+    have hy' : y < a := hy
+    nlinarith
+  refine ⟨(a - y) / 2, hr, ?_⟩
+  intro z hz
+  have : |y - z| < (a - y) / 2 := by
+    simpa [openBall_1_14, Real.dist_eq] using hz
+  have hz' := abs_lt.mp this
+  have hlt : z < a := by
+    linarith
+  exact hlt
+
+/-- In the Euclidean topology on `ℝ`, the closed ray `[a, ∞)` is closed. -/
+theorem real_Ici_closed_1_17 (a : ℝ) :
+    IsClosed_1_2 (@inducedTopology_1_17 ℝ inferInstance) (Set.Ici a) := by
+  rw [IsClosed_1_2]
+  have hcompl : (Set.Ici a)ᶜ = Set.Iio a := by
+    ext y
+    simp [Set.Ici, Set.Iio]
+  rw [hcompl]
+  exact real_Iio_open_1_17 a
+
+/-- In the Euclidean topology on `ℝ`, the closed ray `(-∞, a]` is closed. -/
+theorem real_Iic_closed_1_17 (a : ℝ) :
+    IsClosed_1_2 (@inducedTopology_1_17 ℝ inferInstance) (Set.Iic a) := by
+  rw [IsClosed_1_2]
+  have hcompl : (Set.Iic a)ᶜ = Set.Ioi a := by
+    ext y
+    simp [Set.Iic, Set.Ioi]
+  rw [hcompl]
+  exact real_Ioi_open_1_17 a
+
+/-- In the Euclidean topology on `ℝ`, the open interval `(a, b)` is open. -/
+theorem real_Ioo_open_1_17 (a b : ℝ) :
+    Set.Ioo a b ∈ @inducedTopology_1_17 ℝ inferInstance := by
+  simpa [Set.Ioo] using
+    (inducedTopology_isTopology_1_17 (X := ℝ)).O2_inter
+      (real_Ioi_open_1_17 a) (real_Iio_open_1_17 b)
+
+/-- In the Euclidean topology on `ℝ`, the closed interval `[a, b]` is closed. -/
+theorem real_Icc_closed_1_17 (a b : ℝ) :
+    IsClosed_1_2 (@inducedTopology_1_17 ℝ inferInstance) (Set.Icc a b) := by
+  simpa [Set.Icc] using
+    (inducedTopology_isTopology_1_17 (X := ℝ)).C3_inter
+      (real_Ici_closed_1_17 a) (real_Iic_closed_1_17 b)
+
+/-!
 Definition 1.18 introduces metrizability: a topology is metrizable when it is
 equal to one induced by some distance.
 -/

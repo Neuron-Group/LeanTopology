@@ -590,14 +590,7 @@ theorem closure_Ioo_neg_one_one_4_9_4 :
     intro x hx
     set U := {x | x > (1 : ℝ)}
     have Uop : U ∈ 𝒪 := by
-      simp only [𝒪]
-      intro y hy
-      refine ⟨y - 1, sub_pos.mpr hy, ?_⟩
-      intro z hz
-      simp only [openBall_1_14, mem_setOf_eq,
-        gt_iff_lt, U] at hz ⊢
-      have hz' := abs_lt.mp hz
-      linarith
+      simpa [𝒪, U, Set.Ioi, gt_iff_lt] using real_Ioi_open_1_17 (1 : ℝ)
     have hxU : IsNeighborhood_2_1 𝒪 x U
       := neighborhood_of_open_mem Uop hx
     have hAU : A ∩ U = ∅ := by
@@ -619,13 +612,7 @@ theorem closure_Ioo_neg_one_one_4_9_4 :
     intro x hx
     set U := {x | x < (-1 : ℝ)}
     have Uop : U ∈ 𝒪 := by
-      intro y hy
-      refine ⟨-1 - y, sub_pos.mpr hy, ?_⟩
-      intro z hz
-      simp only [openBall_1_14,
-        mem_setOf_eq, U] at hz ⊢
-      have hz' := abs_lt.mp hz
-      linarith
+      simpa [𝒪, U, Set.Iio] using real_Iio_open_1_17 (-1 : ℝ)
     have hxU : IsNeighborhood_2_1 𝒪 x U
       := neighborhood_of_open_mem Uop hx
     have hAU : A ∩ U = ∅ := by
