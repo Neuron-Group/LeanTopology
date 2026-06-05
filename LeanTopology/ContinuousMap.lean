@@ -1041,6 +1041,113 @@ structure IsHomeomorphism_5_20 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) w
 
 end HomeomorphismPart
 
+section OpenClosedMapPart
+
+variable {X : Type u} {Y : Type v}
+variable {𝒪₁ : Set (Set X)} {𝒪₂ : Set (Set Y)}
+
+/-!
+Definition 5.26 introduces open maps and closed maps.
+-/
+
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 5.26: `f` is an open map when the image of every open set is open. -/
+def IsOpenMap_5_26 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
+  ∀ U : Set X, U ∈ 𝒪₁ -> f '' U ∈ 𝒪₂
+
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 5.26: `f` is a closed map when the image of every closed set is closed. -/
+def IsClosedMap_5_26 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
+  ∀ F : Set X, IsClosed_1_2 𝒪₁ F -> IsClosed_1_2 𝒪₂ (f '' F)
+
+/-!
+Proposition 5.27 characterises homeomorphisms via open/closed maps.
+-/
+
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27(1⟹2): a homeomorphism is a continuous bijection and an open map. -/
+theorem homeomorphism_isContinuousBijectiveOpenMap_5_27
+  (h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂) :
+    IsContinuous_5_1 𝒪₁ 𝒪₂ h.toFun ∧
+    Function.Bijective h.toFun ∧
+    IsOpenMap_5_26 𝒪₁ 𝒪₂ h.toFun := by sorry
+
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27(2⟹3): a continuous open bijection is a closed map. -/
+theorem openMap_isClosedMap_of_bijective_5_27
+  {f : X → Y} (hfbij : Function.Bijective f) (hfo : IsOpenMap_5_26 𝒪₁ 𝒪₂ f) :
+    IsClosedMap_5_26 𝒪₁ 𝒪₂ f := by sorry
+
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27(3⟹1): a continuous bijection that is a closed map
+  yields a homeomorphism. -/
+theorem homeomorphism_of_continuousBijectiveClosedMap_5_27
+  (h𝒪₁ : IsTopology_1_1 X 𝒪₁) (h𝒪₂ : IsTopology_1_1 Y 𝒪₂)
+  {f : X → Y} (hf : IsContinuous_5_1 𝒪₁ 𝒪₂ f) (hfbij : Function.Bijective f)
+  (hfc : IsClosedMap_5_26 𝒪₁ 𝒪₂ f) :
+    ∃ (g : Y → X), IsContinuous_5_1 𝒪₂ 𝒪₁ g ∧
+      Function.LeftInverse g f ∧ Function.RightInverse g f := by sorry
+
+end OpenClosedMapPart
+
+section HomeomorphismExamplesPart
+
+open LeanTopology.Basis
+
+/-!
+Example 5.21 presents an explicit homeomorphism between [0,1) and [0,+∞).
+-/
+
+/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.21: the half-open interval [0,1) is homeomorphic to [0,+∞). -/
+theorem homeomorphism_half_open_ray_5_21 :
+    ∃ h : IsHomeomorphism_5_20
+      (@inducedTopology_1_17 {x : ℝ | 0 ≤ x ∧ x < 1}
+        (restrictDistance_1_13 {x : ℝ | 0 ≤ x ∧ x < 1}))
+      (@inducedTopology_1_17 {x : ℝ | 0 ≤ x}
+        (restrictDistance_1_13 {x : ℝ | 0 ≤ x})),
+      True := by sorry
+
+/-!
+Example 5.22 presents an explicit homeomorphism between the closed disk and the closed square.
+-/
+
+/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.22: the closed unit disk is homeomorphic to the closed unit square. -/
+theorem homeomorphism_closed_disk_square_5_22 :
+    ∃ h : IsHomeomorphism_5_20
+      (@inducedTopology_1_17 {x : E 2 | ‖x‖ ≤ 1}
+        (restrictDistance_1_13 {x : E 2 | ‖x‖ ≤ 1}))
+      (@inducedTopology_1_17 {x : E 2 | |x ⟨0, by decide⟩| ≤ 1 ∧ |x ⟨1, by decide⟩| ≤ 1}
+        (restrictDistance_1_13 {x : E 2 | |x ⟨0, by decide⟩| ≤ 1 ∧ |x ⟨1, by decide⟩| ≤ 1})),
+      True := by sorry
+
+/-!
+Note 5.23 warns that a continuous bijection need not be a homeomorphism.
+-/
+
+/-- ℕℴ𝓉ℯ 5.23: the identity map from discrete ℝ to usual ℝ is continuous and bijective,
+  but its inverse is not continuous, so it is not a homeomorphism. -/
+theorem continuous_bijection_not_homeomorphism_5_23 :
+    IsContinuous_5_1 (discreteTopology_1_6 ℝ) {U : Set ℝ | IsOpen U} (id : ℝ → ℝ) ∧
+    Function.Bijective (id : ℝ → ℝ) ∧
+    ¬ IsContinuous_5_1 {U : Set ℝ | IsOpen U} (discreteTopology_1_6 ℝ) (id : ℝ → ℝ) := by sorry
+
+/-!
+Note 5.24 explains that homeomorphisms preserve topological properties.
+-/
+
+/-- ℕℴ𝓉ℯ 5.24: homeomorphic spaces share the same topological properties.
+  As an example, second countability is preserved. -/
+theorem homeomorphism_preserves_secondCountable_5_24
+  (h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂) (h2 : SecondCountable_3_6 𝒪₁) :
+    SecondCountable_3_6 𝒪₂ := by sorry
+
+/-!
+Example 5.25 shows that ℝ and the Sorgenfrey line are not homeomorphic.
+-/
+
+/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.25: the Euclidean line and the Sorgenfrey line are not homeomorphic
+  because ℝ is second countable but the Sorgenfrey line is not. -/
+theorem real_not_homeomorphic_sorgenfrey_5_25 :
+    ¬ ∃ h : IsHomeomorphism_5_20
+        {U : Set ℝ | IsOpen U} SorgenfreyTopology_3_12, True := by sorry
+
+end HomeomorphismExamplesPart
+
 /-!
 The final statements verify that our continuity language agrees with mathlib's
 bundled topological notions.
