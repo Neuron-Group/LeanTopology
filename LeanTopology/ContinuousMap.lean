@@ -1,6 +1,7 @@
 import LeanTopology.ClosureInterior
 import LeanTopology.Tactic.TopologyIntro
 import Mathlib.Algebra.Polynomial.Eval.Defs
+import Mathlib.Topology.Bases
 
 /-!
 # 拓扑学入门5: 连续映射
@@ -1026,6 +1027,10 @@ section HomeomorphismPart
 variable {X : Type u} {Y : Type v}
 variable {𝒪₁ : Set (Set X)} {𝒪₂ : Set (Set Y)}
 
+open Basis
+open LeanTopology.TopologicalSpace
+open LeanTopology.ClosureInterior
+
 /-!
 Definition 5.20 introduces homeomorphisms.
 -/
@@ -1039,114 +1044,499 @@ structure IsHomeomorphism_5_20 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) w
   left_inv : Function.LeftInverse invFun toFun
   right_inv : Function.RightInverse invFun toFun
 
-end HomeomorphismPart
+/-- A map-oriented restatement of definition 5.20. -/
+def IsHomeomorphismMap_5_20 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
+  ∃ g : Y → X,
+    IsContinuous_5_1 𝒪₁ 𝒪₂ f ∧
+      IsContinuous_5_1 𝒪₂ 𝒪₁ g ∧
+        Function.LeftInverse g f ∧ Function.RightInverse g f
 
-section OpenClosedMapPart
+/-- The bundled and unbundled formulations of definition 5.20 are equivalent. -/
+theorem isHomeomorphism_iff_isHomeomorphismMap_5_20 (f : X → Y) :
+    (∃ h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂, h.toFun = f)
+      <-> IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f := by
+  constructor
+  · rintro ⟨h, rfl⟩
+    exact ⟨h.invFun, h.continuous_toFun, h.continuous_invFun, h.left_inv, h.right_inv⟩
+  · rintro ⟨g, hf, hg, hleft, hright⟩
+    refine ⟨{
+      toFun := f
+      invFun := g
+      continuous_toFun := hf
+      continuous_invFun := hg
+      left_inv := hleft
+      right_inv := hright }, rfl⟩
 
-variable {X : Type u} {Y : Type v}
-variable {𝒪₁ : Set (Set X)} {𝒪₂ : Set (Set Y)}
+private theorem isContinuous_iff_mathlibContinuous_local
+    (T₁ : TopologicalSpace X) (T₂ : TopologicalSpace Y) (f : X → Y) :
+    IsContinuous_5_1
+      {U : Set X | @IsOpen X T₁ U}
+      {V : Set Y | @IsOpen Y T₂ V} f
+        <-> Continuous f := by
+  constructor
+  · intro hf
+    rw [continuous_def]
+    intro V hV
+    exact hf V hV
+  · intro hf
+    rw [continuous_def] at hf
+    intro V hV
+    exact hf V hV
+
+section Example521
+
+abbrev HalfOpenUnitInterval_5_21 := {x : ℝ // 0 ≤ x ∧ x < 1}
+abbrev NonnegativeRay_5_21 := {y : ℝ // 0 ≤ y}
+
+instance : DistanceSpace_1_12 HalfOpenUnitInterval_5_21 :=
+  restrictDistance_1_13 (D := inferInstance) {x : ℝ | 0 ≤ x ∧ x < 1}
+
+instance : DistanceSpace_1_12 NonnegativeRay_5_21 :=
+  restrictDistance_1_13 (D := inferInstance) {y : ℝ | 0 ≤ y}
+
+/-- The map `f(x) = x / (1 - x)` from `[0,1)` to `[0,+∞)`. -/
+def halfOpenUnitInterval_to_nonnegativeRay_5_21
+    (x : HalfOpenUnitInterval_5_21) : NonnegativeRay_5_21 := by
+  refine ⟨x.1 / (1 - x.1), ?_⟩
+  have hx0 : 0 ≤ x.1 := x.2.1
+  have hden : 0 ≤ 1 - x.1 := by linarith [x.2.2]
+  exact div_nonneg hx0 hden
+
+/-- The map `g(y) = y / (1 + y)` from `[0,+∞)` to `[0,1)`. -/
+def nonnegativeRay_to_halfOpenUnitInterval_5_21
+    (y : NonnegativeRay_5_21) : HalfOpenUnitInterval_5_21 := by
+  refine ⟨y.1 / (1 + y.1), ?_⟩
+  constructor
+  · have hy0 : 0 ≤ y.1 := y.2
+    have hden : 0 ≤ 1 + y.1 := by linarith
+    exact div_nonneg hy0 hden
+  · have hy0 : 0 ≤ y.1 := y.2
+    have hden : 0 < 1 + y.1 := by linarith
+    have : y.1 / (1 + y.1) < 1 := by
+      exact (div_lt_one hden).2 (by linarith)
+    simpa using this
+
+/- The continuity and homeomorphism proof is given later, after the
+   compatibility lemmas with mathlib continuity and homeomorphisms. -/
+
+/-- The composition `g ∘ f` is the identity on `[0,1)`. -/
+theorem halfOpenUnitInterval_nonnegativeRay_leftInv_5_21 :
+    Function.LeftInverse nonnegativeRay_to_halfOpenUnitInterval_5_21
+      halfOpenUnitInterval_to_nonnegativeRay_5_21 := by
+  intro x
+  ext
+  change x.1 / (1 - x.1) / (1 + x.1 / (1 - x.1)) = x.1
+  have hne : 1 - x.1 ≠ 0 := by linarith [x.2.2]
+  field_simp [hne]
+  ring
+
+/-- The composition `f ∘ g` is the identity on `[0,+∞)`. -/
+theorem halfOpenUnitInterval_nonnegativeRay_rightInv_5_21 :
+    Function.RightInverse nonnegativeRay_to_halfOpenUnitInterval_5_21
+      halfOpenUnitInterval_to_nonnegativeRay_5_21 := by
+  intro y
+  ext
+  change y.1 / (1 + y.1) / (1 - y.1 / (1 + y.1)) = y.1
+  have hy0 : 0 ≤ y.1 := y.2
+  have hne : 1 + y.1 ≠ 0 := by linarith
+  field_simp [hne]
+  ring
+
+/- The homeomorphism theorem is proved later using the compatibility result
+   with mathlib continuity. -/
+
+end Example521
+
+section Example522
+
+/-- The closed unit disk in `ℝ²`. -/
+abbrev ClosedDisk_5_22 := {x : E 2 // ‖x‖ ≤ 1}
+
+/-- The closed square `[-1,1] × [-1,1]` in `ℝ²`. -/
+abbrev ClosedSquare_5_22 := {x : E 2 // ∀ i : Fin 2, |x i| ≤ 1}
+
+/-- The Euclidean norm. -/
+def normOne_5_22 (x : E 2) : ℝ := ‖x‖
+
+/-- The maximum coordinate norm. -/
+def normMax_5_22 (x : E 2) : ℝ :=
+  max (|x ⟨0, by decide⟩|) (|x ⟨1, by decide⟩|)
+
+/-- The radial map sending the disk toward the square, defined on all of `ℝ²`. -/
+def closedDisk_to_closedSquare_raw_5_22 (x : E 2) : E 2 :=
+  ((normOne_5_22 x) / (normMax_5_22 x)) • x
+
+/-- The inverse radial map, defined on all of `ℝ²`. -/
+def closedSquare_to_closedDisk_raw_5_22 (x : E 2) : E 2 :=
+  ((normMax_5_22 x) / (normOne_5_22 x)) • x
+
+/-- The maximum coordinate norm is nonnegative. -/
+theorem normMax_nonneg_5_22 (x : E 2) : 0 ≤ normMax_5_22 x := by
+  unfold normMax_5_22
+  positivity
+
+/-- The maximum coordinate norm vanishes exactly at the origin. -/
+theorem normMax_eq_zero_iff_5_22 (x : E 2) : normMax_5_22 x = 0 ↔ x = 0 := by
+  constructor
+  · intro hx
+    have hmax : max (|x ⟨0, by decide⟩|) (|x ⟨1, by decide⟩|) = 0 := by
+      simpa [normMax_5_22] using hx
+    have hcoord0 : |x ⟨0, by decide⟩| = 0 := by
+      apply le_antisymm
+      · exact hmax ▸ le_max_left _ _
+      · exact abs_nonneg _
+    have hcoord1 : |x ⟨1, by decide⟩| = 0 := by
+      apply le_antisymm
+      · exact hmax ▸ le_max_right _ _
+      · exact abs_nonneg _
+    ext i
+    fin_cases i
+    · exact abs_eq_zero.mp hcoord0
+    · exact abs_eq_zero.mp hcoord1
+  · intro hx
+    simp [normMax_5_22, hx]
+
+/-- The Euclidean norm vanishes exactly at the origin. -/
+theorem normOne_eq_zero_iff_5_22 (x : E 2) : normOne_5_22 x = 0 ↔ x = 0 := by
+  unfold normOne_5_22
+  exact norm_eq_zero
+
+/-- The forward radial map sends the origin to the origin. -/
+theorem closedDisk_to_closedSquare_raw_zero_5_22 :
+    closedDisk_to_closedSquare_raw_5_22 (0 : E 2) = 0 := by
+  simp [closedDisk_to_closedSquare_raw_5_22, normOne_5_22, normMax_5_22]
+
+/-- The inverse radial map sends the origin to the origin. -/
+theorem closedSquare_to_closedDisk_raw_zero_5_22 :
+    closedSquare_to_closedDisk_raw_5_22 (0 : E 2) = 0 := by
+  simp [closedSquare_to_closedDisk_raw_5_22, normOne_5_22, normMax_5_22]
+
+/-- Away from the origin, the maximum coordinate norm is nonzero. -/
+theorem normMax_ne_zero_of_ne_zero_5_22 {x : E 2} (hx : x ≠ 0) :
+    normMax_5_22 x ≠ 0 := by
+  exact mt (normMax_eq_zero_iff_5_22 x).mp hx
+
+/-- Away from the origin, the Euclidean norm is nonzero. -/
+theorem normOne_ne_zero_of_ne_zero_5_22 {x : E 2} (hx : x ≠ 0) :
+    normOne_5_22 x ≠ 0 := by
+  exact mt (normOne_eq_zero_iff_5_22 x).mp hx
+
+/-- On nonzero points, the forward map is given by radial scaling. -/
+theorem closedDisk_to_closedSquare_raw_eq_5_22 {x : E 2} (_hx : x ≠ 0) :
+    closedDisk_to_closedSquare_raw_5_22 x =
+      ((normOne_5_22 x) / (normMax_5_22 x)) • x := rfl
+
+/-- On nonzero points, the inverse map is given by radial scaling. -/
+theorem closedSquare_to_closedDisk_raw_eq_5_22 {x : E 2} (_hx : x ≠ 0) :
+    closedSquare_to_closedDisk_raw_5_22 x =
+      ((normMax_5_22 x) / (normOne_5_22 x)) • x := rfl
+
+/-- The induced map from the closed disk to the closed square. -/
+def closedDisk_to_closedSquare_5_22 (x : ClosedDisk_5_22) : ClosedSquare_5_22 := by
+  by_cases hx : x.1 = 0
+  · refine ⟨0, ?_⟩
+    intro i
+    simp
+  · refine ⟨closedDisk_to_closedSquare_raw_5_22 x.1, ?_⟩
+    intro i
+    have hnormmax_ne : normMax_5_22 x.1 ≠ 0 := normMax_ne_zero_of_ne_zero_5_22 hx
+    have hscale_nonneg : 0 ≤ normOne_5_22 x.1 / normMax_5_22 x.1 := by
+      apply div_nonneg
+      · exact norm_nonneg _
+      · exact normMax_nonneg_5_22 _
+    have hcoord_le : |x.1 i| ≤ normMax_5_22 x.1 := by
+      fin_cases i
+      · unfold normMax_5_22
+        exact le_max_left _ _
+      · unfold normMax_5_22
+        exact le_max_right _ _
+    have hcoord_eq : |closedDisk_to_closedSquare_raw_5_22 x.1 i|
+        = (normOne_5_22 x.1 / normMax_5_22 x.1) * |x.1 i| := by
+      simp [closedDisk_to_closedSquare_raw_5_22, abs_mul, hscale_nonneg]
+    rw [hcoord_eq]
+    calc
+      (normOne_5_22 x.1 / normMax_5_22 x.1) * |x.1 i|
+          ≤ (normOne_5_22 x.1 / normMax_5_22 x.1) * normMax_5_22 x.1 :=
+            mul_le_mul_of_nonneg_left hcoord_le hscale_nonneg
+      _ = normOne_5_22 x.1 := by field_simp [hnormmax_ne]
+      _ ≤ 1 := x.2
+
+/-- The induced map from the closed square to the closed disk. -/
+def closedSquare_to_closedDisk_5_22 (x : ClosedSquare_5_22) : ClosedDisk_5_22 := by
+  by_cases hx : x.1 = 0
+  · refine ⟨0, ?_⟩
+    simp
+  · refine ⟨closedSquare_to_closedDisk_raw_5_22 x.1, ?_⟩
+    have hnormone_ne : normOne_5_22 x.1 ≠ 0 := normOne_ne_zero_of_ne_zero_5_22 hx
+    have hnormmax_le : normMax_5_22 x.1 ≤ 1 := by
+      unfold normMax_5_22
+      refine max_le ?_ ?_
+      · simpa using x.2 ⟨0, by decide⟩
+      · simpa using x.2 ⟨1, by decide⟩
+    have hscale_nonneg : 0 ≤ normMax_5_22 x.1 / normOne_5_22 x.1 := by
+      apply div_nonneg
+      · exact normMax_nonneg_5_22 _
+      · exact norm_nonneg _
+    have hnorm_eq :
+        ‖closedSquare_to_closedDisk_raw_5_22 x.1‖
+          = |normMax_5_22 x.1 / normOne_5_22 x.1| * ‖x.1‖ := by
+      rw [closedSquare_to_closedDisk_raw_5_22, norm_smul]
+      simp only [Real.norm_eq_abs]
+    rw [hnorm_eq, abs_of_nonneg hscale_nonneg]
+    calc
+      (normMax_5_22 x.1 / normOne_5_22 x.1) * ‖x.1‖ = normMax_5_22 x.1 := by
+        rw [normOne_5_22]
+        field_simp [hnormone_ne]
+      _ ≤ 1 := hnormmax_le
+
+/-- If the two radial maps are continuous and inverse to each other, then they define a homeomorphism. -/
+theorem closedDisk_homeomorphism_closedSquare_criterion_5_22
+    (hf : IsContinuous_5_1 (euclideanSubspaceTopology_2_21 2 {x : E 2 | ‖x‖ ≤ 1})
+      (euclideanSubspaceTopology_2_21 2 {x : E 2 | ∀ i : Fin 2, |x i| ≤ 1})
+      closedDisk_to_closedSquare_5_22)
+    (hg : IsContinuous_5_1 (euclideanSubspaceTopology_2_21 2 {x : E 2 | ∀ i : Fin 2, |x i| ≤ 1})
+      (euclideanSubspaceTopology_2_21 2 {x : E 2 | ‖x‖ ≤ 1})
+      closedSquare_to_closedDisk_5_22)
+    (hleft : Function.LeftInverse closedSquare_to_closedDisk_5_22 closedDisk_to_closedSquare_5_22)
+    (hright : Function.RightInverse closedSquare_to_closedDisk_5_22 closedDisk_to_closedSquare_5_22) :
+    IsHomeomorphismMap_5_20
+      (euclideanSubspaceTopology_2_21 2 {x : E 2 | ‖x‖ ≤ 1})
+      (euclideanSubspaceTopology_2_21 2 {x : E 2 | ∀ i : Fin 2, |x i| ≤ 1})
+      closedDisk_to_closedSquare_5_22 := by
+  exact ⟨closedSquare_to_closedDisk_5_22, hf, hg, hleft, hright⟩
+
+end Example522
 
 /-!
-Definition 5.26 introduces open maps and closed maps.
+Examples 5.21–5.25 provide concrete constructions and counterexamples before
+the later development of open maps, closed maps, and invariance properties.
 -/
 
-/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 5.26: `f` is an open map when the image of every open set is open. -/
+/-- The singleton `{0}` is not open in the usual topology on `ℝ`. -/
+theorem singleton_zero_not_open_real_5_23 :
+    ({0} : Set ℝ) ∉ (@inducedTopology_1_17 ℝ inferInstance) := by
+  intro hU
+  change isOpenDistance_1_15 ({0} : Set ℝ) at hU
+  rcases hU 0 (by simp) with ⟨r, rpos, hr⟩
+  have hr2 : r / 2 > 0 := by linarith
+  have hmem : r / 2 ∈ openBall_1_14 (0 : ℝ) r := by
+    change DistanceSpace_1_12.dist (0 : ℝ) (r / 2) < r
+    change dist (0 : ℝ) (r / 2) < r
+    have hdist : dist (0 : ℝ) (r / 2) = r / 2 := by
+      rw [Real.dist_eq]
+      have hnonneg : 0 ≤ r / 2 := by linarith
+      simpa [abs_of_nonneg hnonneg]
+    rw [hdist]
+    have : r / 2 < r := by
+      linarith
+    exact this
+  have : (r / 2 : ℝ) = 0 := hr hmem
+  linarith
+
+/-- A continuous bijection need not have continuous inverse. -/
+theorem continuous_bijective_not_homeomorphism_5_23 :
+    ¬ IsHomeomorphismMap_5_20 (discreteTopology_1_6 ℝ)
+      (@inducedTopology_1_17 ℝ inferInstance) (id : ℝ → ℝ) := by
+  intro h
+  rcases h with ⟨g, -, hgcont, hleft, -⟩
+  have hg_eq_id : g = id := by
+    funext x
+    exact hleft x
+  have hsingle_open : ({0} : Set ℝ) ∈ (@inducedTopology_1_17 ℝ inferInstance) := by
+    have hdisc : ({0} : Set ℝ) ∈ discreteTopology_1_6 ℝ := mem_discreteTopology_1_6 _
+    simpa [hg_eq_id] using hgcont {0} hdisc
+  exact singleton_zero_not_open_real_5_23 hsingle_open
+
+/-- Homeomorphisms preserve second countability. -/
+theorem homeomorphism_preserves_secondCountable_5_24 {f : X → Y}
+    (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
+    SecondCountable_3_6 𝒪₁ -> SecondCountable_3_6 𝒪₂ := by
+  intro hSecond
+  rcases hf with ⟨g, hcont, hgcont, hleft, hright⟩
+  rcases hSecond with ⟨ℬ, hℬ, hℬctb⟩
+  let ℭ : Set (Set Y) := (fun B : Set X ↦ f '' B) '' ℬ
+  have hℭctb : ℭ.Countable := hℬctb.image (fun B : Set X ↦ f '' B)
+  refine ⟨ℭ, ?_, hℭctb⟩
+  constructor
+  · rintro C ⟨B, hBℬ, rfl⟩
+    have hBop : B ∈ 𝒪₁ := hℬ.left hBℬ
+    have hpre : g ⁻¹' B ∈ 𝒪₂ := hgcont B hBop
+    have hEq : g ⁻¹' B = f '' B := by
+      ext y
+      constructor
+      · intro hy
+        exact ⟨g y, hy, hright y⟩
+      · rintro ⟨x, hx, rfl⟩
+        simpa [hleft x] using hx
+    simpa [hEq] using hpre
+  · intro V hV y hy
+    have hy_pre : g y ∈ f ⁻¹' V := by
+      simpa [hright y] using hy
+    rcases hℬ.right (f ⁻¹' V) (hcont V hV) (g y) hy_pre with ⟨B, hBℬ, hyB, hBsub⟩
+    refine ⟨f '' B, ?_, ?_, ?_⟩
+    · exact ⟨B, hBℬ, rfl⟩
+    · exact ⟨g y, hyB, hright y⟩
+    · intro z hz
+      rcases hz with ⟨x, hxB, rfl⟩
+      exact hBsub hxB
+
+/-- Homeomorphisms preserve separability. -/
+theorem homeomorphism_preserves_separable_5_24 {f : X → Y}
+    (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
+    IsSeparable_4_13 𝒪₁ -> IsSeparable_4_13 𝒪₂ := by
+  intro hSep
+  rcases hf with ⟨g, hcont, -, -, hright⟩
+  rcases hSep with ⟨A, hActb, hAdense⟩
+  refine ⟨f '' A, hActb.image f, ?_⟩
+  rw [isDense_iff_open_4_11]
+  intro V hV hVne
+  rcases hVne with ⟨y, hyV⟩
+  have hpre_open : f ⁻¹' V ∈ 𝒪₁ := hcont V hV
+  have hpre_ne : (A ∩ f ⁻¹' V).Nonempty := by
+    exact (isDense_iff_open_4_11 (𝒪 := 𝒪₁) A).mp hAdense (f ⁻¹' V) hpre_open
+      ⟨g y, by simpa [hright y] using hyV⟩
+  rcases hpre_ne with ⟨x, hxA, hxV⟩
+  exact ⟨f x, ⟨⟨x, hxA, rfl⟩, hxV⟩⟩
+
+/-- The usual real line is not homeomorphic to the Sorgenfrey line. -/
+theorem real_not_homeomorphic_sorgenfrey_5_25 :
+    ¬ ∃ f : ℝ → ℝ,
+      IsHomeomorphismMap_5_20 (@inducedTopology_1_17 ℝ inferInstance)
+        SorgenfreyTopology_3_12 f := by
+  rintro ⟨f, hhomeo⟩
+  have hRealSecond : SecondCountable_3_6 (@inducedTopology_1_17 ℝ inferInstance) := by
+    have hSep : IsSeparable_4_13 (@inducedTopology_1_17 ℝ inferInstance) := by
+      refine ⟨Set.range (fun q : ℚ ↦ (q : ℝ)), Set.countable_range _, ?_⟩
+      rw [isDense_iff_open_4_11]
+      intro U hU hUne
+      rcases hUne with ⟨x, hxU⟩
+      rcases hU x hxU with ⟨r, rpos, hr⟩
+      rcases exists_rat_btwn (show x < x + r by linarith) with ⟨q, hqx, hqr⟩
+      refine ⟨q, ?_, hr ?_⟩
+      · exact ⟨q, rfl⟩
+      · have : |(q : ℝ) - x| < r := by
+          rw [abs_lt]
+          constructor <;> linarith
+        simpa [openBall_1_14, Real.dist_eq, abs_sub_comm] using this
+    exact separable_metric_implies_secondCountable_4_15 hSep
+  have hSorSecond : SecondCountable_3_6 SorgenfreyTopology_3_12 :=
+    homeomorphism_preserves_secondCountable_5_24 hhomeo hRealSecond
+  exact Sorgenfrey_not_secondCountable_3_12 hSorSecond
+
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 5.26: an open map sends open sets to open sets. -/
 def IsOpenMap_5_26 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
   ∀ U : Set X, U ∈ 𝒪₁ -> f '' U ∈ 𝒪₂
 
-/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 5.26: `f` is a closed map when the image of every closed set is closed. -/
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 5.26: a closed map sends closed sets to closed sets. -/
 def IsClosedMap_5_26 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
   ∀ F : Set X, IsClosed_1_2 𝒪₁ F -> IsClosed_1_2 𝒪₂ (f '' F)
 
-/-!
-Proposition 5.27 characterises homeomorphisms via open/closed maps.
--/
+private theorem preimage_eq_image_of_inverse
+    {f : X → Y} {g : Y → X}
+    (hleft : Function.LeftInverse g f)
+    (hright : Function.RightInverse g f)
+    (U : Set X) :
+    g ⁻¹' U = f '' U := by
+  ext y
+  constructor
+  · intro hy
+    refine ⟨g y, hy, ?_⟩
+    exact hright y
+  · rintro ⟨x, hx, rfl⟩
+    simpa [hleft x] using hx
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27(1⟹2): a homeomorphism is a continuous bijection and an open map. -/
-theorem homeomorphism_isContinuousBijectiveOpenMap_5_27
-  (h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂) :
-    IsContinuous_5_1 𝒪₁ 𝒪₂ h.toFun ∧
-    Function.Bijective h.toFun ∧
-    IsOpenMap_5_26 𝒪₁ 𝒪₂ h.toFun := by sorry
+private theorem image_compl_eq_compl_image_of_bijective
+    {f : X → Y} (hf : Function.Bijective f) (F : Set X) :
+    f '' Fᶜ = (f '' F)ᶜ := by
+  ext y
+  constructor
+  · rintro ⟨x, hxF, rfl⟩ hy
+    rcases hy with ⟨x', hx'F, hx'⟩
+    have : x = x' := hf.1 hx'.symm
+    exact hxF (this ▸ hx'F)
+  · intro hy
+    rcases hf.2 y with ⟨x, rfl⟩
+    refine ⟨x, ?_, rfl⟩
+    intro hxF
+    exact hy ⟨x, hxF, rfl⟩
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27(2⟹3): a continuous open bijection is a closed map. -/
-theorem openMap_isClosedMap_of_bijective_5_27
-  {f : X → Y} (hfbij : Function.Bijective f) (hfo : IsOpenMap_5_26 𝒪₁ 𝒪₂ f) :
-    IsClosedMap_5_26 𝒪₁ 𝒪₂ f := by sorry
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27 (1 → 2):
+  a homeomorphism is a continuous bijection and an open map. -/
+theorem homeomorphismMap_implies_continuous_bijective_open_5_27 {f : X → Y}
+    (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
+    IsContinuous_5_1 𝒪₁ 𝒪₂ f ∧ Function.Bijective f ∧ IsOpenMap_5_26 𝒪₁ 𝒪₂ f := by
+  rcases hf with ⟨g, hcont, hgcont, hleft, hright⟩
+  refine ⟨hcont, ⟨hleft.injective, hright.surjective⟩, ?_⟩
+  intro U hU
+  have hpre : g ⁻¹' U ∈ 𝒪₂ := hgcont U hU
+  rw [preimage_eq_image_of_inverse hleft hright U] at hpre
+  exact hpre
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27(3⟹1): a continuous bijection that is a closed map
-  yields a homeomorphism. -/
-theorem homeomorphism_of_continuousBijectiveClosedMap_5_27
-  (h𝒪₁ : IsTopology_1_1 X 𝒪₁) (h𝒪₂ : IsTopology_1_1 Y 𝒪₂)
-  {f : X → Y} (hf : IsContinuous_5_1 𝒪₁ 𝒪₂ f) (hfbij : Function.Bijective f)
-  (hfc : IsClosedMap_5_26 𝒪₁ 𝒪₂ f) :
-    ∃ (g : Y → X), IsContinuous_5_1 𝒪₂ 𝒪₁ g ∧
-      Function.LeftInverse g f ∧ Function.RightInverse g f := by sorry
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27 (2 → 3):
+  a continuous bijection is open iff it is closed. -/
+theorem continuous_bijective_open_implies_closed_5_27 {f : X → Y}
+    (_hfcont : IsContinuous_5_1 𝒪₁ 𝒪₂ f)
+    (hfbij : Function.Bijective f)
+    (hfopen : IsOpenMap_5_26 𝒪₁ 𝒪₂ f) :
+    IsClosedMap_5_26 𝒪₁ 𝒪₂ f := by
+  intro F hF
+  have hFc_open : Fᶜ ∈ 𝒪₁ := open_of_closed_compl hF
+  have himage_open : f '' Fᶜ ∈ 𝒪₂ := hfopen Fᶜ hFc_open
+  have hEq : f '' Fᶜ = (f '' F)ᶜ := image_compl_eq_compl_image_of_bijective hfbij F
+  rw [hEq] at himage_open
+  simpa using closed_of_open_compl himage_open
 
-end OpenClosedMapPart
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27 (3 → 1):
+  a continuous bijection that is closed is a homeomorphism. -/
+theorem continuous_bijective_closed_implies_homeomorphismMap_5_27 {f : X → Y}
+    (hfcont : IsContinuous_5_1 𝒪₁ 𝒪₂ f)
+    (hfbij : Function.Bijective f)
+    (hfclosed : IsClosedMap_5_26 𝒪₁ 𝒪₂ f) :
+    IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f := by
+  classical
+  let g : Y → X := λ y ↦ Classical.choose (hfbij.2 y)
+  have hright : Function.RightInverse g f := by
+    intro y
+    exact Classical.choose_spec (hfbij.2 y)
+  have hleft : Function.LeftInverse g f := by
+    intro x
+    apply hfbij.1
+    exact hright (f x)
+  refine ⟨g, hfcont, ?_, hleft, hright⟩
+  apply (continuous_iff_preimage_closed_5_4 (𝒪₁ := 𝒪₂) (𝒪₂ := 𝒪₁) g).2
+  intro F hF
+  have himage_closed : IsClosed_1_2 𝒪₂ (f '' F) := hfclosed F hF
+  have hEq : g ⁻¹' F = f '' F := preimage_eq_image_of_inverse hleft hright F
+  rwa [hEq]
 
-section HomeomorphismExamplesPart
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27:
+  for a map `f`, being a homeomorphism is equivalent to being a continuous
+  bijection and an open map. -/
+theorem homeomorphismMap_iff_continuous_bijective_open_5_27 {f : X → Y} :
+    IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f
+      <->
+        IsContinuous_5_1 𝒪₁ 𝒪₂ f ∧ Function.Bijective f ∧ IsOpenMap_5_26 𝒪₁ 𝒪₂ f := by
+  constructor
+  · exact homeomorphismMap_implies_continuous_bijective_open_5_27
+  · rintro ⟨hfcont, hfbij, hfopen⟩
+    exact continuous_bijective_closed_implies_homeomorphismMap_5_27 hfcont hfbij
+      (continuous_bijective_open_implies_closed_5_27 hfcont hfbij hfopen)
 
-open LeanTopology.Basis
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.27:
+  for a map `f`, being a homeomorphism is equivalent to being a continuous
+  bijection and a closed map. -/
+theorem homeomorphismMap_iff_continuous_bijective_closed_5_27 {f : X → Y} :
+    IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f
+      <->
+        IsContinuous_5_1 𝒪₁ 𝒪₂ f ∧ Function.Bijective f ∧ IsClosedMap_5_26 𝒪₁ 𝒪₂ f := by
+  constructor
+  · intro hf
+    rcases homeomorphismMap_implies_continuous_bijective_open_5_27 hf with ⟨hfcont, hfbij, hfopen⟩
+    exact ⟨hfcont, hfbij, continuous_bijective_open_implies_closed_5_27 hfcont hfbij hfopen⟩
+  · rintro ⟨hfcont, hfbij, hfclosed⟩
+    exact continuous_bijective_closed_implies_homeomorphismMap_5_27 hfcont hfbij hfclosed
 
-/-!
-Example 5.21 presents an explicit homeomorphism between [0,1) and [0,+∞).
--/
-
-/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.21: the half-open interval [0,1) is homeomorphic to [0,+∞). -/
-theorem homeomorphism_half_open_ray_5_21 :
-    ∃ h : IsHomeomorphism_5_20
-      (@inducedTopology_1_17 {x : ℝ | 0 ≤ x ∧ x < 1}
-        (restrictDistance_1_13 {x : ℝ | 0 ≤ x ∧ x < 1}))
-      (@inducedTopology_1_17 {x : ℝ | 0 ≤ x}
-        (restrictDistance_1_13 {x : ℝ | 0 ≤ x})),
-      True := by sorry
-
-/-!
-Example 5.22 presents an explicit homeomorphism between the closed disk and the closed square.
--/
-
-/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.22: the closed unit disk is homeomorphic to the closed unit square. -/
-theorem homeomorphism_closed_disk_square_5_22 :
-    ∃ h : IsHomeomorphism_5_20
-      (@inducedTopology_1_17 {x : E 2 | ‖x‖ ≤ 1}
-        (restrictDistance_1_13 {x : E 2 | ‖x‖ ≤ 1}))
-      (@inducedTopology_1_17 {x : E 2 | |x ⟨0, by decide⟩| ≤ 1 ∧ |x ⟨1, by decide⟩| ≤ 1}
-        (restrictDistance_1_13 {x : E 2 | |x ⟨0, by decide⟩| ≤ 1 ∧ |x ⟨1, by decide⟩| ≤ 1})),
-      True := by sorry
-
-/-!
-Note 5.23 warns that a continuous bijection need not be a homeomorphism.
--/
-
-/-- ℕℴ𝓉ℯ 5.23: the identity map from discrete ℝ to usual ℝ is continuous and bijective,
-  but its inverse is not continuous, so it is not a homeomorphism. -/
-theorem continuous_bijection_not_homeomorphism_5_23 :
-    IsContinuous_5_1 (discreteTopology_1_6 ℝ) {U : Set ℝ | IsOpen U} (id : ℝ → ℝ) ∧
-    Function.Bijective (id : ℝ → ℝ) ∧
-    ¬ IsContinuous_5_1 {U : Set ℝ | IsOpen U} (discreteTopology_1_6 ℝ) (id : ℝ → ℝ) := by sorry
-
-/-!
-Note 5.24 explains that homeomorphisms preserve topological properties.
--/
-
-/-- ℕℴ𝓉ℯ 5.24: homeomorphic spaces share the same topological properties.
-  As an example, second countability is preserved. -/
-theorem homeomorphism_preserves_secondCountable_5_24
-  (h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂) (h2 : SecondCountable_3_6 𝒪₁) :
-    SecondCountable_3_6 𝒪₂ := by sorry
-
-/-!
-Example 5.25 shows that ℝ and the Sorgenfrey line are not homeomorphic.
--/
-
-/-- ℰ𝓍𝒶𝓂𝓅𝓁ℯ 5.25: the Euclidean line and the Sorgenfrey line are not homeomorphic
-  because ℝ is second countable but the Sorgenfrey line is not. -/
-theorem real_not_homeomorphic_sorgenfrey_5_25 :
-    ¬ ∃ h : IsHomeomorphism_5_20
-        {U : Set ℝ | IsOpen U} SorgenfreyTopology_3_12, True := by sorry
-
-end HomeomorphismExamplesPart
+end HomeomorphismPart
 
 /-!
 The final statements verify that our continuity language agrees with mathlib's
@@ -1229,6 +1619,98 @@ def Homeomorph.toArticleHomeomorphism_cert (h : X ≃ₜ Y) :
   right_inv := h.right_inv
 
 end CertifyMathlib
+
+section Examples
+
+open LeanTopology.TopologicalSpace
+
+/-- The half-open interval `[0,1)` is homeomorphic to `[0,+∞)`. -/
+theorem halfOpenUnitInterval_homeomorphism_nonnegativeRay_5_21 :
+    IsHomeomorphismMap_5_20
+      (@inducedTopology_1_17 HalfOpenUnitInterval_5_21 inferInstance)
+      (@inducedTopology_1_17 NonnegativeRay_5_21 inferInstance)
+      halfOpenUnitInterval_to_nonnegativeRay_5_21 := by
+  have hf : IsContinuous_5_1
+      (@inducedTopology_1_17 HalfOpenUnitInterval_5_21 inferInstance)
+      (@inducedTopology_1_17 NonnegativeRay_5_21 inferInstance)
+      halfOpenUnitInterval_to_nonnegativeRay_5_21 := by
+    rw [continuous_iff_eps_5_9]
+    intro x₀ ε εpos
+    set a : ℝ := 1 - x₀.1 with ha
+    have ha_pos : 0 < a := by
+      rw [ha]
+      linarith [x₀.2.2]
+    refine ⟨min (a / 2) (ε * (a ^ 2 / 2)), by positivity, ?_⟩
+    intro x hx
+    have hx1 : dist x₀.1 x.1 < a / 2 := lt_of_lt_of_le hx (min_le_left _ _)
+    have hx2 : dist x₀.1 x.1 < ε * (a ^ 2 / 2) := lt_of_lt_of_le hx (min_le_right _ _)
+    have habs : |x₀.1 - x.1| < a / 2 := by simpa [Real.dist_eq] using hx1
+    have hdenx : a / 2 < 1 - x.1 := by
+      rw [ha] at habs ⊢
+      rcases abs_lt.mp habs with ⟨h1, h2⟩
+      linarith
+    have hEq :
+        x₀.1 / (1 - x₀.1) - x.1 / (1 - x.1)
+          = (x₀.1 - x.1) / ((1 - x₀.1) * (1 - x.1)) := by
+      field_simp [show (1 - x₀.1) ≠ 0 by linarith [x₀.2.2], show (1 - x.1) ≠ 0 by linarith]
+      ring
+    change dist (x₀.1 / (1 - x₀.1)) (x.1 / (1 - x.1)) < ε
+    rw [Real.dist_eq, hEq, abs_div]
+    have hden_pos : 0 < (1 - x₀.1) * (1 - x.1) := by
+      have hxden_pos : 0 < 1 - x.1 := by linarith
+      nlinarith [x₀.2.2, hxden_pos]
+    have hden_abs : |(1 - x₀.1) * (1 - x.1)| = (1 - x₀.1) * (1 - x.1) := abs_of_pos hden_pos
+    rw [hden_abs]
+    have hden_lower : a ^ 2 / 2 ≤ (1 - x₀.1) * (1 - x.1) := by
+      rw [ha]
+      nlinarith [hdenx]
+    have hnum : |x₀.1 - x.1| < ε * ((1 - x₀.1) * (1 - x.1)) := by
+      have haux : ε * (a ^ 2 / 2) ≤ ε * ((1 - x₀.1) * (1 - x.1)) :=
+        mul_le_mul_of_nonneg_left hden_lower εpos.le
+      exact lt_of_lt_of_le hx2 haux
+    have hlt : |x₀.1 - x.1| / ((1 - x₀.1) * (1 - x.1)) <
+        (ε * ((1 - x₀.1) * (1 - x.1))) / ((1 - x₀.1) * (1 - x.1)) :=
+      div_lt_div_of_pos_right hnum hden_pos
+    simpa [hden_pos.ne'] using hlt
+  have hg : IsContinuous_5_1
+      (@inducedTopology_1_17 NonnegativeRay_5_21 inferInstance)
+      (@inducedTopology_1_17 HalfOpenUnitInterval_5_21 inferInstance)
+      nonnegativeRay_to_halfOpenUnitInterval_5_21 := by
+    rw [continuous_iff_eps_5_9]
+    intro y₀ ε εpos
+    refine ⟨ε, εpos, ?_⟩
+    intro y hy
+    have hEq :
+        y₀.1 / (1 + y₀.1) - y.1 / (1 + y.1)
+          = (y₀.1 - y.1) / ((1 + y₀.1) * (1 + y.1)) := by
+      have hy₀ne : 1 + y₀.1 ≠ 0 := by linarith [y₀.2]
+      have hyne : 1 + y.1 ≠ 0 := by linarith [y.2]
+      field_simp [hy₀ne, hyne]
+      ring
+    change dist (y₀.1 / (1 + y₀.1)) (y.1 / (1 + y.1)) < ε
+    rw [Real.dist_eq, hEq, abs_div]
+    have hden_pos : 0 < (1 + y₀.1) * (1 + y.1) := by nlinarith [y₀.2, y.2]
+    have hden_ge : 1 ≤ (1 + y₀.1) * (1 + y.1) := by nlinarith [y₀.2, y.2]
+    have hden_abs : |(1 + y₀.1) * (1 + y.1)| = (1 + y₀.1) * (1 + y.1) := abs_of_pos hden_pos
+    rw [hden_abs]
+    have hnum0 : |y₀.1 - y.1| < ε := by simpa [Real.dist_eq] using hy
+    have hnum : |y₀.1 - y.1| < ε * ((1 + y₀.1) * (1 + y.1)) := by
+      nlinarith [hnum0, εpos, hden_ge]
+    have hlt : |y₀.1 - y.1| / ((1 + y₀.1) * (1 + y.1)) <
+        (ε * ((1 + y₀.1) * (1 + y.1))) / ((1 + y₀.1) * (1 + y.1)) :=
+      div_lt_div_of_pos_right hnum hden_pos
+    have hcancel :
+        (ε * ((1 + y₀.1) * (1 + y.1))) / ((1 + y₀.1) * (1 + y.1)) = ε := by
+      rw [mul_div_assoc]
+      rw [div_self hden_pos.ne']
+      ring
+    rw [hcancel] at hlt
+    exact hlt
+  exact ⟨nonnegativeRay_to_halfOpenUnitInterval_5_21, hf, hg,
+    halfOpenUnitInterval_nonnegativeRay_leftInv_5_21,
+    halfOpenUnitInterval_nonnegativeRay_rightInv_5_21⟩
+
+end Examples
 
 end ContinuousMap
 end LeanTopology
