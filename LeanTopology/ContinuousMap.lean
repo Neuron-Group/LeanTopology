@@ -249,7 +249,8 @@ theorem continuous_iff_ball_5_9 (f : X → Y) :
     · rw [Veq]
       exact image_subset_iff.mp sub
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.9(b): the open-ball image formulation is equivalent to the usual epsilon-delta condition. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.9(b):
+  the open-ball image formulation is equivalent to the usual epsilon-delta condition. -/
 theorem ballImage_iff_eps_5_9 (f : X → Y) :
   (∀ x₀ : X, ∀ ε > 0, ∃ δ > 0,
     f '' openBall_1_14 x₀ δ ⊆ openBall_1_14 (f x₀) ε)
@@ -410,7 +411,8 @@ theorem continuous_into_euclidean_5_10 {n : ℕ} (f : X → E n) :
           (DistanceSpace_1_12.dist (f' k x₀) (f' k x)) ^ 2) := Real.sqrt_nonneg _
       nlinarith
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.10, subspace form: a map into a Euclidean subspace is continuous iff each coordinate is continuous. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.10, subspace form:
+  a map into a Euclidean subspace is continuous iff each coordinate is continuous. -/
 theorem continuous_into_euclideanSubspace_5_10 {n : ℕ}
   {A : Set (E n)} (f : X → A) :
     IsContinuous_5_1 (@inducedTopology_1_17 X ‹DistanceSpace_1_12 X›)
@@ -772,7 +774,7 @@ theorem euclidean_semialgebraic_basic_open_5_14 {n : ℕ}
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.15: continuity may be tested on a subbasis of the codomain. -/
 theorem continuous_iff_subbasis_5_15
-  (h𝒪₁ : IsTopology_1_1 X 𝒪₁) (h𝒪₂ : IsTopology_1_1 Y 𝒪₂) {𝒮 : Set (Set Y)}
+  (h𝒪₁ : IsTopology_1_1 X 𝒪₁) {𝒮 : Set (Set Y)}
     (h𝒮 : IsTopologicalSubbasis_3_13 𝒪₂ 𝒮) (f : X → Y) :
       IsContinuous_5_1 𝒪₁ 𝒪₂ f
         <-> ∀ S : Set Y, S ∈ 𝒮 -> f ⁻¹' S ∈ 𝒪₁ := by
@@ -870,7 +872,7 @@ theorem continuous_iff_closure_image_5_16
       exact this
     have : Ā[𝒪₁] ⊆ f ⁻¹' (f '' A)̄[𝒪₂]
       := closure_minimal_4_2 A (f ⁻¹' (f '' A)̄[𝒪₂]) c3 c2
-    exact image_subset_iff.mpr this 
+    exact image_subset_iff.mpr this
   · apply continuous_iff_preimage_closed_5_4 f |>.mpr
     intro F Fcl
     suffices (f ⁻¹' F)̄[𝒪₁] ⊆ f ⁻¹' F
@@ -937,7 +939,8 @@ theorem tendstoSeq_image_of_continuousAt_5_17
   apply fUsub
   exact mem_image_of_mem f hN
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.18: on a first-countable domain, continuity at a point is equivalent to sequential continuity. -/
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 5.18: on a first-countable domain,
+  continuity at a point is equivalent to sequential continuity. -/
 theorem continuousAt_iff_tendstoSeq_5_18
   (h𝒪₁ : IsTopology_1_1 X 𝒪₁) (hFirst : FirstCountable_2_12 𝒪₁) {f : X → Y} {x : X} :
     IsContinuousAt_5_6 𝒪₁ 𝒪₂ f x
@@ -1289,7 +1292,8 @@ def closedSquare_to_closedDisk_5_22 (x : ClosedSquare_5_22) : ClosedDisk_5_22 :=
         field_simp [hnormone_ne]
       _ ≤ 1 := hnormmax_le
 
-/-- If the two radial maps are continuous and inverse to each other, then they define a homeomorphism. -/
+/-- If the two radial maps are continuous and inverse to each other,
+  then they define a homeomorphism. -/
 theorem closedDisk_homeomorphism_closedSquare_criterion_5_22
     (hf : IsContinuous_5_1 (euclideanSubspaceTopology_2_21 2 {x : E 2 | ‖x‖ ≤ 1})
       (euclideanSubspaceTopology_2_21 2 {x : E 2 | ∀ i : Fin 2, |x i| ≤ 1})
@@ -1298,11 +1302,11 @@ theorem closedDisk_homeomorphism_closedSquare_criterion_5_22
       (euclideanSubspaceTopology_2_21 2 {x : E 2 | ‖x‖ ≤ 1})
       closedSquare_to_closedDisk_5_22)
     (hleft : Function.LeftInverse closedSquare_to_closedDisk_5_22 closedDisk_to_closedSquare_5_22)
-    (hright : Function.RightInverse closedSquare_to_closedDisk_5_22 closedDisk_to_closedSquare_5_22) :
-    IsHomeomorphismMap_5_20
-      (euclideanSubspaceTopology_2_21 2 {x : E 2 | ‖x‖ ≤ 1})
-      (euclideanSubspaceTopology_2_21 2 {x : E 2 | ∀ i : Fin 2, |x i| ≤ 1})
-      closedDisk_to_closedSquare_5_22 := by
+    (hright : Function.RightInverse closedSquare_to_closedDisk_5_22 closedDisk_to_closedSquare_5_22)
+    : IsHomeomorphismMap_5_20
+        (euclideanSubspaceTopology_2_21 2 {x : E 2 | ‖x‖ ≤ 1})
+        (euclideanSubspaceTopology_2_21 2 {x : E 2 | ∀ i : Fin 2, |x i| ≤ 1})
+        closedDisk_to_closedSquare_5_22 := by
   exact ⟨closedSquare_to_closedDisk_5_22, hf, hg, hleft, hright⟩
 
 end Example522
@@ -1325,7 +1329,7 @@ theorem singleton_zero_not_open_real_5_23 :
     have hdist : dist (0 : ℝ) (r / 2) = r / 2 := by
       rw [Real.dist_eq]
       have hnonneg : 0 ≤ r / 2 := by linarith
-      simpa [abs_of_nonneg hnonneg]
+      simp [abs_of_nonneg hnonneg]
     rw [hdist]
     have : r / 2 < r := by
       linarith
