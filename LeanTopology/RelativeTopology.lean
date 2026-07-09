@@ -582,24 +582,128 @@ exact hClosedFam.C2_union' 𝒮 h𝒮closed
 -------------------------------------------------------------------------
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.14: convergence in a subspace agrees with ambient convergence. -/
-theorem tendstoSeq_relativeTopology_iff_6_14 (A : Set X)
-    (xₙ : Sequence_2_16 A) (x : A) :
-    TendstoSeq_2_16 (relativeTopology_6_2 𝒪 A) xₙ x
-      <->
-        TendstoSeq_2_16 𝒪 (fun n ↦ (xₙ n).1) x.1 := by
-  sorry
+-----------------------------------------------------
+theorem tendstoSeq_relativeTopology_iff_6_14
+-----------------------------------------------------
+(A  : Set X           )
+(xₙ : Sequence_2_16 A )
+(x  : A               )
+-----------------------------------------------------
+: TendstoSeq_2_16 (relativeTopology_6_2 𝒪 A) xₙ x
+  <-> TendstoSeq_2_16 𝒪 (λ n ↦ (xₙ n).1) x.1 := by
+-----------------------------------------------------
+constructor<;>intro hyp V hV
+· have hVsub : IsNeighborhood_2_1
+    (relativeTopology_6_2 𝒪 A)
+    x (Subtype.val ⁻¹' V) := by
+      rcases hV with ⟨U, hU𝒪, hxU, hUV⟩
+      refine ⟨Subtype.val ⁻¹' U, ?_, ?_, ?_⟩
+      · exact ⟨U, hU𝒪, rfl⟩
+      · simpa using hxU
+      · exact preimage_mono hUV
+  rcases hyp (Subtype.val ⁻¹' V) hVsub with ⟨N, hN⟩
+  refine ⟨N, ?_⟩
+  intro n hn
+  exact hN n hn
+· rcases hV with ⟨W, hWrel, hxW, hWV⟩
+  rcases hWrel with ⟨U, hU𝒪, hWU⟩
+  have hxU : x.1 ∈ U := by
+    have : x ∈ Subtype.val ⁻¹' U := by
+      simpa [hWU] using hxW
+    exact this
+  rcases hyp U ⟨U, hU𝒪, hxU, Subset.rfl⟩ with ⟨N, hN⟩
+  refine ⟨N, ?_⟩
+  intro n hn
+  have hxUn : (xₙ n).1 ∈ U := hN n hn
+  have hxWn : xₙ n ∈ W := by
+    have : xₙ n ∈ Subtype.val ⁻¹' U := hxUn
+    simpa [hWU] using this
+  exact hWV hxWn
+-----------------------------------------------------
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.15: closure in a subspace is the ambient closure intersected with the subspace. -/
-theorem closure_relativeTopology_6_15 (A B : Set X) :
-    closure_4_1 (relativeTopology_6_2 𝒪 A) (subspaceSubset_6_2 A B) =
-      subspaceSubset_6_2 A (A ∩ closure_4_1 𝒪 B) := by
-  sorry
+/- ----------------------------------------------------------------------------
+  One subtle here: If B ⊄ A, we should not immediately say Cl_A B = A ∩ B̄
+  Instance : Put A = {0} and B = {1 / n | n ∈ ℕ⁺}
+    We got A ∩ B̄ = 0, but since A ∩ B = ∅, Cl_A B = ∅.
+------------------------------------------------------------------------------/
+-------------------------------------------------------------------------------
+theorem closure_relativeTopology_6_15
+-------------------------------------------------------------------------------
+(A B  : Set X )
+(hBA  : B ⊆ A )
+-------------------------------------------------------------------------------
+: closure_4_1 (relativeTopology_6_2 𝒪 A) (subspaceSubset_6_2 A B)
+  = subspaceSubset_6_2 A (A ∩ closure_4_1 𝒪 B) := by
+-------------------------------------------------------------------------------
+ext x; constructor<;>intro hyp
+· have hxcl : x.1 ∈ closure_4_1 𝒪 B := by
+    apply mem_closure_iff_openNeighborhood_4_5 B x.1 |>.mpr
+    rintro U ⟨hUx, hU⟩
+    have hUsub : subspaceSubset_6_2 A U ∈ relativeTopology_6_2 𝒪 A := by
+      exact ⟨U, hU, rfl⟩
+    have hxUsub : x ∈ subspaceSubset_6_2 A U := by
+      rcases hUx with ⟨W, hW, hxW, hWU⟩
+      exact hWU hxW
+    have hnonempty :=
+      (mem_closure_iff_openNeighborhood_4_5 (subspaceSubset_6_2 A B) x).mp hyp
+        (subspaceSubset_6_2 A U) ⟨neighborhood_of_open_mem hUsub hxUsub, hUsub⟩
+    rcases hnonempty with ⟨y, hyB, hyU⟩
+    refine ⟨y.1, ?_, ?_⟩
+    · simpa [subspaceSubset_6_2] using hyB
+    · simpa [subspaceSubset_6_2] using hyU
+  simpa [subspaceSubset_6_2] using
+    (show x.1 ∈ A ∩ closure_4_1 𝒪 B from ⟨x.2, hxcl⟩)
+· apply mem_closure_iff_openNeighborhood_4_5
+    (subspaceSubset_6_2 A B) x |>.mpr
+  rintro V ⟨hV, VopA⟩
+  rcases VopA with ⟨U, Uop, hVU⟩
+  have hxV : x ∈ V := by
+    rcases hV with ⟨W, hW, hxW, hWV⟩
+    exact hWV hxW
+  have hxU : x.1 ∈ U := by
+    simpa [hVU] using hxV
+  have hxcl : x.1 ∈ closure_4_1 𝒪 B := by
+    exact hyp.2
+  have hnonempty :=
+    (mem_closure_iff_openNeighborhood_4_5 B x.1).mp hxcl U
+      ⟨neighborhood_of_open_mem Uop hxU, Uop⟩
+  rcases hnonempty with ⟨y, hyB, hyU⟩
+  refine ⟨⟨y, hBA hyB⟩, ?_, ?_⟩
+  · simpa [subspaceSubset_6_2] using hyB
+  · have hyV : (⟨y, hBA hyB⟩ : A) ∈ V := by
+      have : (⟨y, hBA hyB⟩ : A) ∈ Subtype.val ⁻¹' U := by
+        exact hyU
+      simpa [hVU] using this
+    exact hyV
+-------------------------------------------------------------------------------
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.17: corestricting a continuous map to a subspace preserves continuity. -/
-theorem continuous_corestrict_6_17 {f : X → Y} (hf : IsContinuous_5_1 𝒪₁ 𝒪₂ f)
-    (A : Set Y) (hA : MapsTo f univ A) :
-    IsContinuous_5_1 𝒪₁ (relativeTopology_6_2 𝒪₂ A) (corestrict_6_17 f A hA) := by
-  sorry
+------------------------------------------------------------
+theorem continuous_corestrict_6_17
+------------------------------------------------------------
+{f  : X -> Y                  }
+(hf : IsContinuous_5_1 𝒪₁ 𝒪₂ f)
+(A  : Set Y                   )
+(hA : MapsTo f univ A         )
+------------------------------------------------------------
+: IsContinuous_5_1 𝒪₁
+  (relativeTopology_6_2 𝒪₂ A) (corestrict_6_17 f A hA) := by
+------------------------------------------------------------
+set fₐ  : X -> A := corestrict_6_17 f A hA
+set i   : A -> Y := inclusionMap_6_2 A
+have feq : f = i ∘ fₐ := by
+  funext x
+  rfl
+intro V VopA
+simp only [relativeTopology_6_2, mem_setOf_eq] at VopA
+rcases VopA with ⟨U, Uop, hVU⟩
+change V = i ⁻¹' U at hVU
+rw [hVU]
+change (i ∘ fₐ) ⁻¹' U  ∈ 𝒪₁
+rw [← feq]
+exact hf U Uop
+------------------------------------------------------------
 
 section EmbeddingPart
 
@@ -871,7 +975,7 @@ abbrev oneUnit_6_13 : UnitInterval_6_13 :=
 `[0,1/2]` and the second on `[1/2,1]`. -/
 def pathConcat_6_13 (f g : UnitInterval_6_13 → Y) :
     UnitInterval_6_13 → Y :=
-  fun t ↦
+  λ t ↦
     if ht : t.1 ≤ (1 : ℝ) / 2 then
       f ⟨2 * t.1, by
         constructor
