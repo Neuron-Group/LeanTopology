@@ -1038,21 +1038,75 @@ open LeanTopology.ClosureInterior
 Definition 5.20 introduces homeomorphisms.
 -/
 
+/-- Proof that fixed maps `f` and `g` are inverse homeomorphism data. -/
+structure IsHomeomorphismPair_5_20
+    (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) (g : Y → X) : Prop where
+  continuous_toFun : IsContinuous_5_1 𝒪₁ 𝒪₂ f
+  continuous_invFun : IsContinuous_5_1 𝒪₂ 𝒪₁ g
+  left_inv : Function.LeftInverse g f
+  right_inv : Function.RightInverse g f
+
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 5.20: a homeomorphism is a continuous bijection with continuous inverse. -/
 structure IsHomeomorphism_5_20 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) where
   toFun : X → Y
   invFun : Y → X
-  continuous_toFun : IsContinuous_5_1 𝒪₁ 𝒪₂ toFun
-  continuous_invFun : IsContinuous_5_1 𝒪₂ 𝒪₁ invFun
-  left_inv : Function.LeftInverse invFun toFun
-  right_inv : Function.RightInverse invFun toFun
+  homeomorphism_pair : IsHomeomorphismPair_5_20 𝒪₁ 𝒪₂ toFun invFun
+
+instance : CoeFun (IsHomeomorphism_5_20 𝒪₁ 𝒪₂) (fun _ => X → Y) where
+  coe h := h.toFun
+
+namespace IsHomeomorphism_5_20
+
+theorem continuous_toFun (h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂) :
+    IsContinuous_5_1 𝒪₁ 𝒪₂ h.toFun :=
+  h.homeomorphism_pair.continuous_toFun
+
+theorem continuous_invFun (h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂) :
+    IsContinuous_5_1 𝒪₂ 𝒪₁ h.invFun :=
+  h.homeomorphism_pair.continuous_invFun
+
+theorem left_inv (h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂) :
+    Function.LeftInverse h.invFun h.toFun :=
+  h.homeomorphism_pair.left_inv
+
+theorem right_inv (h : IsHomeomorphism_5_20 𝒪₁ 𝒪₂) :
+    Function.RightInverse h.invFun h.toFun :=
+  h.homeomorphism_pair.right_inv
+
+end IsHomeomorphism_5_20
 
 /-- A map-oriented restatement of definition 5.20. -/
-def IsHomeomorphismMap_5_20 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
-  ∃ g : Y → X,
-    IsContinuous_5_1 𝒪₁ 𝒪₂ f ∧
-      IsContinuous_5_1 𝒪₂ 𝒪₁ g ∧
-        Function.LeftInverse g f ∧ Function.RightInverse g f
+def IsHomeomorphismMap_5_20
+    (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
+  ∃ g : Y → X, IsHomeomorphismPair_5_20 𝒪₁ 𝒪₂ f g
+
+namespace IsHomeomorphismMap_5_20
+
+noncomputable def invFun {f : X → Y}
+    (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) : Y → X :=
+  Classical.choose hf
+
+theorem continuous_toFun {f : X → Y}
+    (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
+    IsContinuous_5_1 𝒪₁ 𝒪₂ f :=
+  (Classical.choose_spec hf).continuous_toFun
+
+theorem continuous_invFun {f : X → Y}
+    (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
+    IsContinuous_5_1 𝒪₂ 𝒪₁ hf.invFun :=
+  (Classical.choose_spec hf).continuous_invFun
+
+theorem left_inv {f : X → Y}
+    (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
+    Function.LeftInverse hf.invFun f :=
+  (Classical.choose_spec hf).left_inv
+
+theorem right_inv {f : X → Y}
+    (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
+    Function.RightInverse hf.invFun f :=
+  (Classical.choose_spec hf).right_inv
+
+end IsHomeomorphismMap_5_20
 
 /-- The bundled and unbundled formulations of definition 5.20 are equivalent. -/
 theorem isHomeomorphism_iff_isHomeomorphismMap_5_20 (f : X → Y) :
@@ -1060,15 +1114,16 @@ theorem isHomeomorphism_iff_isHomeomorphismMap_5_20 (f : X → Y) :
       <-> IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f := by
   constructor
   · rintro ⟨h, rfl⟩
-    exact ⟨h.invFun, h.continuous_toFun, h.continuous_invFun, h.left_inv, h.right_inv⟩
-  · rintro ⟨g, hf, hg, hleft, hright⟩
+    exact ⟨h.invFun, h.homeomorphism_pair⟩
+  · intro hf
     refine ⟨{
       toFun := f
-      invFun := g
-      continuous_toFun := hf
-      continuous_invFun := hg
-      left_inv := hleft
-      right_inv := hright }, rfl⟩
+      invFun := hf.invFun
+      homeomorphism_pair := {
+        continuous_toFun := hf.continuous_toFun
+        continuous_invFun := hf.continuous_invFun
+        left_inv := hf.left_inv
+        right_inv := hf.right_inv } }, rfl⟩
 
 private theorem isContinuous_iff_mathlibContinuous_local
     (T₁ : TopologicalSpace X) (T₂ : TopologicalSpace Y) (f : X → Y) :
@@ -1307,7 +1362,7 @@ theorem closedDisk_homeomorphism_closedSquare_criterion_5_22
         (euclideanSubspaceTopology_2_21 2 {x : E 2 | ‖x‖ ≤ 1})
         (euclideanSubspaceTopology_2_21 2 {x : E 2 | ∀ i : Fin 2, |x i| ≤ 1})
         closedDisk_to_closedSquare_5_22 := by
-  exact ⟨closedSquare_to_closedDisk_5_22, hf, hg, hleft, hright⟩
+  exact ⟨closedSquare_to_closedDisk_5_22, ⟨hf, hg, hleft, hright⟩⟩
 
 end Example522
 
@@ -1342,13 +1397,16 @@ theorem continuous_bijective_not_homeomorphism_5_23 :
     ¬ IsHomeomorphismMap_5_20 (discreteTopology_1_6 ℝ)
       (@inducedTopology_1_17 ℝ inferInstance) (id : ℝ → ℝ) := by
   intro h
-  rcases h with ⟨g, -, hgcont, hleft, -⟩
+  let g := h.invFun
+  have hgcont := h.continuous_invFun
+  have hleft := h.left_inv
   have hg_eq_id : g = id := by
     funext x
     exact hleft x
   have hsingle_open : ({0} : Set ℝ) ∈ (@inducedTopology_1_17 ℝ inferInstance) := by
     have hdisc : ({0} : Set ℝ) ∈ discreteTopology_1_6 ℝ := mem_discreteTopology_1_6 _
-    simpa [hg_eq_id] using hgcont {0} hdisc
+    have hpre : g ⁻¹' ({0} : Set ℝ) ∈ (@inducedTopology_1_17 ℝ inferInstance) := hgcont {0} hdisc
+    rwa [hg_eq_id, preimage_id_eq] at hpre
   exact singleton_zero_not_open_real_5_23 hsingle_open
 
 /-- Homeomorphisms preserve second countability. -/
@@ -1356,7 +1414,11 @@ theorem homeomorphism_preserves_secondCountable_5_24 {f : X → Y}
     (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
     SecondCountable_3_6 𝒪₁ -> SecondCountable_3_6 𝒪₂ := by
   intro hSecond
-  rcases hf with ⟨g, hcont, hgcont, hleft, hright⟩
+  let g := hf.invFun
+  have hcont := hf.continuous_toFun
+  have hgcont := hf.continuous_invFun
+  have hleft := hf.left_inv
+  have hright := hf.right_inv
   rcases hSecond with ⟨ℬ, hℬ, hℬctb⟩
   let ℭ : Set (Set Y) := (fun B : Set X ↦ f '' B) '' ℬ
   have hℭctb : ℭ.Countable := hℬctb.image (fun B : Set X ↦ f '' B)
@@ -1371,11 +1433,17 @@ theorem homeomorphism_preserves_secondCountable_5_24 {f : X → Y}
       · intro hy
         exact ⟨g y, hy, hright y⟩
       · rintro ⟨x, hx, rfl⟩
-        simpa [hleft x] using hx
+        change g (f x) ∈ B
+        have hgf : g (f x) = x := by
+          simpa [g] using hleft x
+        simpa [hgf] using hx
     simpa [hEq] using hpre
   · intro V hV y hy
     have hy_pre : g y ∈ f ⁻¹' V := by
-      simpa [hright y] using hy
+      change f (g y) ∈ V
+      have hfg : f (g y) = y := by
+        simpa [g] using hright y
+      simpa [hfg] using hy
     rcases hℬ.right (f ⁻¹' V) (hcont V hV) (g y) hy_pre with ⟨B, hBℬ, hyB, hBsub⟩
     refine ⟨f '' B, ?_, ?_, ?_⟩
     · exact ⟨B, hBℬ, rfl⟩
@@ -1389,7 +1457,9 @@ theorem homeomorphism_preserves_separable_5_24 {f : X → Y}
     (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
     IsSeparable_4_13 𝒪₁ -> IsSeparable_4_13 𝒪₂ := by
   intro hSep
-  rcases hf with ⟨g, hcont, -, -, hright⟩
+  let g := hf.invFun
+  have hcont := hf.continuous_toFun
+  have hright := hf.right_inv
   rcases hSep with ⟨A, hActb, hAdense⟩
   refine ⟨f '' A, hActb.image f, ?_⟩
   rw [isDense_iff_open_4_11]
@@ -1398,7 +1468,11 @@ theorem homeomorphism_preserves_separable_5_24 {f : X → Y}
   have hpre_open : f ⁻¹' V ∈ 𝒪₁ := hcont V hV
   have hpre_ne : (A ∩ f ⁻¹' V).Nonempty := by
     exact (isDense_iff_open_4_11 (𝒪 := 𝒪₁) A).mp hAdense (f ⁻¹' V) hpre_open
-      ⟨g y, by simpa [hright y] using hyV⟩
+      ⟨g y, by
+        change f (g y) ∈ V
+        have hfg : f (g y) = y := by
+          simpa [g] using hright y
+        simpa [hfg] using hyV⟩
   rcases hpre_ne with ⟨x, hxA, hxV⟩
   exact ⟨f x, ⟨⟨x, hxA, rfl⟩, hxV⟩⟩
 
@@ -1469,7 +1543,11 @@ private theorem image_compl_eq_compl_image_of_bijective
 theorem homeomorphismMap_implies_continuous_bijective_open_5_27 {f : X → Y}
     (hf : IsHomeomorphismMap_5_20 𝒪₁ 𝒪₂ f) :
     IsContinuous_5_1 𝒪₁ 𝒪₂ f ∧ Function.Bijective f ∧ IsOpenMap_5_26 𝒪₁ 𝒪₂ f := by
-  rcases hf with ⟨g, hcont, hgcont, hleft, hright⟩
+  let g := hf.invFun
+  have hcont := hf.continuous_toFun
+  have hgcont := hf.continuous_invFun
+  have hleft := hf.left_inv
+  have hright := hf.right_inv
   refine ⟨hcont, ⟨hleft.injective, hright.surjective⟩, ?_⟩
   intro U hU
   have hpre : g ⁻¹' U ∈ 𝒪₂ := hgcont U hU
@@ -1506,7 +1584,7 @@ theorem continuous_bijective_closed_implies_homeomorphismMap_5_27 {f : X → Y}
     intro x
     apply hfbij.1
     exact hright (f x)
-  refine ⟨g, hfcont, ?_, hleft, hright⟩
+  refine ⟨g, ⟨hfcont, ?_, hleft, hright⟩⟩
   apply (continuous_iff_preimage_closed_5_4 (𝒪₁ := 𝒪₂) (𝒪₂ := 𝒪₁) g).2
   intro F hF
   have himage_closed : IsClosed_1_2 𝒪₂ (f '' F) := hfclosed F hF
@@ -1599,12 +1677,12 @@ def IsHomeomorphism_5_20.toMathlibHomeomorph_cert
       {U : Set X | @IsOpen X T₁ U}
       {V : Set Y | @IsOpen Y T₂ V}) :
     X ≃ₜ Y where
-  toFun := h.toFun
+  toFun := h
   invFun := h.invFun
   left_inv := h.left_inv
   right_inv := h.right_inv
   continuous_toFun :=
-    (isContinuous_iff_mathlibContinuous_cert T₁ T₂ h.toFun).mp h.continuous_toFun
+    (isContinuous_iff_mathlibContinuous_cert T₁ T₂ h).mp h.continuous_toFun
   continuous_invFun :=
     (isContinuous_iff_mathlibContinuous_cert T₂ T₁ h.invFun).mp h.continuous_invFun
 
@@ -1615,12 +1693,14 @@ def Homeomorph.toArticleHomeomorphism_cert (h : X ≃ₜ Y) :
       {V : Set Y | @IsOpen Y T₂ V} where
   toFun := h
   invFun := h.symm
-  continuous_toFun :=
-    (isContinuous_iff_mathlibContinuous_cert T₁ T₂ h).mpr h.continuous
-  continuous_invFun :=
-    (isContinuous_iff_mathlibContinuous_cert T₂ T₁ h.symm).mpr h.symm.continuous
-  left_inv := h.left_inv
-  right_inv := h.right_inv
+  homeomorphism_pair := {
+    continuous_toFun :=
+      (isContinuous_iff_mathlibContinuous_cert T₁ T₂ h).mpr h.continuous
+    continuous_invFun :=
+      (isContinuous_iff_mathlibContinuous_cert T₂ T₁ h.symm).mpr h.symm.continuous
+    left_inv := h.left_inv
+    right_inv := h.right_inv
+  }
 
 end CertifyMathlib
 
