@@ -19,6 +19,11 @@ subDir = "lean"
 rev = "main"
 
 [[require]]
+name = "LeanPrism"
+git = "https://codeberg.org/wvhulle/lean-prism.git"
+rev = "main"
+
+[[require]]
 name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.30.0-rc2"

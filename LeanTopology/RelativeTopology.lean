@@ -729,7 +729,8 @@ Definition 6.18 introduces embeddings. We phrase it using the factorization of
 codomain.
 -/
 
-/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 6.18: a topological embedding is a continuous injective map whose range factor is a homeomorphism. -/
+/-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 6.18: a topological embedding is a continuous injective map
+  whose range factor is a homeomorphism. -/
 structure IsEmbedding_6_18 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop where
   continuous : IsContinuous_5_1 𝒪₁ 𝒪₂ f
   injective : Function.Injective f
@@ -767,6 +768,14 @@ private theorem isClosed_relativeTopology_iff_relativeClosed_6_6
     ext x
     rw [hBC]
     simp [subspaceSubset_6_2]
+
+private theorem continuous_rangeFactor_comp_of_continuous_comp_6_21
+    {W : Type (max u v w)} {𝒪W : Set (Set W)} {f : X → Y} {g : W → X}
+    (hfg : IsContinuous_5_1 𝒪W 𝒪₂ (f ∘ g)) :
+    IsContinuous_5_1 𝒪W (rangeTopology_6_18 𝒪₂ f) (rangeFactor_6_18 f ∘ g) := by
+  intro V hV
+  rcases hV with ⟨U, hU, rfl⟩
+  simpa [rangeFactor_6_18, Function.comp_def] using hfg U hU
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.21(2): for a continuous injective map,
 being an embedding is equivalent to openness of images in the subspace range. -/
@@ -846,7 +855,7 @@ constructor<;>intro hyp
 ------------------------------------------------------------------------------------
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.21(3): for a continuous injective map,
-being an embedding is equivalent to closedness of images in the subspace range. -/
+  being an embedding is equivalent to closedness of images in the subspace range. -/
 ------------------------------------------------------------------------------------
 theorem isEmbedding_iff_imageClosedInRange_6_21
 ------------------------------------------------------------------------------------
@@ -936,41 +945,155 @@ constructor<;>intro hyp
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.21(4): for a continuous injective map,
 being an embedding is equivalent to the universal property against continuity. -/
+------------------------------------------------------------------------------------
 theorem isEmbedding_iff_universalProperty_6_21
+------------------------------------------------------------------------------------
 {f      : X -> Y                  }
 (hfcont : IsContinuous_5_1 𝒪₁ 𝒪₂ f)
 (hfinj  : Function.Injective f    )
+------------------------------------------------------------------------------------
 : IsEmbedding_6_18 𝒪₁ 𝒪₂ f
   <->
-  ∀ {W : Type w} (𝒪W : Set (Set W)) (g : W → X),
+  ∀ {W : Type (max u v w)} (𝒪W : Set (Set W)) (g : W → X),
     IsContinuous_5_1 𝒪W 𝒪₂ (f ∘ g) -> IsContinuous_5_1 𝒪W 𝒪₁ g := by
+------------------------------------------------------------------------------------
 constructor<;>intro hyp
 · intro Z 𝒪Z g hfg
-  sorry
-· sorry
+  let hRange := hyp.rangeFactor_homeomorphism
+  have hgRange :
+      IsContinuous_5_1 𝒪Z (rangeTopology_6_18 𝒪₂ f) (rangeFactor_6_18 f ∘ g) :=
+    continuous_rangeFactor_comp_of_continuous_comp_6_21
+      (𝒪₂ := 𝒪₂) (f := f) (g := g) hfg
+  have hg' :
+      IsContinuous_5_1 𝒪Z 𝒪₁ (hRange.invFun ∘ (rangeFactor_6_18 f ∘ g)) :=
+    continuous_comp_5_2 hgRange hRange.continuous_invFun
+  have hEq : hRange.invFun ∘ (rangeFactor_6_18 f ∘ g) = g := by
+    funext z
+    exact hRange.left_inv (g z)
+  simpa [hEq] using hg'
+· let inv : Set.range f → X := fun y ↦ Classical.choose y.2
+  refine ⟨hfcont, hfinj, ⟨inv, ⟨?_, ?_, ?_, ?_⟩⟩⟩
+  · have hrange : MapsTo f univ (Set.range f) := by
+      intro x _
+      exact ⟨x, rfl⟩
+    simpa [rangeFactor_6_18, corestrict_6_17] using
+      (continuous_corestrict_6_17 (𝒪₁ := 𝒪₁) (𝒪₂ := 𝒪₂) hfcont (Set.range f) hrange)
+  · have hcomp :
+        IsContinuous_5_1 (rangeTopology_6_18 𝒪₂ f) 𝒪₂ (f ∘ inv) := by
+      have hincl :
+          IsContinuous_5_1 (rangeTopology_6_18 𝒪₂ f) 𝒪₂
+            (inclusionMap_6_2 (Set.range f)) :=
+        inclusion_continuous_6_3 (𝒪 := 𝒪₂) (A := Set.range f)
+      have hEq : f ∘ inv = inclusionMap_6_2 (Set.range f) := by
+        funext y
+        exact Classical.choose_spec y.2
+      simpa [hEq] using hincl
+    let RangeLift := ULift.{max u v w, v} (Set.range f)
+    let 𝒪RangeLift : Set (Set RangeLift) :=
+      {V | ∃ U : Set (Set.range f),
+        U ∈ rangeTopology_6_18 𝒪₂ f ∧ V = ULift.down ⁻¹' U}
+    have hdown :
+        IsContinuous_5_1 𝒪RangeLift (rangeTopology_6_18 𝒪₂ f)
+          (ULift.down : RangeLift → Set.range f) := by
+      intro V hV
+      exact ⟨V, hV, rfl⟩
+    have hcompLift :
+        IsContinuous_5_1 𝒪RangeLift 𝒪₂ (f ∘ (inv ∘ ULift.down)) := by
+      simpa [Function.comp_def] using continuous_comp_5_2 hdown hcomp
+    have hinvLift :
+      IsContinuous_5_1 𝒪RangeLift 𝒪₁
+        (inv ∘ (ULift.down : RangeLift → Set.range f)) :=
+          hyp 𝒪RangeLift (inv ∘ (ULift.down : RangeLift → Set.range f)) hcompLift
+    intro U hU
+    rcases hinvLift U hU with ⟨V, hV, hVeq⟩
+    have hpre : inv ⁻¹' U = V := by
+      ext y
+      have hmem :=
+        congrArg (fun S : Set RangeLift => (ULift.up y : RangeLift) ∈ S) hVeq
+      simpa [Function.comp_def] using hmem
+    rwa [hpre]
+  · intro x
+    apply hfinj
+    exact Classical.choose_spec (rangeFactor_6_18 f x).2
+  · intro y
+    apply Subtype.ext
+    exact Classical.choose_spec y.2
+------------------------------------------------------------------------------------
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.22(1): the composition of embeddings is an embedding. -/
-theorem embedding_comp_6_22 {f : X → Y} {g : Y → Z}
-    (hf : IsEmbedding_6_18 𝒪₁ 𝒪₂ f)
-    (hg : IsEmbedding_6_18 𝒪₂ 𝒪₃ g) :
-    IsEmbedding_6_18 𝒪₁ 𝒪₃ (g ∘ f) := by
-  sorry
+--------------------------------------------------------------------
+theorem embedding_comp_6_22
+--------------------------------------------------------------------
+{f  : X -> Y                  }
+{g  : Y -> Z                  }
+(hf : IsEmbedding_6_18 𝒪₁ 𝒪₂ f)
+(hg : IsEmbedding_6_18 𝒪₂ 𝒪₃ g)
+: IsEmbedding_6_18 𝒪₁ 𝒪₃ (g ∘ f) := by
+--------------------------------------------------------------------
+have hcont : IsContinuous_5_1 𝒪₁ 𝒪₃ (g ∘ f) :=
+  continuous_comp_5_2 hf.continuous hg.continuous
+have hinj : Function.Injective (g ∘ f) := by
+  intro x₁ x₂ hEq
+  exact hf.injective (hg.injective hEq)
+apply (isEmbedding_iff_universalProperty_6_21.{u, w, v}
+  (𝒪₁ := 𝒪₁) (𝒪₂ := 𝒪₃) (f := g ∘ f) hcont hinj).mpr
+intro W 𝒪W k hgfk
+have hgfk : IsContinuous_5_1 𝒪W 𝒪₃ (g ∘ (f ∘ k)) := by
+  simpa [Function.comp_def] using hgfk
+have hfk : IsContinuous_5_1 𝒪W 𝒪₂ (f ∘ k) :=
+  (isEmbedding_iff_universalProperty_6_21.{v, w, u}
+    (𝒪₁ := 𝒪₂) (𝒪₂ := 𝒪₃) (f := g) hg.continuous hg.injective).mp hg
+      (W := W) 𝒪W (f ∘ k) hgfk
+exact (isEmbedding_iff_universalProperty_6_21.{u, v, w}
+  (𝒪₁ := 𝒪₁) (𝒪₂ := 𝒪₂) (f := f) hf.continuous hf.injective).mp hf
+    (W := W) 𝒪W k hfk
+--------------------------------------------------------------------
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.22(2): if a composite is an embedding, then the first map is an embedding. -/
-theorem embedding_of_comp_6_22 {f : X → Y} {g : Y → Z}
-    (hgf : IsEmbedding_6_18 𝒪₁ 𝒪₃ (g ∘ f))
-    (hfcont : IsContinuous_5_1 𝒪₁ 𝒪₂ f)
-    (hgcont : IsContinuous_5_1 𝒪₂ 𝒪₃ g) :
-    IsEmbedding_6_18 𝒪₁ 𝒪₂ f := by
-  sorry
+--------------------------------------------------------------------
+theorem embedding_of_comp_6_22
+--------------------------------------------------------------------
+{f      : X -> Y                        }
+{g      : Y -> Z                        }
+(hgf    : IsEmbedding_6_18 𝒪₁ 𝒪₃ (g ∘ f))
+(hfcont : IsContinuous_5_1 𝒪₁ 𝒪₂ f      )
+(hgcont : IsContinuous_5_1 𝒪₂ 𝒪₃ g      )
+--------------------------------------------------------------------
+: IsEmbedding_6_18 𝒪₁ 𝒪₂ f := by
+--------------------------------------------------------------------
+have hfinj : Function.Injective f := by
+  intro x₁ x₂ hEq
+  apply hgf.injective
+  exact congrArg g hEq
+apply (isEmbedding_iff_universalProperty_6_21.{u, v, w}
+  (𝒪₁ := 𝒪₁) (𝒪₂ := 𝒪₂) (f := f) hfcont hfinj).mpr
+intro W 𝒪W k hfk
+have hgfk : IsContinuous_5_1 𝒪W 𝒪₃ (g ∘ (f ∘ k)) :=
+  continuous_comp_5_2 hfk hgcont
+have hcomp : IsContinuous_5_1 𝒪W 𝒪₃ ((g ∘ f) ∘ k) := by
+  simpa [Function.comp_def] using hgfk
+exact isEmbedding_iff_universalProperty_6_21.{u, w, v}
+  (𝒪₁ := 𝒪₁) (𝒪₂ := 𝒪₃) (f := g ∘ f) hgf.continuous hgf.injective
+    |>.mp hgf (W := W) 𝒪W k hcomp
+--------------------------------------------------------------------
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.23: a continuous injective open map is an embedding. -/
-theorem embedding_of_openMap_6_23 {f : X → Y}
-    (hfcont : IsContinuous_5_1 𝒪₁ 𝒪₂ f)
-    (hfinj : Function.Injective f)
-    (hfopen : IsOpenMap_5_26 𝒪₁ 𝒪₂ f) :
-    IsEmbedding_6_18 𝒪₁ 𝒪₂ f := by
-  sorry
+---------------------------------------------------------------
+theorem embedding_of_openMap_6_23
+---------------------------------------------------------------
+{f      : X -> Y                  }
+(hfcont : IsContinuous_5_1 𝒪₁ 𝒪₂ f)
+(hfinj  : Function.Injective f    )
+(hfopen : IsOpenMap_5_26 𝒪₁ 𝒪₂ f  )
+---------------------------------------------------------------
+: IsEmbedding_6_18 𝒪₁ 𝒪₂ f := by
+---------------------------------------------------------------
+apply isEmbedding_iff_imageOpenInRange_6_21 hfcont hfinj |>.mpr
+intro U Uop
+apply open_mem_relativeTopologyOn_6_8
+· exact image_subset_range f U
+· exact mem_preimage.mp (hfopen U Uop)
+---------------------------------------------------------------
 
 /-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.23: a continuous injective closed map is an embedding. -/
 theorem embedding_of_closedMap_6_23 {f : X → Y}
@@ -978,7 +1101,11 @@ theorem embedding_of_closedMap_6_23 {f : X → Y}
     (hfinj : Function.Injective f)
     (hfclosed : IsClosedMap_5_26 𝒪₁ 𝒪₂ f) :
     IsEmbedding_6_18 𝒪₁ 𝒪₂ f := by
-  sorry
+  apply isEmbedding_iff_imageClosedInRange_6_21 hfcont hfinj |>.mpr
+  intro F Fcl
+  apply closed_mem_relativeClosedOn_6_8
+  · exact image_subset_range f F
+  · exact hfclosed F Fcl
 
 /-- 𝒟ℯ𝒻𝒾𝓃𝒾𝓉𝒾ℴ𝓃 6.24: an open embedding is an embedding that is also an open map. -/
 def IsOpenEmbedding_6_24 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
@@ -988,17 +1115,55 @@ def IsOpenEmbedding_6_24 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X 
 def IsClosedEmbedding_6_24 (𝒪₁ : Set (Set X)) (𝒪₂ : Set (Set Y)) (f : X → Y) : Prop :=
   IsEmbedding_6_18 𝒪₁ 𝒪₂ f ∧ IsClosedMap_5_26 𝒪₁ 𝒪₂ f
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.25: for an embedding, being an open embedding is equivalent to having open range. -/
-theorem isOpenEmbedding_iff_open_range_6_25 {f : X → Y}
-    (hf : IsEmbedding_6_18 𝒪₁ 𝒪₂ f) :
-    IsOpenEmbedding_6_24 𝒪₁ 𝒪₂ f <-> Set.range f ∈ 𝒪₂ := by
-  sorry
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.25: for an embedding,
+  being an open embedding is equivalent to having open range. -/
+--------------------------------------------------------------------
+theorem isOpenEmbedding_iff_open_range_6_25
+--------------------------------------------------------------------
+{f    : X -> Y                  }
+(h𝒪₁  : IsTopology_1_1 X 𝒪₁     )
+(h𝒪₂  : IsTopology_1_1 Y 𝒪₂     )
+(hf   : IsEmbedding_6_18 𝒪₁ 𝒪₂ f)
+--------------------------------------------------------------------
+: IsOpenEmbedding_6_24 𝒪₁ 𝒪₂ f <-> Set.range f ∈ 𝒪₂ := by
+--------------------------------------------------------------------
+constructor <;> intro hyp
+· rcases hyp with ⟨-, hopen⟩
+  simpa [Set.image_univ] using hopen univ h𝒪₁.O1_univ
+· refine ⟨hf, ?_⟩
+  intro U Uop
+  have himage :
+      f '' U ∈ relativeTopologyOn_6_2 𝒪₂ (Set.range f) :=
+    isEmbedding_iff_imageOpenInRange_6_21 hf.continuous hf.injective
+      |>.mp hf U Uop
+  exact openIn_openIn_ambient_6_7 h𝒪₂ hyp himage
+--------------------------------------------------------------------
 
-/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.25: for an embedding, being a closed embedding is equivalent to having closed range. -/
-theorem isClosedEmbedding_iff_closed_range_6_25 {f : X → Y}
-    (hf : IsEmbedding_6_18 𝒪₁ 𝒪₂ f) :
-    IsClosedEmbedding_6_24 𝒪₁ 𝒪₂ f <-> IsClosed_1_2 𝒪₂ (Set.range f) := by
-  sorry
+/-- 𝒫𝓇ℴ𝓅ℴ𝓈𝒾𝓉𝒾ℴ𝓃 6.25: for an embedding,
+  being a closed embedding is equivalent to having closed range. -/
+----------------------------------------------------------------------
+theorem isClosedEmbedding_iff_closed_range_6_25
+----------------------------------------------------------------------
+{f    : X -> Y}
+(h𝒪₁  : IsTopology_1_1 X 𝒪₁)
+(h𝒪₂  : IsTopology_1_1 Y 𝒪₂)
+(hf   : IsEmbedding_6_18 𝒪₁ 𝒪₂ f)
+----------------------------------------------------------------------
+: IsClosedEmbedding_6_24 𝒪₁ 𝒪₂ f
+  <-> IsClosed_1_2 𝒪₂ (Set.range f) := by
+----------------------------------------------------------------------
+constructor <;> intro hyp
+· rcases hyp with ⟨-, hclosed⟩
+  simpa [Set.image_univ] using
+    hclosed univ (by simpa using closed_of_open_compl h𝒪₁.O1_empty)
+· refine ⟨hf, ?_⟩
+  intro F Fcl
+  have himage :
+      f '' F ∈ relativeClosedOn_6_6 𝒪₂ (Set.range f) :=
+    isEmbedding_iff_imageClosedInRange_6_21 hf.continuous hf.injective
+      |>.mp hf F Fcl
+  exact closedIn_closedIn_ambient_6_7 h𝒪₂ hyp himage
+----------------------------------------------------------------------
 
 end EmbeddingPart
 
@@ -1103,7 +1268,14 @@ theorem relativeTopology_iff_mathlibSubspace_cert (A : Set X) :
     relativeTopology_6_2 {U : Set X | @IsOpen X T U} A
       =
         {V : Set A | @IsOpen A (TopologicalSpace.induced Subtype.val T) V} := by
-  sorry
+  ext V
+  change (∃ U : Set X, @IsOpen X T U ∧ V = Subtype.val ⁻¹' U) ↔
+    ∃ U : Set X, @IsOpen X T U ∧ Subtype.val ⁻¹' U = V
+  constructor
+  · rintro ⟨U, hU, hV⟩
+    exact ⟨U, hU, hV.symm⟩
+  · rintro ⟨U, hU, hV⟩
+    exact ⟨U, hU, hV.symm⟩
 
 /-- 𝒱ℯ𝓇𝒾𝒻𝒾𝒸𝒶𝓉𝒾ℴ𝓃 : our embedding notion agrees with mathlib's `Topology.IsEmbedding`. -/
 theorem isEmbedding_iff_mathlibIsEmbedding_cert (f : X → Y) :
@@ -1111,7 +1283,72 @@ theorem isEmbedding_iff_mathlibIsEmbedding_cert (f : X → Y) :
       {U : Set X | @IsOpen X T₁ U}
       {V : Set Y | @IsOpen Y T₂ V} f
         <-> Topology.IsEmbedding f := by
-  sorry
+  constructor
+  · intro hf
+    have hmap :
+        IsHomeomorphismMap_5_20
+          {U : Set X | @IsOpen X T₁ U}
+          {V : Set (Set.range f) |
+            @IsOpen (Set.range f) (TopologicalSpace.induced Subtype.val T₂) V}
+          (rangeFactor_6_18 f) := by
+      have hmap := hf.rangeFactor_homeomorphism
+      change IsHomeomorphismMap_5_20
+        {U : Set X | @IsOpen X T₁ U}
+        (relativeTopology_6_2 {V : Set Y | @IsOpen Y T₂ V} (Set.range f))
+        (rangeFactor_6_18 f) at hmap
+      simpa [relativeTopology_iff_mathlibSubspace_cert (T := T₂) (A := Set.range f)] using hmap
+    let hhomeo : X ≃ₜ Set.range f := {
+      toFun := rangeFactor_6_18 f
+      invFun := hmap.invFun
+      left_inv := hmap.left_inv
+      right_inv := hmap.right_inv
+      continuous_toFun :=
+        (isContinuous_iff_mathlibContinuous_cert T₁ (TopologicalSpace.induced Subtype.val T₂)
+          (rangeFactor_6_18 f)).mp hmap.continuous_toFun
+      continuous_invFun :=
+        (isContinuous_iff_mathlibContinuous_cert
+          (TopologicalSpace.induced Subtype.val T₂) T₁ hmap.invFun).mp hmap.continuous_invFun
+    }
+    have hEmbRange : Topology.IsEmbedding (rangeFactor_6_18 f) := by
+      exact hhomeo.isEmbedding
+    simpa [rangeFactor_6_18, Function.comp_def] using Topology.IsEmbedding.subtypeVal.comp hEmbRange
+  · intro hf
+    refine ⟨?_, hf.injective, ?_⟩
+    · exact (isContinuous_iff_mathlibContinuous_cert T₁ T₂ f).mpr hf.continuous
+    · have hto : (hf.toHomeomorph : X → Set.range f) = rangeFactor_6_18 f := by
+        funext x
+        rfl
+      have hmap :
+          IsHomeomorphismMap_5_20
+            {U : Set X | @IsOpen X T₁ U}
+            {V : Set (Set.range f) |
+              @IsOpen (Set.range f) (TopologicalSpace.induced Subtype.val T₂) V}
+            (rangeFactor_6_18 f) :=
+        ⟨hf.toHomeomorph.symm, {
+          continuous_toFun := by
+            simpa [hto] using
+              (isContinuous_iff_mathlibContinuous_cert T₁
+                (TopologicalSpace.induced Subtype.val T₂) (hf.toHomeomorph : X → Set.range f)).mpr
+                hf.toHomeomorph.continuous_toFun
+          continuous_invFun := by
+            exact (isContinuous_iff_mathlibContinuous_cert
+              (TopologicalSpace.induced Subtype.val T₂) T₁ hf.toHomeomorph.symm).mpr
+                hf.toHomeomorph.continuous_invFun
+          left_inv := by
+            intro x
+            rw [← hto]
+            exact hf.toHomeomorph.left_inv x
+          right_inv := by
+            intro y
+            rw [← hto]
+            exact hf.toHomeomorph.right_inv y
+        }⟩
+      change IsHomeomorphismMap_5_20
+        {U : Set X | @IsOpen X T₁ U}
+        (rangeTopology_6_18 {V : Set Y | @IsOpen Y T₂ V} f)
+        (rangeFactor_6_18 f)
+      simpa [rangeTopology_6_18,
+        relativeTopology_iff_mathlibSubspace_cert (T := T₂) (A := Set.range f)] using hmap
 
 end CertifyMathlib
 
